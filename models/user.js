@@ -6,6 +6,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    experience: {
+        type: String,
+        required: true,
+        enum: ['Novice', 'Intermediate', 'Expert']
     }
 })
 UserSchema.plugin(passportLocalMongoose); 

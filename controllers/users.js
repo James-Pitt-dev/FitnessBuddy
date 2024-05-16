@@ -13,8 +13,8 @@ module.exports.renderRegister = (req, res) => {
 
 module.exports.registerUser = async (req, res) => {  
     try {
-        const {email, username, password} = req.body;
-        const user = new User({email, username});
+        const {email, username, password, experience} = req.body;
+        const user = new User({email, username, experience});
         const registeredUser = await User.register(user, password);
         req.login(registeredUser, (err) => {
             if(err){
@@ -28,6 +28,7 @@ module.exports.registerUser = async (req, res) => {
         req.flash('error', e.message);
         res.redirect('register');
     }
+    
 };
 
 module.exports.renderLogin = (req, res) => {
