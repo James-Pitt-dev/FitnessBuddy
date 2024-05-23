@@ -89,6 +89,10 @@ app.get('/', (req, res) => {
     res.render('home');
 });
 
+app.get('/workouts/new', (req, res) => {
+    res.render('workouts/new');
+});
+
 app.all('*', (req, res, next) => {
     next(new ExpressError('Page Not Found', 404));
 }) 
