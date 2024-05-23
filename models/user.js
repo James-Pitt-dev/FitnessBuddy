@@ -1,4 +1,4 @@
-const { required } = require('joi');
+
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
@@ -11,7 +11,6 @@ const UserSchema = new mongoose.Schema({
     experience: {
         type: String,
         enum: ['Novice', 'Intermediate', 'Expert'],
-        required: function() { return this.isRegistered; }
     },
     currentWeight: { type: Number},
     goalWeight: { type: Number},

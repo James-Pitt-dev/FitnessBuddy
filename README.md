@@ -33,7 +33,7 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 ### Getting started
 - //navigate to a project dir, git clone will make a fitnessbuddy dir there //
 
-    git clone https://github.com/James-Pitt-dev/Yelp-Camp.git
+    git clone https://github.com/James-Pitt-dev/FitnessBuddy.git
     cd .\fitnessbuddy\
     npm install
 
@@ -48,3 +48,10 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 - Update to latest code: be in master/main branch, then git pull origin to get the latest code from repo
 - develop new features in a separate branch and change as little other code as possible to reduce merge conflicts. git checkout -b featureBranch --> do code, when done something functional --> git push origin featureBranch
 - We want to make things as modular and isolated as possible or the code becomes a mess
+- We want master branch to be clean and functional
+
+
+### References
+- https://github.com/James-Pitt-dev/Yelp-Camp
+
+A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.

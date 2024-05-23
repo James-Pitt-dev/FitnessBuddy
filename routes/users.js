@@ -5,7 +5,6 @@ const ExpressError = require('../utils/ExpressError');
 const User = require('../models/user');
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
-// const { userSchema } = require('../schemas.js');
 const users = require('../controllers/users');
 
 router.get('/register', users.renderRegister);
@@ -39,6 +38,10 @@ router.post('/createProfile', async (req, res) => {
     await user.save();
     console.log(user);
     res.redirect('/');
+});
+
+router.get('/showProfile', (req, res) => {
+    res.render('users/showProfile');
 });
 
 

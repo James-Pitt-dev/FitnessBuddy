@@ -5,7 +5,7 @@ const ExpressError = require('../utils/ExpressError');
 const User = require('../models/user');
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
-// const { userSchema } = require('../schemas.js');
+
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register');

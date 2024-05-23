@@ -6,7 +6,6 @@ const app = express(); // use to set up server and listen
 const mongoose = require('mongoose'); // Used as ODM and mongdoDB interaction
 const path = require('path'); //Helps with file paths
 const ExpressError = require('./utils/ExpressError');
-const { campgroundSchema, reviewSchema } = require('./schemas.js');
 const methodOverride = require('method-override'); // lets you listen for PUT/DELETE requests on POST Reqs
 const ejsMate = require('ejs-mate'); // lets you use body templates
 const session = require('express-session');
@@ -16,8 +15,7 @@ const LocalStrategy = require('passport-local');
 
 // routes
 const userRoutes = require('./routes/users');
-const campgroundsRoutes = require('./routes/campgrounds');
-const reviewsRoutes = require('./routes/reviews');
+const workoutRoutes = require('./routes/workouts');
 
 const User = require('./models/user.js');
 
@@ -82,15 +80,11 @@ app.use((req, res, next) => {
 
 // Routing
 app.use('/', userRoutes);
-app.use('/campgrounds', campgroundsRoutes);
-app.use('/campgrounds/:id/reviews', reviewsRoutes);
+app.use('/workouts', workoutRoutes);
+
 
 app.get('/', (req, res) => {
     res.render('home');
-});
-
-app.get('/workouts/new', (req, res) => {
-    res.render('workouts/new');
 });
 
 app.all('*', (req, res, next) => {
