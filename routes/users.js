@@ -19,6 +19,29 @@ router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlas
 
 router.get('/logout', users.logout); 
 
+router.get('/createProfile', (req, res) => {
+    console.log(req.user);
+    res.render('users/createProfile');
+});
+
+router.post('/createProfile', async (req, res) => {
+    const {experience, height, currentWeight, goalWeight, workoutNum} = req.body;
+    const user = await User.findById(req.user._id);
+    if(!user){
+        req.flash('error', 'Cannot find user');
+        return res.redirect('/login');
+    }
+    user.experience = experience;
+    user.height = height;
+    user.currentWeight = currentWeight;
+    user.goalWeight = goalWeight;
+    user.workoutNum = workoutNum;
+    await user.save();
+    console.log(user);
+    res.redirect('/');
+});
+
+
 // if (!req.isAuthenticated()){
 //     req.flash('error', 'Logout Failed: You Are Not Logged In');
 //    return res.redirect('/campgrounds');

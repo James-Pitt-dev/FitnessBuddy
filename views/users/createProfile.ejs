@@ -1,0 +1,56 @@
+<% layout('layouts/boilerplate') %>
+<!-- after user registers, they need to fill out a profile form:
+'Users should be able to enter or edit their health details like current weight, goal weight, height, and view the number of workouts done in a day.' -->
+
+<!-- How forms in express/node work, each input is submitted to the route in the form action attribute url. They are then accessed under the key of the input name attribute. We would grab those in the route logic and save them to database. routes are kept in routes/users.js
+
+ex. a current weight input is submitted here, you go to the route: route.post('/users/createProfile', whateverFunction) and grab the current weight input by const currentWeight = req.body.user[currentWeight]; and do logic to save it to the database along with every other input we want. --> 
+
+<div class="row">
+    <h1 class="text-center mb-3">Set Profile Data</h1>
+    <div class="col-6 offset-3">
+        <form action="/createProfile" method="POST" novalidate class="validated-form">
+          
+            <div class="mb-3">    
+                <label class="form-label
+                " for="location">Current Weight</label>
+                <input class="form-control" type="number" id="currentWeight" name="currentWeight" required>
+                <div class="valid-feedback">
+                    Looks Good! 
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="goalWeight">Goal Weight</label>
+                <input class="form-control" type="number" id="goalWeight" name="goalWeight" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="height">Height</label>
+                <input class="form-control" type="number" id="height" name="height" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="experience" class="form-label">Whats your fitness experience?</label>
+                <select class="form-select" id="experience" name="experience" required>
+                    <option value="Novice">Novice</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Expert">Expert</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="workouts">How many workouts a week?</label>
+                <input class="form-control" type="number" id="workoutNum" name="workoutNum" required>
+                <div class="valid-feedback">
+                    Looks Good!
+                </div>
+            </div>
+            <button class="btn btn-primary mb-3" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+

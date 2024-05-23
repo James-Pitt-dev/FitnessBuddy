@@ -1,3 +1,4 @@
+const { required } = require('joi');
 const mongoose = require('mongoose');
 const passportLocalMongoose = require('passport-local-mongoose');
 
@@ -9,9 +10,15 @@ const UserSchema = new mongoose.Schema({
     },
     experience: {
         type: String,
-        required: true,
-        enum: ['Novice', 'Intermediate', 'Expert']
-    }
+        enum: ['Novice', 'Intermediate', 'Expert'],
+        required: function() { return this.isRegistered; }
+    },
+    currentWeight: { type: Number},
+    goalWeight: { type: Number},
+    height: { type: Number},
+    workoutNum: { type: Number},
+   
+
 })
 UserSchema.plugin(passportLocalMongoose); 
 // put in the passport plug in and it will handle missing columns in UserSchema like name/password. And include useful methods
