@@ -27,3 +27,24 @@ MVC (Model-View-Controller) architectural pattern. It's a functional programming
 
 ## Database
 The database is hosted on MongoDB, a source-available cross-platform document-oriented database program. It uses JSON-like documents with optional schemas.
+
+## Workflows
+
+### Getting started
+- //navigate to a project dir, git clone will make a fitnessbuddy dir there //
+
+    git clone https://github.com/James-Pitt-dev/Yelp-Camp.git
+    cd .\fitnessbuddy\
+    npm install
+
+// to start the server on http://127.0.0.1:3000
+
+    node app.js   
+
+//this starts the server and lets it listen for incoming url requests, which we make routes in code for it to run and serve view pages and do logic
+
+
+### git
+- Update to latest code: be in master/main branch, then git pull origin to get the latest code from repo
+- develop new features in a separate branch and change as little other code as possible to reduce merge conflicts. git checkout -b featureBranch --> do code, when done something functional --> git push origin featureBranch
+- We want to make things as modular and isolated as possible or the code becomes a mess
