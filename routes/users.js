@@ -41,9 +41,28 @@ router.post('/createProfile', async (req, res) => {
 });
 
 router.get('/showProfile', (req, res) => {
-    res.render('users/showProfile');
+    let currUser= res.locals.currentUser;
+    res.render('users/showProfile',{currUser});
 });
 
+
+//POST methond to update the profile
+router.post('/editProfile', async(req,res)=>{
+    try{
+        const id= req.body._id    
+        const editUser= await User.findByIdAndUpdate(id,req.body); 
+        if(!editUser){
+            return res.status(500).json({msg:"Unable to update user data"});
+        } else{
+           const updatedUser= await User.findById(id);  
+           req.flash('success', 'Back to edit page!');
+           let currUser= updatedUser;
+           res.render('users/showProfile', {currUser});               
+        }                  
+    }catch(error){     
+        return res.status(500).json({msg:"Unable to update user data"});
+    }
+});
 
 // if (!req.isAuthenticated()){
 //     req.flash('error', 'Logout Failed: You Are Not Logged In');
