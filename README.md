@@ -37,6 +37,8 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
     - cd .\fitnessbuddy\
     - npm install
 
+// change .env.example to .env, replace password placeholder with real password
+
 // to start the server on http://127.0.0.1:3000
 
     - node app.js   
@@ -53,5 +55,7 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 
 ### References
 - https://github.com/James-Pitt-dev/Yelp-Camp
+  - A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
 
-A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
+- https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb
+  - API for exercise list

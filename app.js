@@ -16,6 +16,7 @@ const LocalStrategy = require('passport-local');
 // routes
 const userRoutes = require('./routes/users');
 const workoutRoutes = require('./routes/workouts');
+const exerciseRoutes = require('./routes/exercises');
 
 const User = require('./models/user.js');
 
@@ -23,19 +24,19 @@ const apiKey = process.env.API_KEY;
 const dbPassword = process.env.DATABASE_PASSWORD;
 
 
-mongoose.connect(dbPassword, {})
-    .then(() => {
-        console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
-    })
-    .catch((err) => {
-        console.log(`Mongoose Error: ${err}`);
-    });
+// mongoose.connect(dbPassword, {})
+//     .then(() => {
+//         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
+//     })
+//     .catch((err) => {
+//         console.log(`Mongoose Error: ${err}`);
+//     });
 
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
-db.once("open", () => {
-    console.log("Database connected");
-});
+// const db = mongoose.connection;
+// db.on("error", console.error.bind(console, "connection error:"));
+// db.once("open", () => {
+//     console.log("Database connected");
+// });
 
 // APP SETTINGS
 app.engine('ejs', ejsMate); //tell express we want to use ejs-mate as engine
@@ -81,7 +82,7 @@ app.use((req, res, next) => {
 // Routing
 app.use('/', userRoutes);
 app.use('/workouts', workoutRoutes);
-
+app.use('/exercises', exerciseRoutes); //reroutes incoming urls that match '/exercises/*' to route handler
 
 app.get('/', (req, res) => {
     res.render('home');

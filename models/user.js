@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+        
     },
     experience: {
         type: String,
@@ -16,8 +17,6 @@ const UserSchema = new mongoose.Schema({
     goalWeight: { type: Number},
     height: { type: Number},
     workoutNum: { type: Number},
-   
-
 })
 UserSchema.plugin(passportLocalMongoose); 
 // put in the passport plug in and it will handle missing columns in UserSchema like name/password. And include useful methods
