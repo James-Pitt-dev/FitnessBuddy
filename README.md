@@ -17,6 +17,7 @@
 - Mongoose
 - EJS
 - Bootstrap
+- Jest 
 
 ## Architecture
 MVC (Model-View-Controller) architectural pattern. It's a functional programming application where each part of the code has its own job. The model represents the data, the view displays the data, and the controller handles the input.
@@ -45,6 +46,8 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 
 //this starts the server and lets it listen for incoming url requests, which we make routes in code for it to run and serve view pages and do logic
 
+//Jest to process the unit tests
+
 
 ### git
 - Update to latest code: be in master/main branch, then git pull origin to get the latest code from repo
@@ -59,3 +62,6 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 
 - https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb
   - API for exercise list
+
+A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
+
