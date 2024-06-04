@@ -3,6 +3,8 @@ const path = require('path');
 require('dotenv').config();
 const dbPassword = process.env.DATABASE_PASSWORD;
 const Exercise = require('../models/exercise');
+const Workout = require('../models/workout');
+const WorkoutExercise = require('../models/workoutExercise');
 
 // WILL WIPE AND REWRITE EXERCISE COLLECTION IN DATABASE IF RAN, CAUTION!!
 
@@ -24,7 +26,7 @@ db.once("open", () => {
 
 const workoutAPI = async function(){ //function to fetch API exercises
     // /exercises/exercise/{id}
-        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=50`;
+        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=300`;
         const options = {
             method: 'GET',
             headers: {
@@ -45,6 +47,9 @@ const workoutAPI = async function(){ //function to fetch API exercises
 const seedDB = async () => {
     const exerciseAPI = await workoutAPI();
     await Exercise.deleteMany({}); //empty exercise collection
+    await Workout.deleteMany({});
+    await WorkoutExercise.deleteMany({});
+
 
     for(let e of exerciseAPI){
         const exercise = new Exercise({...e}); 
