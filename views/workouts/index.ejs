@@ -1,3 +1,35 @@
+
+<% layout('layouts/boilerplate'); %>
+<!-- Only show key data about workout here, show all data in the view workout -->
+<h1>All Workouts</h1>
+<% for (let workout of workouts) { %>
+    <div class="card mb-2">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card-body p-2">
+                    <h5 class="card-title text-bold">Title: <%= workout.title %></h5>
+                    <p class="card-text text-muted">Notes: <%= workout.notes %></p>
+                    <p class="card-text text-muted">Timer: <%= workout.timer %></p>
+                    
+                    <% for (let i = 0; i < workout.exercises.length; i++) { %>
+                        <h6 class="card-subtitle mb-2 text-muted">Exercise <%= i + 1 %>:</h6>
+                        <p class="card-text">Exercise Name: <%= workout.exercises[i].exercise.name %></p>
+                        <% for (let j = 0; j < workout.exercises[i].sets.length; j++) { %>
+                            <h6 class="card-subtitle mb-2 text-muted">Set <%= j + 1 %>:</h6>
+                            <p class="card-text">Reps: <%= workout.exercises[i].sets[j].reps %></p>
+                            <p class="card-text">Weight: <%= workout.exercises[i].sets[j].weight %></p>
+                            <p class="card-text">Previous Weight: <%= workout.exercises[i].sets[j].previousWeight %></p>
+                        <% } %>
+                        <hr>
+                    <% } %>
+
+                    <a href="/workouts/<%= workout._id %>" class="btn btn-primary mt-3">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %>
+=======
 <% layout('layouts/boilerplate') %>
     <h1>All Exercise Catalogs</h1>
     <a href="/workouts/new">Add Workouts</a> 
