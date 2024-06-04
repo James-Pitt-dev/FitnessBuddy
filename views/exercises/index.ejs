@@ -2,8 +2,8 @@
 
 <!-- {"bodyPart", "equipment", "gifUrl", "id", "name", "target", "secondaryMuscles", "instructions"} -->
 
-    <h1>All Exercises</h1>
-    <label for="search">Search</label>
+<h1>All Exercise Catalogs</h1>
+    <label for="search">Search(TODO)</label>
     <input type="text" name="search" id="search">
         <% for(let workout of workouts){ %>
             <div class="card mb-2">
@@ -15,16 +15,9 @@
                         <div class="card-body p-2">
                             <h5 class="card-title text-bold"><%= workout.name %></h5>
                             <p class="card-text text-muted"><%= workout.bodyPart %></p>
-                            <!-- <p class="card-text">
-                                <small class="card-text"><% %></small>
-                            </p> -->
                             <a href="/exercises/<%= workout.id %>" class="btn btn-primary mt-3">View</a>
                         </div>
                     </div>
                 </div>
             </div>
         <% } %>       
-
-        <script>
-
-        </script>
