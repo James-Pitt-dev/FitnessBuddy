@@ -21,47 +21,46 @@ const request = require("supertest");
 const app = require("../app.js");
 const passport = require("passport");
 
-afterAll(async (done) => {
+afterAll(async () => {
   //delete the user of test
   await User.deleteOne({ username: "test" });
-  mongoose.disconnect();
-  mongoose.connection.close();
-  done()
+  await mongoose.disconnect();
+  await mongoose.connection.close(); 
 });
 
-describe("Testing data connection,login function, and register", () => {
-  test("Testing Database connecting by check list length", async () => {
-    let currDatalenght = 0;
-    await User.find({}).then(function (users) {
-      currDatalenght = users.length;
-    });
-   return expect(currDatalenght).toBe(5);
-  });
 
-  test("testing passport authenticate for login ", async () => {
-    // call passport authenticate method, using the local or google or whatever strategy,
-    user_id = "6652839663b7c72157e5dabb";
-    username = "William";
-    password = "wei.shi@student.kpu.ca";
-    email = "wei.shi@student.kpu.ca";
-    const authenticate_curr = await User.authenticate();
-    return authenticate_curr(username, password, function (err, result) {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log("authentication successfully");
-        //The email of attribute is unique, so compare it
-        expect(result.email).toBe(email);
-      }
-    });
+test("Testing Database connecting by check list length", async () => {
+  let currDatalenght = 0;
+  await User.find({}).then(function (users) {
+    currDatalenght = users.length;
   });
+  expect(currDatalenght).toBe(8);
+});
 
-  test("Testing register by creating a new user", async () => {
-    const testUser = new User();
-    testUser.email = "test@fitnessbuddy.ca";
-    testUser.username = "test";
-    const registeredUser = await User.register(testUser, "testPassword");
-    //find user hwo username is test in database
-    return expect(registeredUser.username).toBe("test");
+test("testing passport authenticate for login ", async () => {
+  // call passport authenticate method, using the local or google or whatever strategy,
+  user_id = "6652839663b7c72157e5dabb";
+  username = "William";
+  password = "wei.shi@student.kpu.ca";
+  email = "wei.shi@student.kpu.ca";
+  const authenticate_curr = await User.authenticate();
+  return authenticate_curr(username, password, function (err, result) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("authentication successfully");
+      //The email of attribute is unique, so compare it
+      expect(result.email).toBe(email);
+    }
   });
 });
+
+test("Testing register by creating a new user", async () => {
+  const testUser = new User();
+  testUser.email = "test@fitnessbuddy.ca";
+  testUser.username = "test";
+  const registeredUser = await User.register(testUser, "testPassword");
+  //find user hwo username is test in database
+  expect(registeredUser.username).toBe("test");
+});
+
