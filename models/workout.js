@@ -37,13 +37,18 @@ const Schema = mongoose.Schema;
 
 // module.exports = Workout;
 
-const workoutExerciseSchema = require('./workoutExercise'); // Adjust the path as necessary
+const workoutExerciseSchema = require('./workoutExercise'); 
 
 const workoutSchema = new Schema({
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User', 
+      required: true
+    },
     title: String,
     notes: String,
     timer: Number,
-    exercises: [workoutExerciseSchema] // Embedding the workoutExercise schema
+    exercises: [{ type: Schema.Types.ObjectId, ref: 'WorkoutExercise'}]
 });
 
 const Workout = mongoose.model('Workout', workoutSchema);

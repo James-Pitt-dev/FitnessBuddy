@@ -2,11 +2,13 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const workoutExerciseSchema = new Schema({
-    exercise: { type: Schema.Types.ObjectId, ref: 'Exercise' },
-    sets: Number,
-    reps: Number,
-    weight: Number,
-    previousWeight: Number
+    exercise: { type: Schema.Types.ObjectId, ref: 'Exercise', required: true },
+    sets: [{
+        reps: { type: Number},
+        weight: { type: Number},
+        previousWeight: { type: Number}
+    }],
+    workout: { type: Schema.Types.ObjectId, ref: 'Workout', required: true }
 });
 
-module.exports = workoutExerciseSchema;
+module.exports = mongoose.model('WorkoutExercise', workoutExerciseSchema);
