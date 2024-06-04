@@ -40,7 +40,7 @@ router.post('/new', isLoggedIn, catchAsync(async (req, res) => {
   await newWorkout.save();
   console.log(newWorkout);
   req.flash('success', 'Successfully created a new workout!');
-  res.send(newWorkout);
+  res.redirect('/workouts/index');
 }));
 
 router.get('/index', catchAsync(async (req, res) => {
