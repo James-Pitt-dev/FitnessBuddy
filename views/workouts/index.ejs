@@ -29,26 +29,5 @@
         </div>
     </div>
 <% } %>
-=======
-<% layout('layouts/boilerplate') %>
-    <h1>All Exercise Catalogs</h1>
-    <a href="/workouts/new">Add Workouts</a> 
-        <% for(let exercise of exerciseList){ %>
-            <div class="card mb-3">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="<%= exercise.gifUrl %>" alt="" class="img-fluid">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title"><%= exercise.name %></h5>
-                            <p class="card-text"><%= exercise.target %></p>
-                            <p class="card-text">
-                                <small class="text-muted"><%= exercise.instructions %></small>
-                            </p>
-                            <a href="/campgrounds/<%= exercise.id %>" class="btn btn-primary">View <%= exercise.name %></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        <% } %>       
+
+

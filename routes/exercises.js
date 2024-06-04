@@ -16,7 +16,8 @@ router.get('/', catchAsync(async (req, res) => {
 
 router.get('/:id', catchAsync(async (req, res) => {
     const {id} = req.params;
-    const workout = await workoutAPI(`/exercise/${id}`);
+    const workout = await Exercise.findOne({ id: id });
+    // const workout = await workoutAPI(`/exercise/${id}`);
     res.render('exercises/show', {workout});
 }));
 
