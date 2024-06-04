@@ -1,0 +1,17 @@
+<% layout('layouts/boilerplate') %>
+<!-- {"bodyPart", "equipment", "gifUrl", "id", "name", "target", "secondaryMuscles", "instructions"} -->
+<div class="card mb-3">
+        <!-- section to display the gifUrl image  -->
+        <img src="<%= workout.gifUrl %>" class="card-img-top d-block w-100" alt="..." height="500">
+
+    <div class="card-body">
+      <h5 class="card-title"><%= workout.name %></h5>
+      <p class="card-text"><%= workout.instructions %></p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item text-muted"><%= workout.bodyPart %></li>
+      <li class="list-group-item">Target: <%= workout.target %></li>
+      <li class="list-group-item">Secondary Muscle: <%= workout.secondaryMuscles %></li>
+      <li class="list-group-item">Equipment: <%= workout.equipment %></li>
+    </ul>
+</div>
