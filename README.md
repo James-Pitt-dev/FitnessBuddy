@@ -59,6 +59,9 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 ### References
 - https://github.com/James-Pitt-dev/Yelp-Camp
   - A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
+- Routing naming convention example
+  - ![image](https://github.com/James-Pitt-dev/FitnessBuddy/assets/39842510/37ce50cf-7e84-4018-bbb2-0f62e1e51a53)
+
 
 - https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb
   - API for exercise list
