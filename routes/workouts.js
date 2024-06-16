@@ -1,60 +1,105 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Workout = require('../models/workout');
-const WorkoutExercise = require('../models/workoutExercise');
-const Exercise = require('../models/exercise');
-const catchAsync = require('../utils/catchAsync');
-const { isLoggedIn } = require('../middleware');
+const Workout = require("../models/workout");
+const WorkoutExercise = require("../models/workoutExercise");
+const Exercise = require("../models/exercise");
+const catchAsync = require("../utils/catchAsync");
+const { isLoggedIn } = require("../middleware");
 
 // Ensure user is logged in
-router.get('/new', isLoggedIn, catchAsync(async (req, res) => {
-  const exercises = await Exercise.find({});
-  res.render('workouts/new', { exercises });
-}));
+router.get(
+  "/new",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const exercises = await Exercise.find({});
+    res.render("workouts/new", { exercises });
+  })
+);
 
-router.post('/new', isLoggedIn, catchAsync(async (req, res) => {
-  const { workout } = req.body;
-  const newWorkout = new Workout({
-    title: workout.title,
-    notes: workout.notes,
-    timer: workout.timer,
-    author: req.user._id
-  });
-
-  for (let exerciseIndex in workout.exercises) {
-    const exerciseData = workout.exercises[exerciseIndex];
-    const workoutExercise = new WorkoutExercise({
-      exercise: exerciseData.exercise,
-      workout: newWorkout._id,
-      sets: exerciseData.sets.map(set => ({
-        reps: set.reps,
-        weight: set.weight,
-        previousWeight: set.previousWeight
-      }))
+router.post(
+  "/new",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const { workout } = req.body;
+    const newWorkout = new Workout({
+      title: workout.title,
+      notes: workout.notes,
+      timer: workout.timer,
+      author: req.user._id,
     });
 
-    await workoutExercise.save();
-    newWorkout.exercises.push(workoutExercise);
-  }
+    for (let exerciseIndex in workout.exercises) {
+      const exerciseData = workout.exercises[exerciseIndex];
+      const workoutExercise = new WorkoutExercise({
+        exercise: exerciseData.exercise,
+        workout: newWorkout._id,
+        sets: exerciseData.sets.map((set) => ({
+          reps: set.reps,
+          weight: set.weight,
+          previousWeight: set.previousWeight,
+        })),
+      });
 
-  await newWorkout.save();
-  console.log(newWorkout);
-  req.flash('success', 'Successfully created a new workout!');
-  res.redirect('/workouts/index');
-}));
-
-router.get('/index', catchAsync(async (req, res) => {
-
-  const workouts = await Workout.find({}).populate({
-    path: 'exercises',
-    populate: {
-        path: 'exercise', // populate the `exercise` field inside `workoutExercise`
-        model: 'Exercise'
+      await workoutExercise.save();
+      newWorkout.exercises.push(workoutExercise);
     }
-});
-  res.render('workouts/index', {workouts});
-  // res.render('workouts/index');
-}));
+
+    await newWorkout.save();
+    console.log(newWorkout);
+    req.flash("success", "Successfully created a new workout!");
+    res.redirect("/workouts/index");
+  })
+);
+
+router.get(
+  "/index",isLoggedIn,
+  catchAsync(async (req, res) => {
+    const workouts = await Workout.find({}).populate({
+      path: "exercises",
+      populate: {
+        path: "exercise", // populate the `exercise` field inside `workoutExercise`
+        model: "Exercise",
+      },
+    });
+    res.render("workouts/index", { workouts });
+    // res.render('workouts/index');
+  })
+);
+
+router.get(
+  "/view/:id",isLoggedIn,
+  catchAsync(async (req, res) => {
+    let {id} = req.params;
+    console.log("here is viewing ",id);
+    const workout = await Workout.findById(id).populate({
+      path: "exercises",
+      populate: {
+        path: "exercise", // populate the `exercise` field inside `workoutExercise`
+        model: "Exercise",
+      },
+    });
+    req.flash("success", "Welcom to view the workout!");
+    res.render("workouts/show", { workout });
+    // res.render('workouts/index');*/
+  })
+);
+
+router.get(
+  "/delete/:id",isLoggedIn,
+  catchAsync(async (req, res) => {
+    let {id} = req.params;
+    let curr_workout= await Workout.findById(id)
+    console.log(curr_workout.exercises)
+    //before deleting the workout plan, should go to find the workexercise id to delete workoutEexercise
+    for (let exerciseIndex in curr_workout.exercises) {
+       //one by one, delete the workExercises
+       let delete_workoutExercise= await WorkoutExercise.findByIdAndDelete(curr_workout.exercises[exerciseIndex])  
+      }
+      //ane then delete the workout plan
+    const delete_workout = await Workout.findByIdAndDelete(id);
+    res.redirect("/workouts/index");
+  })
+);
 
 module.exports = router;
 
@@ -92,4 +137,3 @@ module.exports = router;
 
 //   }
 // });
-
