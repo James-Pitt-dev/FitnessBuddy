@@ -1,0 +1,48 @@
+<% layout('layouts/boilerplate') %>
+    <!-- https://getbootstrap.com/docs/5.3/components/modal/#how-it-works -->
+    <div class="row">
+        <h1 class="text-center">View Workout</h1>
+        <div class="col-6 offset-3">
+            <form action="/workouts/update" method="POST" novalidate class="validated-form">
+                <div class="mb-3">
+                    <label class="form-label" for="title">Workout Title</label>
+                    <input class="form-control" type="text" id="title" name="workout[title]"
+                        value="<%= workout.title %>" placeholder="Name your workout" required>
+                    <div class="valid-feedback">Looks Good!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="notes">Notes</label>
+                    <textarea class="form-control" id="notes" name="workout[notes]" value="<%= workout.notes %>"
+                        placeholder="Add notes to help your workout"></textarea>
+                    <div class="valid-feedback">Looks Good!</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="timer">Duration (in minutes)</label>
+                    <input class="form-control" type="number" id="timer" name="workout[timer]"
+                        value="<%= workout.timer %>" placeholder="60">
+                    <div class="valid-feedback">Looks Good!</div>
+                </div>
+
+                <% for (let i=0; i < workout.exercises.length; i++) { %>
+                    <h6 class="card-subtitle mb-2 text-muted">Exercise <%= i + 1 %>:</h6>
+                    <p class="card-text">Exercise Name: <%= workout.exercises[i].exercise.name %>
+                    </p>
+                    <% for (let j=0; j < workout.exercises[i].sets.length; j++) { %>
+                        <h6 class="card-subtitle mb-2 text-muted">Set <%= j + 1 %>:</h6>
+                        <p class="card-text">Reps: <%= workout.exercises[i].sets[j].reps %>
+                        </p>
+                        <p class="card-text">Weight: <%= workout.exercises[i].sets[j].weight %>
+                        </p>
+                        <p class="card-text">Previous Weight: <%= workout.exercises[i].sets[j].previousWeight %>
+                        </p>
+                        <% } %>
+                            <% } %>
+                                <div class="mb-3 mt-3">
+                                    <button class="btn btn-success" type="submit">Update Workout</button>
+                                </div>
+            </form>
+            <a href="/workouts">All Workouts</a>
+        </div>
+    </div>
