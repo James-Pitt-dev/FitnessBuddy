@@ -1,23 +1,34 @@
 <% layout('layouts/boilerplate') %>
 
-<!-- {"bodyPart", "equipment", "gifUrl", "id", "name", "target", "secondaryMuscles", "instructions"} -->
+    <!-- {"bodyPart", "equipment", "gifUrl", "id", "name", "target", "secondaryMuscles", "instructions"} -->
 
-<h1>All Exercise Catalogs</h1>
-    <label for="search">Search(TODO)</label>
-    <input type="text" name="search" id="search">
-        <% for(let workout of workouts){ %>
-            <div class="card mb-2">
-                <div class="row">
-                    <div class="col-md-4">
-                        <img src="<%= workout.gifUrl %>" alt="" class="img-fluid" loading="lazy">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body p-2">
-                            <h5 class="card-title text-bold"><%= workout.name %></h5>
-                            <p class="card-text text-muted"><%= workout.bodyPart %></p>
-                            <a href="/exercises/<%= workout.id %>" class="btn btn-primary mt-3">View</a>
-                        </div>
+    <h1>All Exercise Catalogs</h1>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+          <form class="d-flex" role="search" action="/exercises/search" method="post" novalidate class="validated-form">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+            <input class="form-control me-8" type="text" name="search" id="search" placeholder="Enter a keyword..." aria-label="Search">        
+          </form>
+        </div>
+      </nav>
+    <br>
+    <% for(let workout of workouts){ %>
+        <div class="card mb-2">
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="<%= workout.gifUrl %>" alt="" class="img-fluid" loading="lazy">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body p-2">
+                        <h5 class="card-title text-bold">
+                            <%= workout.name %>
+                        </h5>
+                        <p class="card-text text-muted">
+                            <%= workout.bodyPart %>
+                        </p>
+                        <a href="/exercises/<%= workout.id %>" class="btn btn-primary mt-3">View</a>
                     </div>
                 </div>
             </div>
-        <% } %>       
+        </div>
+        <% } %>
