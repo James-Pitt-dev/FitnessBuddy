@@ -6,6 +6,7 @@ const User = require('../models/user');
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
 const users = require('../controllers/users');
+const { isLoggedIn } = require("../middleware");
 
 router.get('/register', users.renderRegister);
 
@@ -23,7 +24,7 @@ router.get('/createProfile', (req, res) => {
     res.render('users/createProfile');
 });
 
-router.post('/createProfile', async (req, res) => {
+router.post('/createProfile',isLoggedIn, async (req, res) => {
     const {experience, height, currentWeight, goalWeight, workoutNum} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){
@@ -40,14 +41,14 @@ router.post('/createProfile', async (req, res) => {
     res.redirect('/');
 });
 
-router.get('/showProfile', (req, res) => {
+router.get('/showProfile',isLoggedIn, (req, res) => {
     let currUser= res.locals.currentUser;
     res.render('users/showProfile',{currUser});
 });
 
 
 //POST methond to update the profile
-router.post('/editProfile', async(req,res)=>{
+router.post('/editProfile',isLoggedIn, async(req,res)=>{
     try{
         const id= req.body._id    
         const editUser= await User.findByIdAndUpdate(id,req.body); 
@@ -61,6 +62,24 @@ router.post('/editProfile', async(req,res)=>{
         }                  
     }catch(error){     
         return res.status(500).json({msg:"Unable to update user data"});
+    }
+});
+
+//get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
+router.get('/deleteProfile/:id',isLoggedIn, async(req,res)=>{
+    try{
+        let {id} = req.params;
+        console.log(id)
+        const delUser= await User.findByIdAndDelete(id); 
+        if(!delUser){
+            return res.status(500).json({msg:"Unable to delete user data"});
+        } else{
+            //return to home pape and user needs to recreate new account to login
+           
+           res.redirect('/');               
+        }                  
+    }catch(error){     
+        return res.status(500).json({msg:"Unable to delete user data"});
     }
 });
 

@@ -18,7 +18,7 @@
                 </div>
                 </div>
             </div>
-            <input class="form-control" type="text" id="_id" name="_id" value="<%= currentUser._id %>"  hidden>
+            <input class="form-control" type="text" id="_id" name="_id" value="<%= currUser._id %>"  hidden>
             <div class="form-row">  
                 <div class="form-group col-md-6">  
                 <label class="form-label" for="email">Email</label>
@@ -85,10 +85,15 @@
             </div>
             
             <Br> 
-           <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
+        <div>
                 
+        <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
+        <button class="btn  btn-warning my-2 my-sm-0"><a href="/deleteProfile/<%= currUser._id %>">Delete</a></button>
+        </div>
         </form>
-        <a href="/">All campgrounds</a>
+        
+        <Br>
+        <a  href="/">All campgrounds</a>
         </div>
        
     </div>
