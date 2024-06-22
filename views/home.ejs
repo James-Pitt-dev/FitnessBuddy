@@ -1,2 +1,45 @@
 <% layout('layouts/boilerplate'); %>
-    <h1>Landing Page of Fitness Buddy</h1>
+
+<style>
+    .img-container {
+        height: 200px; /* Adjust height as needed */
+        overflow: hidden;
+    }
+    .img-container img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+    h1 {
+        margin-bottom: 20px;
+    }
+    </style>
+<div id="registrationForm1" class="text-center " style="display: block;">
+    <h1 class="mb-3">Welcome to <span class="text-primary">Fitness Buddy</span></h1>
+        <div class="row justify-content-center sm">
+          <div class="col-md-4">    
+            <div class="img-container">
+                <img src="https://s3.amazonaws.com/thisistoday-webassets/siteMedia/Devotion-Images/2019-10/workout.jpg" class="img-fluid rounded" alt="...">
+            </div><p>Ready for some wins? Start tracking, it’s easy!</p>
+          </div>
+          <div class="col-md-4">
+            <div class="img-container">
+                <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.vNo5s0dMrSfkCWZcnpJESAHaD2%26pid%3DApi&f=1&ipt=6fd7d00711fb7baac8258853415f2a266c09ef5b63d0895805afbc664ca49f43&ipo=images" class="img-fluid rounded" alt="...">
+            </div>
+             <p>Transform your fitness journey with personalized AI guidance and seamless workout tracking. </p>
+          </div>
+          <div class="col-md-4">
+            <div class="img-container">
+                <img src="https://cdn.dribbble.com/users/3993860/screenshots/12319955/media/1749f54ab1eff26f4f06622a7a4df111.png" class="img-fluid rounded" alt="...">
+            </div>
+              <p>Discover the impact of viewing your consistent progress</p>
+          </div>
+
+        </div> 
+        <% if(!currentUser){ %>
+        <p class="d-inline-flex gap-1">
+            <a href="/register" class="btn btn-primary">Sign Up!</a>
+        </p>
+        <p class="small text-center text-gray-soft">Have an account? <a href="/login">Sign In</a></p>
+        <% } %> 
+    </div>
