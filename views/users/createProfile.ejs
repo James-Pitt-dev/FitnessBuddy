@@ -5,52 +5,323 @@
 <!-- How forms in express/node work, each input is submitted to the route in the form action attribute url. They are then accessed under the key of the input name attribute. We would grab those in the route logic and save them to database. routes are kept in routes/users.js
 
 ex. a current weight input is submitted here, you go to the route: route.post('/users/createProfile', whateverFunction) and grab the current weight input by const currentWeight = req.body.user[currentWeight]; and do logic to save it to the database along with every other input we want. --> 
+<div class="container py-2 h-50">
+    <div class="row d-flex justify-content-center align-items-center h-50">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white" style="border-radius: 1rem;">
+                <div class="card-body p-4 text-center">
+                    <div class="mb-md-4 mt-md-2 pb-2">
+                        <div class="row">
+                            <h1 class="text-center mb-3">Set Profile Data</h1>
+                            <div class="col-6 offset-3">
+                                <form action="/createProfile" method="POST" novalidate class="validated-form">
+                                    
+                                    <div class="mb-5" id="Form1">    
+                                        <div class="mb-4">
+                                            <label class="form-label">What are you looking to get out of Fitness Buddy?.</label>
+                                            <input type="radio" class="btn-check btn-dark" name="goal" id="become_stronger" value="become stronger" autocomplete="off">
+                                            <label class="btn btn-light" for="become_stronger">Become stronger</label>
+                                            
+                                            <input type="radio" class="btn-check btn-dark" name="goal" id="look_better" value="look better" autocomplete="off">
+                                            <label class="btn btn-light" for="look_better">Look better</label>
+                                            
+                                            <input type="radio" class="btn-check btn-dark" name="goal" id="look_better_and_become_stronger" value="look better and become stronger" autocomplete="off">
+                                            <label class="btn btn-light" for="look_better_and_become_stronger">Both</label>
+                                        </div>
+                                        
+                                        <button type="button" class="btn btn-info btn-lg btn-block"  id="nextButton">Next</button>
+                                    </div>
+                                   
+              <div class="container mt-4" id="Form2" style="display: none;">
+               
+                    <div class="mb-3">
+                        <label class="form-label">Please select your sex.</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="female">
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="age" class="form-label">What is your age?</label>
+                      <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age">
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="height">Height</label>
+                    <input class="form-control" type="number" id="height" name="height" required>
+                    <div class="valid-feedback">
+                         Looks Good!
+                    </div>
+                  </div>
+                <div class="mb-3">
+                    <label for="currentWeight" class="form-label">What is your Current weight (lbs)?</label>
+                    <input type="number" class="form-control" id="currentWeight" name="currentWeight" placeholder="Enter your weight">
+                </div>
+                  <div class="mb-3">
+                    <label for="goalWeight" class="form-label">What is your Goal weight (lbs)?</label>
+                    <input type="text" class="form-control" id="goalWeight" name="goalWeight" placeholder="Enter your weight">
+                </div>
+                    <div class="mb-3 text-muted">
+                        We use this information to calculate an accurate calorie goal for you.
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showStep1()">Back</button>
+                        <button type="button" class="btn btn-primary" id="nextButton2">Next</button>
+                      </div>
+              
+            </div>
+            <div class="container mt-5" id="Form3" style="display: none;">
+                                     
+                                            <h4 class="text-center mb-4">What is your current activity level?</h4>
+                                            <div class="d-flex flex-column align-items-center">
+                                                <input type="radio" class="btn-check" name="activity" id="sedentary" value = "sedentary"   autocomplete="off">
+                                                <label class="btn btn-outline-light btn-lg mb-2" for="sedentary">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span>Sedentary</span>
+                                                        <i class="bi bi-bar-chart"></i>
+                                                    </div>
+                                                    <small class="d-block">No exercise and limited daily movement</small>
+                                                </label>
+                                    
+                                                <input type="radio" class="btn-check" name="activity" id="lightly active" value = "lightly active"  autocomplete="off">
+                                                <label class="btn btn-outline-light btn-lg mb-2" for="lightly active">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span>Lightly active</span>
+                                                        <i class="bi bi-bar-chart"></i>
+                                                    </div>
+                                                    <small class="d-block">Some light exercise 1-2 days per week</small>
+                                                </label>
+                                    
+                                                <input type="radio" class="btn-check" name="activity" id="moderately active" value = "moderately active" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-lg mb-2" for="moderately active">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span>Moderately active</span>
+                                                        <i class="bi bi-bar-chart"></i>
+                                                    </div>
+                                                    <small class="d-block">Moderate exercise 3-5 days per week</small>
+                                                </label>
+                                    
+                                                <input type="radio" class="btn-check" name="activity" id="very active" value = "very active"  autocomplete="off">
+                                                <label class="btn btn-outline-light btn-lg mb-2" for="very active">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span>Very active</span>
+                                                        <i class="bi bi-bar-chart"></i>
+                                                    </div>
+                                                    <small class="d-block">Vigorous exercise 6-7 days per week</small>
+                                                </label>
+                                    
+                                                <input type="radio" class="btn-check" name="activity" id="extremely active" value = "extremely active" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-lg mb-2" for="extremely active">
+                                                    <div class="d-flex justify-content-between align-items-center w-100">
+                                                        <span>Extremely active</span>
+                                                        <i class="bi bi-bar-chart"></i>
+                                                    </div>
+                                                    <small class="d-block">Vigorous exercise twice or more per day</small>
+                                                </label>
+                                            </div>
+                                           
+                                     
+                                    <button class="btn btn-primary mb-3" type="button" id = "nextButton3" >Next</button>
+                                </div>
+                                <div class="container mt-5" id="Form4" style="display: none;">
+                                    <h4 class="text-center mb-4">How often would you like to workout?</h4>
+                                    <div class="list-group">
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="2days" value="2days" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="2days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>2x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="3days" value="3days" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="3days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>3x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="4days" value="4days" autocomplete="off">
+                                        <label class="btn btn-outline-light " for="4days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>4x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="5days" value="5days" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="5days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>5x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="6days" value="6days" autocomplete="off">
+                                        <label class="btn btn-outline-light " for="6days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>6x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="workoutfrequency" id="7days" value="7days" autocomplete="off">
+                                        <label class="btn btn-outline-light " for="7days">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>7x per week</span>
+                                                <i class="bi bi-check-circle"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <p class="text-center text-muted mt-3">We recommend at least 3x per week</p>
+                                    <div class="text-center mt-4">
+                                        <button type="button" class="btn btn-outline-primary" >Back</button>
+                                        <button type="button" class="btn btn-primary"  id="nextButton4">Next</button>
+                                    </div>
+                                </div>
 
-<div class="row">
-    <h1 class="text-center mb-3">Set Profile Data</h1>
-    <div class="col-6 offset-3">
-        <form action="/createProfile" method="POST" novalidate class="validated-form">
-          
-            <div class="mb-3">    
-                <label class="form-label
-                " for="location">Current Weight</label>
-                <input class="form-control" type="number" id="currentWeight" name="currentWeight" required>
-                <div class="valid-feedback">
-                    Looks Good! 
+                                <div class="container mt-5" id="Form5" style="display: none;">
+                                    <h4 class="text-center mb-4">What equipment do you have available?</h4>
+                                    <div class="list-group">
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🏋️‍♂️</span>
+                                                <span>Full Gym</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="full-gym" value="full-gym" autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="full-gym"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🏋️</span>
+                                                <span>Barbells</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="barbells" value="barbells"  autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="barbells"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🏋️</span>
+                                                <span>Dumbbells</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="dumbbells" value="dumbbells" autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="dumbbells"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🏋️</span>
+                                                <span>Kettlebells</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="kettlebells" value="kettlebells"  autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="kettlebells"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🏋️</span>
+                                                <span>Machines</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="machines" value="machines" autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="machines"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                                            <div class="d-flex align-items-center">
+                                                <span class="me-3">🤸</span>
+                                                <span>Bodyweight</span>
+                                            </div>
+                                            <input type="checkbox" class="btn-check" name="equipment" id="bodyweight" value="bodyweight" autocomplete="off">
+                                            <label class="btn btn-outline-secondary btn-sm" for="bodyweight"><i class="bi bi-check2"></i></label>
+                                        </div>
+                                    </div>
+                                    <p class="text-center text-muted mt-3">You can enter specifics later</p>
+                                    <div class="text-center mt-4">
+                                        <button type="button" class="btn btn-primary mb-3" id="nextButton5" >Submit</button>
+                                    </div>
+                                </div>
+                                <div class="container mt-5" id="Form6" style="display: none;">
+                                    <h4 class="text-center mb-4">What is your weightlifting experience?</h4>
+                                    <div class="list-group">
+                                        <input type="radio" class="btn-check" name="experience" id="beginner" value="beginner" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="beginner">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>Beginner</span>
+                                                <i class="bi bi-circle"></i>
+                                            </div>
+                                            <small class="d-block">I'm relatively new to weightlifting</small>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="experience" id="intermediate" value="intermediate" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="intermediate">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>Intermediate</span>
+                                                <i class="bi bi-triangle"></i>
+                                            </div>
+                                            <small class="d-block">I've lifted weights but could still learn more</small>
+                                        </label>
+                            
+                                        <input type="radio" class="btn-check" name="experience" id="advanced" value="advanced" autocomplete="off">
+                                        <label class="btn btn-outline-light" for="advanced">
+                                            <div class="d-flex justify-content-between align-items-center w-100">
+                                                <span>Advanced</span>
+                                                <i class="bi bi-square"></i>
+                                            </div>
+                                            <small class="d-block">I've been lifting weights for years!</small>
+                                        </label>
+                                    </div>
+                                    <div class="text-center mt-4">
+                                        <button type="button" class="btn btn-outline-primary" onclick="showStep5()">Back</button>
+                                        <button type="submit" class="btn btn-primary">Next</button>
+                                    </div>
+                                </div>
+
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <label class="form-label" for="goalWeight">Goal Weight</label>
-                <input class="form-control" type="number" id="goalWeight" name="goalWeight" required>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="height">Height</label>
-                <input class="form-control" type="number" id="height" name="height" required>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-            </div>
-            <div class="mb-3">
-                <label for="experience" class="form-label">Whats your fitness experience?</label>
-                <select class="form-select" id="experience" name="experience" required>
-                    <option value="Novice">Novice</option>
-                    <option value="Intermediate">Intermediate</option>
-                    <option value="Expert">Expert</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="workouts">How many workouts a week?</label>
-                <input class="form-control" type="number" id="workoutNum" name="workoutNum" required>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-            </div>
-            <button class="btn btn-primary mb-3" type="submit">Submit</button>
-        </form>
+         </div>
     </div>
 </div>
+<script>
+    document.getElementById('nextButton').addEventListener('click', function() {
+      document.querySelector('#Form1').style.display = 'none';
+      document.getElementById('Form2').style.display = 'block';
+    });
+    document.getElementById('nextButton2').addEventListener('click', function() {
+      document.querySelector('#Form1').style.display = 'none';
+      document.getElementById('Form2').style.display = 'none';
+      document.getElementById('Form3').style.display = 'block';
+    });
+    document.getElementById('nextButton3').addEventListener('click', function() {
+      document.querySelector('#Form1').style.display = 'none';
+      document.getElementById('Form2').style.display = 'none';
+      document.getElementById('Form3').style.display =  'none';
+      document.getElementById('Form4').style.display = 'block';
+    });
+    document.getElementById('nextButton4').addEventListener('click', function() {
+      document.querySelector('#Form1').style.display = 'none';
+      document.getElementById('Form2').style.display = 'none';
+      document.getElementById('Form3').style.display =  'none';
+        document.getElementById('Form4').style.display = 'none';
+      document.getElementById('Form5').style.display = 'block';
+    });
+
+    document.getElementById('nextButton4').addEventListener('click', function() {
+      document.querySelector('#Form1').style.display = 'none';
+      document.getElementById('Form2').style.display = 'none';
+      document.getElementById('Form3').style.display =  'none';
+        document.getElementById('Form4').style.display = 'none';
+    document.getElementById('Form5').style.display = 'none';
+      document.getElementById('Form6').style.display = 'block';
+    });
 
 
+
+  </script>

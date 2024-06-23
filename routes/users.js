@@ -24,17 +24,24 @@ router.get('/createProfile', (req, res) => {
 });
 
 router.post('/createProfile', async (req, res) => {
-    const {experience, height, currentWeight, goalWeight, workoutNum} = req.body;
+    const {experience, age, height, currentWeight, goalWeight, workoutNum, gender, goal, activity, equipment,workoutfrequency} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){
         req.flash('error', 'Cannot find user');
         return res.redirect('/login');
     }
     user.experience = experience;
+    user.age = age;
     user.height = height;
     user.currentWeight = currentWeight;
     user.goalWeight = goalWeight;
     user.workoutNum = workoutNum;
+    user.gender = gender;
+    user.goal = goal;
+    user.activity =  activity;
+    user.equipment = equipment;
+    user.workoutfrequency = workoutfrequency;
+    console.log(gender);
     await user.save();
     console.log(user);
     res.redirect('/');
