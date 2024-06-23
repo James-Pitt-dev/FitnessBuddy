@@ -3,9 +3,11 @@
     <div class="row">
         <h1 class="text-center">View Workout</h1>
         <div class="col-6 offset-3">
-            <form action="/workouts/update" method="POST" novalidate class="validated-form">
+            <form action="/workouts/updateWorkout" method="POST" novalidate class="validated-form">
                 <div class="mb-3">
                     <label class="form-label" for="title">Workout Title</label>
+                    <input class="form-control" type="text" id="workoutId" name="workoutId"
+                    value="<%= workout._id %>" placeholder="Name your workout" hidden>
                     <input class="form-control" type="text" id="title" name="workout[title]"
                         value="<%= workout.title %>" placeholder="Name your workout" required>
                     <div class="valid-feedback">Looks Good!</div>
@@ -13,8 +15,8 @@
 
                 <div class="mb-3">
                     <label class="form-label" for="notes">Notes</label>
-                    <textarea class="form-control" id="notes" name="workout[notes]" value="<%= workout.notes %>"
-                        placeholder="Add notes to help your workout"></textarea>
+                    <textarea class="form-control" type="text" id="notes" name="workout[notes]" 
+                        placeholder="Add notes to help your workout"><%= workout.notes %></textarea>
                     <div class="valid-feedback">Looks Good!</div>
                 </div>
 
@@ -26,17 +28,47 @@
                 </div>
 
                 <% for (let i=0; i < workout.exercises.length; i++) { %>
-                    <h6 class="card-subtitle mb-2 text-muted">Exercise <%= i + 1 %>:</h6>
-                    <p class="card-text">Exercise Name: <%= workout.exercises[i].exercise.name %>
-                    </p>
+
+                    <div class="input-group mb-3">
+                        
+                        <input class="form-control" type="text" id="workoutExerciseId" name="workout[exercises][<%= i %>][_id]"
+                        value="<%= workout.exercises[i]._id %>" hidden></input>
+                        <button type="button" class="btn btn-light form-control" id="add-exercise">Exercise <%= i + 1 %>:&nbsp;<%= workout.exercises[i].exercise.name %></button>
+                        <input class="form-control" type="text" id="add-exercise" name="workout[exercises][<%= i %>][exercise][name]"
+                            value="<%= workout.exercises[i].exercise.name %>" hidden></input>
+               
+                    </div>
                     <% for (let j=0; j < workout.exercises[i].sets.length; j++) { %>
-                        <h6 class="card-subtitle mb-2 text-muted">Set <%= j + 1 %>:</h6>
-                        <p class="card-text">Reps: <%= workout.exercises[i].sets[j].reps %>
-                        </p>
-                        <p class="card-text">Weight: <%= workout.exercises[i].sets[j].weight %>
-                        </p>
-                        <p class="card-text">Previous Weight: <%= workout.exercises[i].sets[j].previousWeight %>
-                        </p>
+
+                        <h6 class="card-subtitle mb-2 text-muted" style="margin-left: 2em">Set <%= j + 1 %>:</h6>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend" style="margin-left: 4em">
+                                <span class="input-group-text">Reps:</span>
+                            </div>
+
+                            <input class="form-control" type="number" id="title" name="workout[exercises][<%= i %>][sets][<%= j %>][reps]"
+                                value="<%= workout.exercises[i].sets[j].reps %>" required></input>
+                                
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend" style="margin-left: 4em">
+                                <span class="input-group-text">Weight:</span>
+                            </div>
+                            <input class="form-control" type="number" id="title" name='workout[exercises][<%= i %>][sets][<%= j %>][weight]'
+                                value="<%= workout.exercises[i].sets[j].weight %>" required></input>
+
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend" style="margin-left: 4em">
+                                <span class="input-group-text">Previous Weight:</span>
+                            </div>
+
+                            <input class="form-control" type="number" id="title" name="workout[exercises][<%= i %>][sets][<%= j %>][previousWeight]"
+                                value="<%= workout.exercises[i].sets[j].previousWeight %>" required></input>
+
+                        </div>
+
                         <% } %>
                             <% } %>
                                 <div class="mb-3 mt-3">
@@ -46,3 +78,5 @@
             <a href="/workouts">All Workouts</a>
         </div>
     </div>
+
+    
