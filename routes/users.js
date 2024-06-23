@@ -3,6 +3,7 @@ const router = express.Router({mergeParams: true});
 const catchAsync = require('../utils/catchAsync');
 const ExpressError = require('../utils/ExpressError');
 const User = require('../models/user');
+const Workout = require("../models/workout");
 const passport = require('passport');
 const { storeReturnTo } = require('../middleware');
 const users = require('../controllers/users');
@@ -41,9 +42,18 @@ router.post('/createProfile',isLoggedIn, async (req, res) => {
     res.redirect('/');
 });
 
-router.get('/showProfile',isLoggedIn, (req, res) => {
+router.get('/showProfile',isLoggedIn, async (req, res) => {
     let currUser= res.locals.currentUser;
-    res.render('users/showProfile',{currUser});
+    let currUserId= req.user._id;
+    //fetch the workoutPlan data as an array to show the workout title, notes, and duration
+    const workouts = await Workout.find({author:currUserId}).populate({
+        path: "exercises",
+        populate: {
+          path: "exercise", // populate the `exercise` field inside `workoutExercise`
+          model: "Exercise",
+        },
+      });
+    res.render('users/showProfile',{currUser,workouts});
 });
 
 
@@ -55,10 +65,10 @@ router.post('/editProfile',isLoggedIn, async(req,res)=>{
         if(!editUser){
             return res.status(500).json({msg:"Unable to update user data"});
         } else{
-           const updatedUser= await User.findById(id);  
+           //redirect to show profile page   
            req.flash('success', 'Back to edit page!');
-           let currUser= updatedUser;
-           res.render('users/showProfile', {currUser});               
+           res.redirect("/showProfile");
+                      
         }                  
     }catch(error){     
         return res.status(500).json({msg:"Unable to update user data"});
