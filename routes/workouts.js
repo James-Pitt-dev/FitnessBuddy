@@ -16,6 +16,7 @@ router.get(
   })
 );
 
+//creat a new workout plan by POST
 router.post(
   "/new",
   isLoggedIn,
@@ -52,9 +53,12 @@ router.post(
 );
 
 router.get(
-  "/index",isLoggedIn,
+  "/index",
+  isLoggedIn,
   catchAsync(async (req, res) => {
-    const workouts = await Workout.find({}).populate({
+    const userId= req.user._id;
+    console.log("show user id as author to display workout",userId);
+    const workouts = await Workout.find({author:userId}).populate({
       path: "exercises",
       populate: {
         path: "exercise", // populate the `exercise` field inside `workoutExercise`
@@ -67,10 +71,11 @@ router.get(
 );
 
 router.get(
-  "/view/:id",isLoggedIn,
+  "/view/:id",
+  isLoggedIn,
   catchAsync(async (req, res) => {
-    let {id} = req.params;
-    console.log("here is viewing ",id);
+    let { id } = req.params;
+    console.log("here is viewing ", id);
     const workout = await Workout.findById(id).populate({
       path: "exercises",
       populate: {
@@ -85,18 +90,62 @@ router.get(
 );
 
 router.get(
-  "/delete/:id",isLoggedIn,
+  "/delete/:id",
+  isLoggedIn,
   catchAsync(async (req, res) => {
-    let {id} = req.params;
-    let curr_workout= await Workout.findById(id)
-    console.log(curr_workout.exercises)
+    let { id } = req.params;
+    let curr_workout = await Workout.findById(id);
+    console.log(curr_workout.exercises);
     //before deleting the workout plan, should go to find the workexercise id to delete workoutEexercise
     for (let exerciseIndex in curr_workout.exercises) {
-       //one by one, delete the workExercises
-       let delete_workoutExercise= await WorkoutExercise.findByIdAndDelete(curr_workout.exercises[exerciseIndex])  
-      }
-      //ane then delete the workout plan
+      //one by one, delete the workExercises
+      let delete_workoutExercise = await WorkoutExercise.findByIdAndDelete(
+        curr_workout.exercises[exerciseIndex]
+      );
+    }
+    //ane then delete the workout plan
     const delete_workout = await Workout.findByIdAndDelete(id);
+    res.redirect("/workouts/index");
+  })
+);
+
+//update the workout plan by POST
+router.post(
+  "/updateWorkout",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    //first of all, update the workout attributes such as title,notes, and timer
+    let workoutId = req.body["workoutId"];
+    const { workout } = req.body;
+    const editWorkout = await Workout.findByIdAndUpdate(workoutId, {
+      title: workout.title,
+      notes: workout.notes,
+      timer: workout.timer,
+    });
+
+    if (!editWorkout) {
+      return res.status(500).json({ msg: "Unable to update workout data" });
+    } else {
+      //find id of workoutExercise, and process the loop to update the sets of workoutExercise by mapping
+      for (let i = 0; i < editWorkout.exercises.length; i++) {
+        console.log(i, req.body["workout"]["exercises"][i]["_id"]);
+        const exerciseData = workout.exercises[i];
+        let workoutExerciseId = req.body["workout"]["exercises"][i]["_id"];
+        const eidtWorkExercise = await WorkoutExercise.findByIdAndUpdate(
+          workoutExerciseId,
+          {
+            sets: exerciseData.sets.map((set) => ({
+              reps: set.reps,
+              weight: set.weight,
+              previousWeight: set.previousWeight,
+            })),
+          }
+        );
+        console.log(eidtWorkExercise);
+      }
+    }
+
+    req.flash("success", "Successfully update current workout!");
     res.redirect("/workouts/index");
   })
 );
