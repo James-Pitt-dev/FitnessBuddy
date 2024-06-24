@@ -5,7 +5,7 @@ const dbPassword = process.env.DATABASE_PASSWORD;
 const Exercise = require('../models/exercise');
 const Workout = require('../models/workout');
 const WorkoutExercise = require('../models/workoutExercise');
-
+const apiKey = process.env.EXERCISE_API_KEY;
 // WILL WIPE AND REWRITE EXERCISE COLLECTION IN DATABASE IF RAN, CAUTION!!
 
 
@@ -45,12 +45,16 @@ const workoutAPI = async function(){ //function to fetch API exercises
      }
 
 const seedDB = async () => {
+    console.log('Fetching API...');
     const exerciseAPI = await workoutAPI();
+    console.log('Deleting Exercises DB...');
     await Exercise.deleteMany({}); //empty exercise collection
+    console.log('Deleting Workout DB...');
     await Workout.deleteMany({});
+    console.log('Deleting WorkoutExercise DB...');
     await WorkoutExercise.deleteMany({});
 
-
+    console.log('Writing new exercises to DB...cd .');
     for(let e of exerciseAPI){
         const exercise = new Exercise({...e}); 
         await exercise.save();

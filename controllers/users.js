@@ -20,7 +20,7 @@ module.exports.registerUser = async (req, res) => {
             if(err){
                 return next(err);
             } else {
-                req.flash('success', 'Welcome to Yelp Camp!');
+                req.flash('success', 'Welcome to Fitness Buddy!');
                 res.redirect('/createProfile');
             }    
         });

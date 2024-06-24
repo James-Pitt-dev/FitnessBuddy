@@ -1,0 +1,26 @@
+<% layout('layouts/boilerplate') %>
+
+<% for(let msg of pastMessages){ %>
+    <div class="bg-gray">
+        <p> <%= msg.userMessage %> </p>
+    </div>
+    <div class="bg-warning">
+        <p> <%= msg.trainerMessage %> </p>
+    </div>
+    <% } %>
+
+<form action="/ai-trainer/chat" method="POST" id="chatForm" novalidate class="validated-form">
+    <div class="row mb-5 fixed-bottom">
+        <div class="col-md-6 offset-3">
+            <div class="row">
+                <div class="col-md-9">
+                    <label class="form-label" for="userChat">Chat</label>
+                    <textarea class="form-control" type="text" id="userChat" name="AI[userChat]" cols="25" rows="4" required></textarea>
+                </div>
+                <div class="col-md-3 d-flex align-items-end">
+                    <button class="btn btn-success">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

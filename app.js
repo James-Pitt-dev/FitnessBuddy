@@ -17,6 +17,7 @@ const LocalStrategy = require('passport-local');
 const userRoutes = require('./routes/users');
 const workoutRoutes = require('./routes/workouts');
 const exerciseRoutes = require('./routes/exercises');
+const aiTrainerRoutes = require('./routes/aiTrainer.js');
 
 const User = require('./models/user.js');
 
@@ -83,6 +84,7 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);
 app.use('/workouts', workoutRoutes);
 app.use('/exercises', exerciseRoutes); //reroutes incoming urls that match '/exercises/*' to route handler
+app.use('/ai-trainer', aiTrainerRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');
