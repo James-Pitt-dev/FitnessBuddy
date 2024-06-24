@@ -23,8 +23,7 @@ const UserSchema = new mongoose.Schema({
         enum: ['male', 'female'],
     },
     goal: {
-        type: String,
-        enum: ['become stronger', 'look better', 'look better and become stronger']
+        type: [String]
     },
     activity: {
         type: String,

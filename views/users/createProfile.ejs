@@ -10,29 +10,61 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
         <div class="col-12 col-md-8 col-lg-6 col-xl-5">
             <div class="card bg-dark text-white" style="border-radius: 1rem;">
                 <div class="card-body p-4 text-center">
-                    <div class="mb-md-4 mt-md-2 pb-2">
+                    <div class="mb-md-6 mt-md-4 pb-4">
                         <div class="row">
                             <h1 class="text-center mb-3">Set Profile Data</h1>
-                            <div class="col-6 offset-3">
+                            <div class="col-8 offset-2">
                                 <form action="/createProfile" method="POST" novalidate class="validated-form">
                                     
-                                    <div class="mb-5" id="Form1">    
-                                        <div class="mb-4">
-                                            <label class="form-label">What are you looking to get out of Fitness Buddy?.</label>
-                                            <input type="radio" class="btn-check btn-dark" name="goal" id="become_stronger" value="become stronger" autocomplete="off">
-                                            <label class="btn btn-light" for="become_stronger">Become stronger</label>
-                                            
-                                            <input type="radio" class="btn-check btn-dark" name="goal" id="look_better" value="look better" autocomplete="off">
-                                            <label class="btn btn-light" for="look_better">Look better</label>
-                                            
-                                            <input type="radio" class="btn-check btn-dark" name="goal" id="look_better_and_become_stronger" value="look better and become stronger" autocomplete="off">
-                                            <label class="btn btn-light" for="look_better_and_become_stronger">Both</label>
-                                        </div>
+                                    <div class="container-fluid"  id="Form1">    
                                         
-                                        <button type="button" class="btn btn-info btn-lg btn-block"  id="nextButton">Next</button>
+                                            <label class="form-label">What are you looking to get out of Fitness Buddy?</label>
+                                            <div class="btn-group-toggle" data-toggle="buttons">
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="become_stronger" value="Become stronger" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2"  for="become_stronger">Become stronger</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better" value="Look better" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2"  for="look_better">Look better</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better_and_become_stronger" value="Look better and become stronger" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2"  for="look_better_and_become_stronger">Both</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="get_stronger" value="Get Stronger" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="get_stronger">Get Stronger</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better_goal" value="Look Better" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="look_better_goal">Look Better</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="lose_weight" value="Lose Weight" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="lose_weight">Lose Weight</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="gain_muscle" value="Gain Muscle" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="gain_muscle">Gain Muscle</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="stay_fit" value="Stay Fit" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="stay_fit">Stay Fit</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="boost_endurance" value="Boost Endurance" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="boost_endurance">Boost Endurance</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="improve_flexibility" value="Improve Flexibility" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="improve_flexibility">Improve Flexibility</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="track_progress" value="Track Progress" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="track_progress">Track Progress</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="stay_motivated" value="Stay Motivated" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="stay_motivated">Stay Motivated</label>
+                                                
+                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="reduce_stress" value="Reduce Stress" autocomplete="off">
+                                                <label class="btn btn-outline-light btn-sm mb-2" for="reduce_stress">Reduce Stress</label>
+                                            
+                                            </div>
+
+                                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showForm2()">Next</button>
                                     </div>
                                    
-              <div class="container mt-4" id="Form2" style="display: none;">
+              <div class="container-fluid" id="Form2" style="display: none;">
                
                     <div class="mb-3">
                         <label class="form-label">Please select your sex.</label>
@@ -66,12 +98,12 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                     <label for="goalWeight" class="form-label">What is your Goal weight (lbs)?</label>
                     <input type="text" class="form-control" id="goalWeight" name="goalWeight" placeholder="Enter your weight">
                 </div>
-                    <div class="mb-3 text-muted">
+                    <div class="mb-3 text-white">
                         We use this information to calculate an accurate calorie goal for you.
                     </div>
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showStep1()">Back</button>
-                        <button type="button" class="btn btn-primary" id="nextButton2">Next</button>
+                    <div class="text-center mt-4">
+                        <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm1()">Back</button>
+                        <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm3()">Next</button>
                       </div>
               
             </div>
@@ -125,8 +157,10 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                                 </label>
                                             </div>
                                            
-                                     
-                                    <button class="btn btn-primary mb-3" type="button" id = "nextButton3" >Next</button>
+                                            <div class="text-center mt-4">
+                                                <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm2()">Back</button>
+                                                <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm4()">Next</button>
+                                            </div>
                                 </div>
                                 <div class="container mt-5" id="Form4" style="display: none;">
                                     <h4 class="text-center mb-4">How often would you like to workout?</h4>
@@ -181,9 +215,9 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                     </div>
                                     <p class="text-center text-muted mt-3">We recommend at least 3x per week</p>
                                     <div class="text-center mt-4">
-                                        <button type="button" class="btn btn-outline-primary" >Back</button>
-                                        <button type="button" class="btn btn-primary"  id="nextButton4">Next</button>
-                                    </div>
+                                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showForm3()" >Back</button>
+                                    <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm5()">Next</button>
+                                        </div>
                                 </div>
 
                                 <div class="container mt-5" id="Form5" style="display: none;">
@@ -240,7 +274,8 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                     </div>
                                     <p class="text-center text-muted mt-3">You can enter specifics later</p>
                                     <div class="text-center mt-4">
-                                        <button type="button" class="btn btn-primary mb-3" id="nextButton5" >Submit</button>
+                                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showForm4()">Back</button>
+                                        <button type="button" class="btn btn-info btn-md btn-block"  onclick="showForm6()">Next</button>
                                     </div>
                                 </div>
                                 <div class="container mt-5" id="Form6" style="display: none;">
@@ -274,8 +309,8 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </label>
                                     </div>
                                     <div class="text-center mt-4">
-                                        <button type="button" class="btn btn-outline-primary" onclick="showStep5()">Back</button>
-                                        <button type="submit" class="btn btn-primary">Next</button>
+                                        <button type="button" class="btn btn-info btn-md btn-block" onclick="showForm5()">Back</button>
+                                        <button type="submit" class="btn btn-info btn-md btn-block">Submit</button>
                                     </div>
                                 </div>
 
@@ -289,39 +324,62 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
          </div>
     </div>
 </div>
+
 <script>
-    document.getElementById('nextButton').addEventListener('click', function() {
-      document.querySelector('#Form1').style.display = 'none';
-      document.getElementById('Form2').style.display = 'block';
-    });
-    document.getElementById('nextButton2').addEventListener('click', function() {
-      document.querySelector('#Form1').style.display = 'none';
-      document.getElementById('Form2').style.display = 'none';
-      document.getElementById('Form3').style.display = 'block';
-    });
-    document.getElementById('nextButton3').addEventListener('click', function() {
-      document.querySelector('#Form1').style.display = 'none';
-      document.getElementById('Form2').style.display = 'none';
-      document.getElementById('Form3').style.display =  'none';
-      document.getElementById('Form4').style.display = 'block';
-    });
-    document.getElementById('nextButton4').addEventListener('click', function() {
-      document.querySelector('#Form1').style.display = 'none';
-      document.getElementById('Form2').style.display = 'none';
-      document.getElementById('Form3').style.display =  'none';
+    function showForm1() {
+        document.getElementById('Form1').style.display = 'block';
+        document.getElementById('Form2').style.display = 'none';
+        document.getElementById('Form3').style.display = 'none';
         document.getElementById('Form4').style.display = 'none';
-      document.getElementById('Form5').style.display = 'block';
-    });
+        document.getElementById('Form5').style.display = 'none';
+        document.getElementById('Form6').style.display = 'none';
+    }
 
-    document.getElementById('nextButton4').addEventListener('click', function() {
-      document.querySelector('#Form1').style.display = 'none';
-      document.getElementById('Form2').style.display = 'none';
-      document.getElementById('Form3').style.display =  'none';
+    function showForm2() {
+        document.getElementById('Form1').style.display = 'none';
+        document.getElementById('Form2').style.display = 'block';
+        document.getElementById('Form3').style.display = 'none';
         document.getElementById('Form4').style.display = 'none';
-    document.getElementById('Form5').style.display = 'none';
-      document.getElementById('Form6').style.display = 'block';
-    });
+        document.getElementById('Form5').style.display = 'none';
+        document.getElementById('Form6').style.display = 'none';
+    }
+
+    function showForm3() {
+        document.getElementById('Form1').style.display = 'none';
+        document.getElementById('Form2').style.display = 'none';
+        document.getElementById('Form3').style.display = 'block';
+        document.getElementById('Form4').style.display = 'none';
+        document.getElementById('Form5').style.display = 'none';
+        document.getElementById('Form6').style.display = 'none';
+    }
+
+    function showForm4() {
+        document.getElementById('Form1').style.display = 'none';
+        document.getElementById('Form2').style.display = 'none';
+        document.getElementById('Form3').style.display = 'none';
+        document.getElementById('Form4').style.display = 'block';
+        
+        document.getElementById('Form5').style.display = 'none';
+        document.getElementById('Form6').style.display = 'none';
+    }
+
+    function showForm5() {
+        document.getElementById('Form1').style.display = 'none';
+        document.getElementById('Form2').style.display = 'none';
+        document.getElementById('Form3').style.display = 'none';
+        document.getElementById('Form4').style.display = 'none';
+        document.getElementById('Form5').style.display = 'block';
+        document.getElementById('Form6').style.display = 'none';
+    }
+
+    function showForm6() {
+        document.getElementById('Form1').style.display = 'none';
+        document.getElementById('Form2').style.display = 'none';
+        document.getElementById('Form3').style.display = 'none';
+        document.getElementById('Form4').style.display = 'none';
+        document.getElementById('Form5').style.display = 'none';
+        document.getElementById('Form6').style.display = 'block';
+    }
 
 
-
-  </script>
+</script>
