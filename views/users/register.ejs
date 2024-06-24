@@ -1,26 +1,40 @@
 <% layout('layouts/boilerplate'); %>
-<h1>Register</h1>
-<form action="/register" method="POST" class="validated-form" novalidate>   
-    <div class="mb-3">    
-        <label class="form-label" for="username">Username</label>
-        <input class="form-control" type="text" id="username" name="username" required>
-        <div class="valid-feedback">
-            Looks Good!
+<div class="container py-2 h-50">
+    <div class="row d-flex justify-content-center align-items-center h-50">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-4 text-center">
+            <div class="mb-md-4 mt-md-2 pb-2">
+                <h1>Register</h1>
+                <form action="/register" method="POST" class="validated-form" novalidate>   
+                    <div class="mb-3">    
+                        <label class="form-label" for="username">Username</label>
+                        <input class="form-control" type="text" id="username" name="username" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                    <div class="mb-3">    
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="email" id="email" name="email" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                    <div class="mb-3">    
+                        <label class="form-label" for="password">Password</label>
+                        <input class="form-control" type="password" id="password" name="password" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                    <button class="btn btn-success" type="submit">Register</button>
+                </form>
+                <div>
+                    <p class="small text-center text-gray-soft">Have an account? <a href="/login">Sign In</a></p>
+                </div>
+            </div>
+          </div>
         </div>
     </div>
-    <div class="mb-3">    
-        <label class="form-label" for="email">Email</label>
-        <input class="form-control" type="email" id="email" name="email" required>
-        <div class="valid-feedback">
-            Looks Good!
-        </div>
-    </div>
-    <div class="mb-3">    
-        <label class="form-label" for="password">Password</label>
-        <input class="form-control" type="password" id="password" name="password" required>
-        <div class="valid-feedback">
-            Looks Good!
-        </div>
-    </div>
-    <button class="btn btn-success" type="submit">Register</button>
-</form>
+</div>
