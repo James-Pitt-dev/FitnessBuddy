@@ -45,6 +45,7 @@ app.set('view engine', 'ejs');
 app.set('path', path.join(__dirname, 'views'));
 
 // MIDDLEWARE
+app.use(express.json());
 app.use(express.urlencoded({extended: true})); // To parse req.body
 app.use(methodOverride('_method')); // To enable PUT/PATCH requests. Pass in string pattern we want app to watch for.
 // app.use(morgan('tiny'));

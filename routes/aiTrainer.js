@@ -14,7 +14,6 @@ router.get('/chat', isLoggedIn, catchAsync(async (req, res) => {
   
         const id = req.user._id
         const pastMessages = await ChatHistory.find({author: id}).populate('author').exec();
-        console.log(pastMessages);
         res.render('aiTrainer/chat', {pastMessages});
 }));
 
@@ -27,7 +26,10 @@ router.post('/chat', isLoggedIn, async (req, res) => {
         userMessage: userChat,
         trainerMessage: data
     });
+
     await chatHistory.save();
-    res.send(`${chatHistory}`);
+    console.log(chatHistory);
+    res.json(chatHistory);
 });
+
 module.exports = router;

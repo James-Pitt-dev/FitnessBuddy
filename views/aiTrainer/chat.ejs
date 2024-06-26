@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
+</div>
 <% for(let msg of pastMessages){ %>
     <div class="bg-gray">
         <p> <%= msg.userMessage %> </p>
@@ -9,7 +10,9 @@
     </div>
     <% } %>
 
-<form action="/ai-trainer/chat" method="POST" id="chatForm" novalidate class="validated-form">
+    <div class="container" id="chatContainer"></div>
+
+<form id="chatForm" novalidate class="validated-form">
     <div class="row mb-5 fixed-bottom">
         <div class="col-md-6 offset-3">
             <div class="row">
@@ -24,3 +27,43 @@
         </div>
     </div>
 </form>
+<script>
+ const chatForm = document.querySelector('#chatForm');
+ chatForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const userChat = document.getElementById('userChat').value;
+    try{
+        const response = await fetch('/ai-trainer/chat', {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        method: 'POST',
+        body: JSON.stringify({AI: {userChat}}), 
+    });
+
+    const chatHistory = await response.json();
+    console.log(chatHistory);
+
+    if(response.ok){
+    const chatContainer = document.getElementById('chatContainer');
+
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.classList.add('bg-gray');
+    userMessageDiv.innerHTML = `<p>${chatHistory.userMessage}</p>`;
+    chatContainer.appendChild(userMessageDiv);    
+
+    const trainerMessageDiv = document.createElement('div');
+    trainerMessageDiv.classList.add('bg-warning');
+    trainerMessageDiv.innerHTML = `<p>${chatHistory.trainerMessage}</p>`;
+    chatContainer.appendChild(trainerMessageDiv);    
+
+
+    
+ }    
+} 
+    
+    catch(e){ console.log(e);}
+
+ });
+
+</script>
