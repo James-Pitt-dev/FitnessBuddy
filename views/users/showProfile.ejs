@@ -35,20 +35,20 @@
                     <div class="form-group col-md-6">
                         <label class="form-label" for="experience">Experience</label>
                         <select class="form-select" id="experience" name="experience" required>
-                            <option value="Novice" <% if(currUser.experience=="Novice" ) { %>
+                            <option value="beginner" <% if(currUser.experience=="beginner" ) { %>
                                 selected
                                 <% } %>
-                                    >Novice
+                                    >Beginner
                             </option>
-                            <option value="Intermediate" <% if(currUser.experience=="Intermediate" ) { %>
+                            <option value="intermediate" <% if(currUser.experience=="intermediate" ) { %>
                                 selected
                                 <% } %>
                                     >Intermediate
                             </option>
-                            <option value="Expert" <% if(currentUser.experience=="Expert" ) { %>
+                            <option value="advanced" <% if(currentUser.experience=="advanced" ) { %>
                                 selected
                                 <% } %>
-                                    >Expert
+                                    >Advanced
                             </option>
                         </select>
 
@@ -60,7 +60,7 @@
 
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="weight">Weight (kg)</label>
+                        <label for="weight">Weight (bls)</label>
                         <input class="form-control" type="number" name="currentWeight" id="currentWeight"
                             value="<%= currUser.currentWeight %>">
                     </div>
@@ -70,9 +70,40 @@
                             value="<%= currUser.height %>">
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="workoutNum">WorkoutNum</label>
-                        <input class="form-control" type="number" name="workoutNum" id="workoutNum"
-                            value="<%= currUser.workoutNum %>">
+                        <label for="workoutfrequency">Workout Frequency</label>
+                        <select class="form-select" id="workoutfrequency" name="workoutfrequency" required>
+                            <option value="2days" <% if(currUser.workoutfrequency=="2days" ) { %>
+                                selected
+                                <% } %>
+                                    >2days
+                            </option>
+                            <option value="3days" <% if(currUser.workoutfrequency=="3days" ) { %>
+                                selected
+                                <% } %>
+                                    >3days
+                            </option>
+                            <option value="4days" <% if(currentUser.workoutfrequency=="4days" ) { %>
+                                selected
+                                <% } %>
+                                    >4days
+                            </option>
+                            <option value="5days" <% if(currUser.workoutfrequency=="5days" ) { %>
+                                selected
+                                <% } %>
+                                    >5days
+                            </option>
+                            <option value="6days" <% if(currUser.workoutfrequency=="6days" ) { %>
+                                selected
+                                <% } %>
+                                    >6days
+                            </option>
+                            <option value="7days" <% if(currentUser.workoutfrequency=="7days" ) { %>
+                                selected
+                                <% } %>
+                                    >7days
+                            </option>
+                        </select>
+
                     </div>
                 </div>
                 <br>
@@ -85,25 +116,26 @@
                                 <th scope="col">Duration(in Minutes)</th>
                             </tr>
                         </thead>
-                        <tbody><% if (workouts.length==0){ %>
-                            <td>
-                                There is no workout plan created!
-                            </td>
+                        <tbody>
+                            <% if (workouts.length==0){ %>
+                                <td>
+                                    There is no workout plan created!
+                                </td>
 
-                        <% }else{ %>
-                            <% for (let i=0; i < workouts.length; i++) { %>
-                                <tr>
-                                    <td>
-                                        <%= workouts[i].title %>
-                                    </td>
-                                    <td>
-                                        <%= workouts[i].notes %>
-                                    </td>
-                                    <td>
-                                        <%= workouts[i].timer %>
-                                    </td>
-                                </tr>
-                                <% } }%>
+                                <% }else{ %>
+                                    <% for (let i=0; i < workouts.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <%= workouts[i].title %>
+                                            </td>
+                                            <td>
+                                                <%= workouts[i].notes %>
+                                            </td>
+                                            <td>
+                                                <%= workouts[i].timer %>
+                                            </td>
+                                        </tr>
+                                        <% } }%>
                         </tbody>
                     </table>
 
