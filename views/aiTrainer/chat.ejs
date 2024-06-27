@@ -1,27 +1,45 @@
 <% layout('layouts/boilerplate') %>
 
-</div>
 <% for(let msg of pastMessages){ %>
-    <div class="bg-gray">
-        <p> <%= msg.userMessage %> </p>
+<div class="row m-2">
+    <div class="col-md-4 offset-6">
+        <div class="d-flex justify-content-end">
+            <div class="card border-dark mb-3" style="width: 38rem;">
+                <div class="card-header bg-success text-white" style="max-height: 3rem;">User</div>
+                <div class="card-body">
+                  <p class="card-text"><%= msg.userMessage %></p>
+                </div>
+              </div>
+        </div>
     </div>
-    <div class="bg-warning">
-        <p> <%= msg.trainerMessage %> </p>
+</div>
+
+<div class="row m-2">
+    <div class="col-md-4 offset-2">
+        <div class="d-flex justify-content-end">
+            <div class="card border-dark mb-3" style="width: 38rem;">
+                <div class="card-header bg-primary text-white" style="max-height: 3rem;">AI Trainer</div>
+                <div class="card-body">
+                  <p class="card-text"><%= msg.trainerMessage %></p>
+                </div>
+              </div>
+        </div>
     </div>
+</div>
     <% } %>
 
     <div class="container" id="chatContainer"></div>
+
 
 <form id="chatForm" novalidate class="validated-form">
     <div class="row mb-5 fixed-bottom">
         <div class="col-md-6 offset-3">
             <div class="row">
                 <div class="col-md-9">
-                    <label class="form-label" for="userChat">Chat</label>
-                    <textarea class="form-control" type="text" id="userChat" name="AI[userChat]" cols="25" rows="4" required></textarea>
+                    <textarea class="form-control border-success" type="text" id="userChat" name="AI[userChat]" cols="25" rows="3" required></textarea>
                 </div>
                 <div class="col-md-3 d-flex align-items-end">
-                    <button class="btn btn-success">Submit</button>
+                    <button class="btn btn-success">^</button>
                 </div>
             </div>
         </div>
@@ -49,15 +67,34 @@
 
     const userMessageDiv = document.createElement('div');
     userMessageDiv.classList.add('bg-gray');
-    userMessageDiv.innerHTML = `<p>${chatHistory.userMessage}</p>`;
+    userMessageDiv.innerHTML = `<div class="row">
+    <div class="col-md-4 offset-6">
+        <div class="d-flex justify-content-end">
+            <div class="card border-primary mb-3" style="width: 38rem;">
+                <div class="card-header bg-success text-white" style="max-height: 3rem;">User</div>
+                <div class="card-body">
+                  <p class="card-text">${chatHistory.userMessage}</p>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>`;
     chatContainer.appendChild(userMessageDiv);    
 
     const trainerMessageDiv = document.createElement('div');
-    trainerMessageDiv.classList.add('bg-warning');
-    trainerMessageDiv.innerHTML = `<p>${chatHistory.trainerMessage}</p>`;
+    trainerMessageDiv.innerHTML = `<div class="row">
+    <div class="col-md-4 offset-2">
+        <div class="d-flex justify-content-end">
+            <div class="card border-primary mb-3" style="width: 38rem;">
+                <div class="card-header bg-primary text-white" style="max-height: 3rem;">AI Trainer</div>
+                <div class="card-body">
+                  <p class="card-text">${chatHistory.trainerMessage}</p>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>`;
     chatContainer.appendChild(trainerMessageDiv);    
-
-
     
  }    
 } 
