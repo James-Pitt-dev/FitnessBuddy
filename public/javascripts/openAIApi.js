@@ -1,5 +1,6 @@
 const OpenAI = require("openai");
 require('dotenv').config();
+const {rolePrompt} = require('./AIContext');
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
 const openai = new OpenAI({
