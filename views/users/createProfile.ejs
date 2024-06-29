@@ -20,15 +20,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         
                                             <label class="form-label">What are you looking to get out of Fitness Buddy?</label>
                                             <div class="btn-group-toggle" data-toggle="buttons">
-                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="become_stronger" value="Become stronger" autocomplete="off">
-                                                <label class="btn btn-outline-light btn-sm mb-2"  for="become_stronger">Become stronger</label>
-                                                
-                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better" value="Look better" autocomplete="off">
-                                                <label class="btn btn-outline-light btn-sm mb-2"  for="look_better">Look better</label>
-                                                
-                                                <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better_and_become_stronger" value="Look better and become stronger" autocomplete="off">
-                                                <label class="btn btn-outline-light btn-sm mb-2"  for="look_better_and_become_stronger">Both</label>
-                                                
+                                             
                                                 <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="get_stronger" value="Get Stronger" autocomplete="off">
                                                 <label class="btn btn-outline-light btn-sm mb-2" for="get_stronger">Get Stronger</label>
                                                 
@@ -326,6 +318,69 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
 </div>
 
 <script>
+    function validateForm1() {
+        const checkboxes = document.querySelectorAll('#Form1 input[type="checkbox"]');
+        for (const checkbox of checkboxes) {
+            if (checkbox.checked) {
+                return true;
+            }
+        }
+        alert("Please select at least one goal.");
+        return false;
+    }
+
+    function validateForm2() {
+        const gender = document.querySelector('input[name="gender"]:checked');
+        const age = document.getElementById('age').value;
+        const height = document.getElementById('height').value;
+        const currentWeight = document.getElementById('currentWeight').value;
+        const goalWeight = document.getElementById('goalWeight').value;
+        
+        if (gender && age && height && currentWeight && goalWeight) {
+            return true;
+        }
+        alert("Please fill out all fields in this section.");
+        return false;
+    }
+
+    function validateForm3() {
+        const activity = document.querySelector('input[name="activity"]:checked');
+        if (activity) {
+            return true;
+        }
+        alert("Please select your current activity level.");
+        return false;
+    }
+
+    function validateForm4() {
+        const workoutFrequency = document.querySelector('input[name="workoutfrequency"]:checked');
+        if (workoutFrequency) {
+            return true;
+        }
+        alert("Please select your workout frequency.");
+        return false;
+    }
+
+    function validateForm5() {
+        const equipment = document.querySelectorAll('#Form5 input[type="checkbox"]');
+        for (const item of equipment) {
+            if (item.checked) {
+                return true;
+            }
+        }
+        alert("Please select at least one equipment option.");
+        return false;
+    }
+
+    function validateForm6() {
+        const experience = document.querySelector('input[name="experience"]:checked');
+        if (experience) {
+            return true;
+        }
+        alert("Please select your weightlifting experience.");
+        return false;
+    }
+
     function showForm1() {
         document.getElementById('Form1').style.display = 'block';
         document.getElementById('Form2').style.display = 'none';
@@ -336,50 +391,57 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
     }
 
     function showForm2() {
-        document.getElementById('Form1').style.display = 'none';
-        document.getElementById('Form2').style.display = 'block';
-        document.getElementById('Form3').style.display = 'none';
-        document.getElementById('Form4').style.display = 'none';
-        document.getElementById('Form5').style.display = 'none';
-        document.getElementById('Form6').style.display = 'none';
+        if (validateForm1()) {
+            document.getElementById('Form1').style.display = 'none';
+            document.getElementById('Form2').style.display = 'block';
+            document.getElementById('Form3').style.display = 'none';
+            document.getElementById('Form4').style.display = 'none';
+            document.getElementById('Form5').style.display = 'none';
+            document.getElementById('Form6').style.display = 'none';
+        }
     }
 
     function showForm3() {
-        document.getElementById('Form1').style.display = 'none';
-        document.getElementById('Form2').style.display = 'none';
-        document.getElementById('Form3').style.display = 'block';
-        document.getElementById('Form4').style.display = 'none';
-        document.getElementById('Form5').style.display = 'none';
-        document.getElementById('Form6').style.display = 'none';
+        if (validateForm2()) {
+            document.getElementById('Form1').style.display = 'none';
+            document.getElementById('Form2').style.display = 'none';
+            document.getElementById('Form3').style.display = 'block';
+            document.getElementById('Form4').style.display = 'none';
+            document.getElementById('Form5').style.display = 'none';
+            document.getElementById('Form6').style.display = 'none';
+        }
     }
 
     function showForm4() {
-        document.getElementById('Form1').style.display = 'none';
-        document.getElementById('Form2').style.display = 'none';
-        document.getElementById('Form3').style.display = 'none';
-        document.getElementById('Form4').style.display = 'block';
-        
-        document.getElementById('Form5').style.display = 'none';
-        document.getElementById('Form6').style.display = 'none';
+        if (validateForm3()) {
+            document.getElementById('Form1').style.display = 'none';
+            document.getElementById('Form2').style.display = 'none';
+            document.getElementById('Form3').style.display = 'none';
+            document.getElementById('Form4').style.display = 'block';
+            document.getElementById('Form5').style.display = 'none';
+            document.getElementById('Form6').style.display = 'none';
+        }
     }
 
     function showForm5() {
-        document.getElementById('Form1').style.display = 'none';
-        document.getElementById('Form2').style.display = 'none';
-        document.getElementById('Form3').style.display = 'none';
-        document.getElementById('Form4').style.display = 'none';
-        document.getElementById('Form5').style.display = 'block';
-        document.getElementById('Form6').style.display = 'none';
+        if (validateForm4()) {
+            document.getElementById('Form1').style.display = 'none';
+            document.getElementById('Form2').style.display = 'none';
+            document.getElementById('Form3').style.display = 'none';
+            document.getElementById('Form4').style.display = 'none';
+            document.getElementById('Form5').style.display = 'block';
+            document.getElementById('Form6').style.display = 'none';
+        }
     }
 
     function showForm6() {
-        document.getElementById('Form1').style.display = 'none';
-        document.getElementById('Form2').style.display = 'none';
-        document.getElementById('Form3').style.display = 'none';
-        document.getElementById('Form4').style.display = 'none';
-        document.getElementById('Form5').style.display = 'none';
-        document.getElementById('Form6').style.display = 'block';
+        if (validateForm5()) {
+            document.getElementById('Form1').style.display = 'none';
+            document.getElementById('Form2').style.display = 'none';
+            document.getElementById('Form3').style.display = 'none';
+            document.getElementById('Form4').style.display = 'none';
+            document.getElementById('Form5').style.display = 'none';
+            document.getElementById('Form6').style.display = 'block';
+        }
     }
-
-
 </script>
