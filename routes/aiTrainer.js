@@ -18,13 +18,18 @@ router.get('/chat', isLoggedIn, catchAsync(async (req, res) => {
 
 router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     const {userChat} = req.body.AI;
-    const {id} = req.user._id;
-    const workoutHistory = await getUserContext(id);
-    const messageHistory = await getChatContext(id);
-    const userProfile = await getProfileContext(id);
-    const superPrompt = workoutHistory + messageHistory + userProfile;
-    
-    const data = await sendPrompt(userChat);
+    const userID = req.user._id;
+    const workoutHistory = await getUserContext(userID);
+    const messageHistory = await getChatContext(userID);
+    const userProfile = await getProfileContext(userID);
+    const superPrompt = `
+    User's Workout History: ${JSON.stringify(workoutHistory)}
+    User's Message History: ${JSON.stringify(messageHistory)}
+    User's Profile: ${userProfile}
+    User's Message: ${userChat}
+`;
+    console.log(superPrompt);
+    const data = await sendPrompt(superPrompt);
     
     const chatHistory = new ChatHistory({
         author: req.user._id,
@@ -33,6 +38,7 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     });
 
     await chatHistory.save();
+    console.log(chatHistory);
     res.json(chatHistory);
 }));
 
