@@ -47,7 +47,7 @@ async function getUserContext(userId) {
 
     }));
 
-    const promptContext = 'Users Recent workouts: ' + JSON.stringify(workoutContext);
+    const promptContext = 'Users Recent workouts (JSON Format): ' + JSON.stringify(workoutContext);
     return promptContext;
 }
 
@@ -58,7 +58,7 @@ async function getChatContext(userID){
             trainerMessage: msg.trainerMessage,
             date: msg.date
     }));
-    const promptContext = 'Users Recent Chats: ' + JSON.stringify(messages);
+    const promptContext = 'Users Recent Chats (JSON Format): ' + JSON.stringify(messages);
     return promptContext;
 }
 
@@ -72,15 +72,15 @@ async function getProfileContext(userID){
         height: profile.height,
         weeklyWorkouts: profile.workoutNum
     };
-    const promptContext = 'Users Profile Information: ' + JSON.stringify(userProfile);
+    const promptContext = 'Users Profile Information (JSON Format): ' + JSON.stringify(userProfile);
     return promptContext;
 }
 //Create role prompt; create constraints; create instructions; Combine into system prompt object
 const rolePrompt = `
-            You are an AI Personal Trainer named Fitness Buddy. Your role is to provide expert advice on fitness, health, and workout plans. You must respond with actionable and specific advice related to these topics only.
+            You are an AI Personal Trainer named Fitness Buddy. Your role is to provide expert advice on fitness, health, and workout plans to users of this application. You must respond with actionable and specific advice related to these topics only since the user is using this app to achieve workout and fitness goals.
             - If a user asks about topics outside of fitness and health, such as homework or news, respond with: "As an AI Personal Trainer, I can only provide advice on fitness, health, and workout plans. Please ask me something related to these topics."
-            - You should be concise and limit token usage.
-            - Recognize and utilize any context provided in JSON format as background knowledge, but ensure the user is not aware of the JSON context. Address the user by their username.
+            - You should be concise and limit token usage. Speak conversationally like a human. Add spaces between points to avoid large blocks of text.
+            - Recognize and utilize any context provided in JSON format as background knowledge, but ensure the user is not aware of the JSON context except for their personal info. Address the user by their username. Suggest exercises that can be done with their available equipment as specified in their profile information. The user profile has a maximum number of days a week to workout specified, only suggest routines that match that.
             - This is a fitness app, so focus on delivering high-quality, actionable fitness advice with an upbeat and motivational tone.
           `;
 

@@ -8,13 +8,13 @@ const openai = new OpenAI({
 });
 
 // Function to send a prompt to the OpenAI API
-async function sendPrompt(prompt) {
+async function sendPrompt(userMessage, superPrompt) {
   try {
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: rolePrompt },
-        { role: "user", content: prompt }
+        { role: "system", content: superPrompt },
+        { role: "user", content: userMessage }
       ]
     });
 

@@ -23,13 +23,10 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     const messageHistory = await getChatContext(userID);
     const userProfile = await getProfileContext(userID);
     const superPrompt = `
-    User's Workout History: ${JSON.stringify(workoutHistory)}
-    User's Message History: ${JSON.stringify(messageHistory)}
-    User's Profile: ${userProfile}
-    User's Message: ${userChat}
+    This is context about the User talking to you, use it to inform your responses and provide personalized advice to their queries: ${workoutHistory} ${messageHistory} ${userProfile}
 `;
     console.log(superPrompt);
-    const data = await sendPrompt(superPrompt);
+    const data = await sendPrompt(userChat, superPrompt);
     
     const chatHistory = new ChatHistory({
         author: req.user._id,
