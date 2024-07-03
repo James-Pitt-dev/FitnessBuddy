@@ -26,7 +26,7 @@ db.once("open", () => {
 
 const workoutAPI = async function(){ //function to fetch API exercises
     // /exercises/exercise/{id}
-        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=300`;
+        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=1324`;
         const options = {
             method: 'GET',
             headers: {
@@ -59,7 +59,6 @@ const seedDB = async () => {
         const exercise = new Exercise({...e}); 
         await exercise.save();
     }
-
 }
 
 seedDB().then(() => mongoose.connection.close()).catch(e => {console.log(e)});
