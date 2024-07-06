@@ -33,9 +33,9 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
         userMessage: userChat,
         trainerMessage: data
     });
-
+    
     await chatHistory.save();
-    console.log(chatHistory);
+    console.log(data);
     res.json(chatHistory);
 }));
 

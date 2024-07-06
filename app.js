@@ -12,6 +12,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const checkForUpdate = require('./seeds/updateGifUrl.js');
 
 // routes
 const userRoutes = require('./routes/users');
@@ -28,6 +29,7 @@ const dbPassword = process.env.DATABASE_PASSWORD;
 mongoose.connect(dbPassword, {})
     .then(() => {
         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
+        checkForUpdate();
     })
     .catch((err) => {
         console.log(`Mongoose Error: ${err}`);

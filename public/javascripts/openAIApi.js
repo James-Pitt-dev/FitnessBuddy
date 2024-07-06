@@ -17,8 +17,6 @@ async function sendPrompt(userMessage, superPrompt) {
         { role: "user", content: userMessage }
       ]
     });
-
-    console.log(response.choices[0].message.content);
     return response.choices[0].message.content;
   } catch (error) {
     console.error("Error sending prompt to OpenAI:", error);

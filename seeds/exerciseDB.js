@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
-const dbPassword = process.env.DATABASE_PASSWORD;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 const Exercise = require('../models/exercise');
 const Workout = require('../models/workout');
 const WorkoutExercise = require('../models/workoutExercise');
-const apiKey = process.env.EXERCISE_API_KEY;
+const EXERCISEDB_API_KEY = process.env.EXERCISEDB_API_KEY;
 // WILL WIPE AND REWRITE EXERCISE COLLECTION IN DATABASE IF RAN, CAUTION!!
 
 
-mongoose.connect('mongodb+srv://jamespitt1:cTiHNKFp4QSL9x6B@cluster0.eimml8f.mongodb.net/FitnessBuddy?retryWrites=true&w=majority', {})
+mongoose.connect(DATABASE_PASSWORD, {})
     .then(() => {
         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
     })
@@ -30,7 +30,7 @@ const workoutAPI = async function(){ //function to fetch API exercises
         const options = {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'a34bd91f76mshd066cdaa2775237p1f279djsn703a2c619030',
+                'X-RapidAPI-Key': EXERCISEDB_API_KEY,
                 'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
             }
         };

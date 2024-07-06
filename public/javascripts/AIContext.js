@@ -80,8 +80,6 @@ async function getProfileContext(userID){
         weeklyWorkouts: profile.workoutfrequency || 'n/a',
     };
     const promptContext = 'Users Profile Information (JSON Format): ' + JSON.stringify(userProfile);
-    console.log(profile);
-    console.log(userProfile);
     return promptContext;
 }
 //Create role prompt; create constraints; create instructions; Combine into system prompt object
@@ -93,6 +91,25 @@ const rolePrompt = `
             - This is a fitness app, so focus on delivering high-quality, actionable fitness advice with an upbeat and motivational tone.
           `;
 
+// const exercisePrompt = `
+// -Here is the list of acceptable exercises to choose from when creating a workout plan for the user: ${exerciseList}.
+// -You will pick from among them
+// `
+          
+
+// const getExerciseList = async (filter) => {
+//             const exercises = await Exercise.find();
+//             const exerciseList = exercises.map((ex) => ({
+//                 id: ex._id,
+//                 name: ex.name,
+//                 target: ex.target,
+//                 bodyPart: ex.bodyPart,
+//                 equipment: ex.equipment,
+//                 secondaryMuscles: ex.secondaryMuscles
+//             }));
+        
+//             return exerciseList;
+//           }
 const superPrompt = (userID) => {getProfileContext(userID) + getChatContext(userID) + getUserContext(userID)};
 
 module.exports = {getUserContext, getChatContext, getProfileContext, rolePrompt, superPrompt};
