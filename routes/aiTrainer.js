@@ -7,7 +7,7 @@ const catchAsync = require("../utils/catchAsync");
 const { isLoggedIn } = require("../middleware");
 const sendPrompt = require('../public/javascripts/openAIApi');
 const ChatHistory = require('../models/chatHistory');
-const {getUserContext, getChatContext, getProfileContext} = require('../public/javascripts/AIContext');
+const {getWorkoutContext, getChatContext, getProfileContext, getExerciseList} = require('../public/javascripts/AIContext');
 
 // GET Chat Interface
 router.get('/chat', isLoggedIn, catchAsync(async (req, res) => {
@@ -19,15 +19,14 @@ router.get('/chat', isLoggedIn, catchAsync(async (req, res) => {
 router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     const {userChat} = req.body.AI;
     const userID = req.user._id;
-    const workoutHistory = await getUserContext(userID);
+    const workoutHistory = await getWorkoutContext(userID);
     const messageHistory = await getChatContext(userID);
     const userProfile = await getProfileContext(userID);
     const superPrompt = `
     This is context about the User talking to you, use it to inform your responses and provide personalized advice to their queries: ${workoutHistory} ${messageHistory} ${userProfile}
 `;
-    console.log(superPrompt);
     const data = await sendPrompt(userChat, superPrompt);
-    
+    console.log(superPrompt);
     const chatHistory = new ChatHistory({
         author: req.user._id,
         userMessage: userChat,

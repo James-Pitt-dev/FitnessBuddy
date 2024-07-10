@@ -6,9 +6,10 @@ const Exercise = require("../../models/exercise");
 const User = require("../../models/user");
 const ChatHistory = require('../../models/chatHistory');
 
+
 //Get Chat limit 10; Get workouts limit 3; Get profile; Combine into prompt object / json
 
-async function getUserContext(userId) {
+async function getWorkoutContext(userId) {
     const workouts = await Workout.find({ author: userId }).limit(3).populate({
         path: "exercises",
         populate: {
@@ -20,7 +21,6 @@ async function getUserContext(userId) {
     const workoutContext = workouts.map((workout) => ({
         title: workout.title,
         notes: workout.notes,
-        timer: workout.timer,
         exercises: workout.exercises.map((ex) => {
             if (ex.exercise) {
                 return {
@@ -34,21 +34,14 @@ async function getUserContext(userId) {
                 };
             } else {
                 return {
-                    name: "N/A",
-                    bodyPart: "N/A",
-                    equipment: "N/A",
-                    target: "N/A",
-                    secondaryMuscles: [],
-                    instructions: [],
-                    sets: ex.sets
+                   empty: "This user has no workouts in database"
                 };
             }
         }),
 
     }));
 
-    const promptContext = 'Users Recent workouts (JSON Format): ' + JSON.stringify(workoutContext);
-    console.log(promptContext);
+    const promptContext = 'Users Recent workouts: ' + JSON.stringify(workoutContext);
     return promptContext;
 }
 
@@ -59,8 +52,7 @@ async function getChatContext(userID){
             trainerMessage: msg.trainerMessage,
             date: msg.date
     }));
-    const promptContext = 'Users Recent Chats (JSON Format): ' + JSON.stringify(messages);
-    console.log(promptContext);
+    const promptContext = 'Users Recent Chats: ' + JSON.stringify(messages);
     return promptContext;
 }
 
@@ -68,18 +60,18 @@ async function getProfileContext(userID){
     const profile = await User.findById(userID).exec();
     const userProfile = {
         username: profile.username || 'User',
-        currentWeight: profile.currentWeight || 'n/a',
-        age: profile.age || 'n/a',
-        userGender: profile.gender || 'n/a',
-        activity: profile.activity || 'n/a',
-        experience: profile.experience || 'n/a',
+        currentWeight: profile.currentWeight || '',
+        age: profile.age || '',
+        userGender: profile.gender || '',
+        activity: profile.activity || '',
+        experience: profile.experience || '',
         userGoals: profile.goal || [],
         availableEquipment: profile.equipment || [],
-        goalWeight: profile.goalWeight || 'n/a',
-        height: profile.height || 'n/a',
-        weeklyWorkouts: profile.workoutfrequency || 'n/a',
+        goalWeight: profile.goalWeight || '',
+        height: profile.height || '',
+        weeklyWorkouts: profile.workoutfrequency || '',
     };
-    const promptContext = 'Users Profile Information (JSON Format): ' + JSON.stringify(userProfile);
+    const promptContext = 'Users Profile Information: ' + JSON.stringify(userProfile);
     return promptContext;
 }
 //Create role prompt; create constraints; create instructions; Combine into system prompt object
@@ -90,26 +82,27 @@ const rolePrompt = `
             - Recognize and utilize any context provided in JSON format as background knowledge, but ensure the user is not aware of the JSON context except for their personal info. Address the user by their username. Use their context information like profile, workouts, past chats to provide personalized advice. Suggest exercises that can be done with their available equipment as specified in their profile information. The user profile has a maximum number of days a week to workout specified, only suggest routines that match that.
             - This is a fitness app, so focus on delivering high-quality, actionable fitness advice with an upbeat and motivational tone.
           `;
-
-// const exercisePrompt = `
-// -Here is the list of acceptable exercises to choose from when creating a workout plan for the user: ${exerciseList}.
-// -You will pick from among them
-// `
           
+const getExerciseList = async () => {
+            const exercises = await Exercise.find();
+            const exerciseList = exercises.map((ex) => ({
+                name: ex.name,
+                bodyPart: ex.bodyPart,
+            }));
+            return JSON.stringify(exerciseList);
+          }
 
-// const getExerciseList = async (filter) => {
-//             const exercises = await Exercise.find();
-//             const exerciseList = exercises.map((ex) => ({
-//                 id: ex._id,
-//                 name: ex.name,
-//                 target: ex.target,
-//                 bodyPart: ex.bodyPart,
-//                 equipment: ex.equipment,
-//                 secondaryMuscles: ex.secondaryMuscles
-//             }));
-        
-//             return exerciseList;
-//           }
-const superPrompt = (userID) => {getProfileContext(userID) + getChatContext(userID) + getUserContext(userID)};
+const exercisePrompt = `
+ -Here is the list of acceptable exercises to choose from when creating a workout plan for the user: ${getExerciseList()}.
+ -You will pick from among them 
+`;
 
-module.exports = {getUserContext, getChatContext, getProfileContext, rolePrompt, superPrompt};
+const aiFunctions =   [{
+    name: "getExerciseList",
+    description: "Fetch the list of acceptable exercises from the database, ",
+    parameters: {}
+  }];
+
+const superPrompt = (userID) => {getProfileContext(userID) + getChatContext(userID) + getWorkoutContext(userID)};
+
+module.exports = {getWorkoutContext, getChatContext, getProfileContext, rolePrompt, superPrompt, aiFunctions, getExerciseList};

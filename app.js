@@ -30,6 +30,7 @@ mongoose.connect(dbPassword, {})
     .then(() => {
         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
         checkForUpdate();
+        
     })
     .catch((err) => {
         console.log(`Mongoose Error: ${err}`);
