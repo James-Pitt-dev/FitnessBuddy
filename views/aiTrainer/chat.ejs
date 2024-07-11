@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate') %>
 
+
 <% for(let msg of pastMessages){ %>
 <div class="row m-2">
     <div class="col-md-4 offset-6">
@@ -33,13 +34,13 @@
 
 <form id="chatForm" novalidate class="validated-form">
     <div class="row mb-5 fixed-bottom">
-        <div class="col-md-6 offset-3">
+        <div class="col-md-8 offset-2 mb-5 fixed-bottom">
             <div class="row">
                 <div class="col-md-10">
                     <textarea class="form-control border-success" style="background-color:darkgray;" type="text" id="userChat" name="AI[userChat]" cols="25" rows="3" required></textarea>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-success">^</button>
+                <div class="col-md-1 d-flex align-items-end">
+                    <button class="btn btn-success border-dark">^</button>
                 </div>
             </div>
         </div>
@@ -60,11 +61,8 @@
     });
 
     const chatHistory = await response.json();
-    console.log(chatHistory);
-
     if(response.ok){
     const chatContainer = document.getElementById('chatContainer');
-
     const userMessageDiv = document.createElement('div');
     userMessageDiv.classList.add('bg-gray');
     userMessageDiv.innerHTML = `<div class="row">
@@ -95,11 +93,9 @@
     </div>
 </div>`;
     chatContainer.appendChild(trainerMessageDiv);    
-    
+    document.getElementById('userChat').value = '';
  }    
-} 
-    
-    catch(e){ console.log(e);}
+} catch(e){ console.log(e);}
 
  });
 
