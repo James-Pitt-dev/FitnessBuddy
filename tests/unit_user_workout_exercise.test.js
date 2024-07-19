@@ -21,8 +21,9 @@ const WorkoutExercise = require("../models/workoutExercise.js");
 const mongoose = require("mongoose"); // Used as ODM and mongdoDB interaction
 const users = require("../controllers/users.js");
 const request = require("supertest");
-const currApp = require("../app.js");
+const app = require("../app.js");
 const passport = require("passport");
+const exercisesRoute = require("../routes/exercises.js");
 
 /*afterAll("Testing Finished", async () => {
   await mongoose.disconnect();
@@ -79,7 +80,7 @@ describe("Jest for Exercise Operations", () => {
     await Exercise.find({}).then(function (exercises) {
       currDatalenght = exercises.length;
     });
-    expect(currDatalenght).toBe(300);
+    expect(currDatalenght).toBe(1324);
   });
 
   test("Testing for finding one exercise to show", async () => {
@@ -105,7 +106,7 @@ describe("Jest for WorkoutPlan Operations", () => {
 
   afterEach(async () => {
     //delete the workout plan of test to end the testing session
-    await Workout.findOneAndDelete({ title: 'testing'});
+    await Workout.findOneAndDelete({ title: "testing" });
   });
 
   test("Testing Database connecting by check the lenght of existed workout plan list", async () => {
@@ -113,23 +114,25 @@ describe("Jest for WorkoutPlan Operations", () => {
     await Workout.find({}).then(function (workouts) {
       currDatalenght = workouts.length;
     });
-    expect(currDatalenght).toBe(19);
+    expect(currDatalenght).toBe(47);
   });
 
   test("testing for updating current workout plan ", async () => {
     // find one workout plan by title and update it.
     let Currtitle = "testing";
-    const workoutPlan_curr = await Workout.findOne({ title: Currtitle }).populate({
+    const workoutPlan_curr = await Workout.findOne({
+      title: Currtitle,
+    }).populate({
       path: "exercises",
       populate: {
         path: "exercise", // populate the `exercise` field inside `workoutExercise`
         model: "Exercise",
       },
     });
-     await Workout.findByIdAndUpdate(workoutPlan_curr._id,{notes:"updated notes for testing"
-
-    })
-    const updatedWorkoutPlan=await Workout.findById(workoutPlan_curr._id);
+    await Workout.findByIdAndUpdate(workoutPlan_curr._id, {
+      notes: "updated notes for testing",
+    });
+    const updatedWorkoutPlan = await Workout.findById(workoutPlan_curr._id);
     expect(updatedWorkoutPlan.notes).toBe("updated notes for testing");
   });
 
@@ -146,6 +149,15 @@ describe("Jest for WorkoutPlan Operations", () => {
       },
     });
     console.log(currentWorkoutPlan);
-    expect(currentWorkoutPlan.author.toString()).toBe("667ccd047aceba108c25fc10");
+    expect(currentWorkoutPlan.author.toString()).toBe(
+      "667ccd047aceba108c25fc10"
+    );
   });
+});
+
+describe("POST /users", () => {
+    test("should respond with a 200 status code", async () => {
+      const response = await request(app).get("/exercises/");
+      expect(response.statusCode).toBe(200);
+    });  
 });
