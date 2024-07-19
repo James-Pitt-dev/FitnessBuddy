@@ -46,8 +46,18 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 
 //this starts the server and lets it listen for incoming url requests, which we make routes in code for it to run and serve view pages and do logic
 
-//Jest to process the unit tests
-
+//Jest and Supertest to process the unit tests and integration tests
+   - installation before testing:  
+     - npm install --save-dev @shelf/jest-mongodb
+     - npm update --latest @testing-library/jest-dom
+     - npm i jest supertest cross-env
+     - "scripts": {
+        - "test": "cross-env NODE_ENV=test jest --testTimeout=6000",
+        -  "start": "node server.js",
+        - "dev": "nodemon server.js"
+        - },
+   - run testing
+     - npm run test
 
 ### git
 - Update to latest code: be in master/main branch, then git pull origin to get the latest code from repo
