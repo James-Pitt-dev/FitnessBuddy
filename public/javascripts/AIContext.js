@@ -47,13 +47,15 @@ async function getWorkoutContext(userId) {
 }
 
 async function getChatContext(userID, limit = 3){
-    const pastMessages = await ChatHistory.find({author: userID}).sort({date: 1}).limit(limit).exec();
+    const pastMessages = await ChatHistory.find({author: userID}).sort({date: -1}).limit(limit).exec();
     const messages = pastMessages.map((msg) => ({
             userMessage: msg.userMessage,
             trainerMessage: msg.trainerMessage,
             date: msg.date
-    }));
+    })).reverse();
+
     const promptContext = 'Users Recent Chats: ' + JSON.stringify(messages);
+    console.log(JSON.stringify(messages));
     return promptContext;
 }
 
@@ -77,12 +79,12 @@ async function getProfileContext(userID){
 }
 //Create role prompt; create constraints; create instructions; Combine into system prompt object
 const rolePrompt = `
-    You are an AI Personal Fitness Trainer named 'Fitness Buddy'. Your role is to provide expert advice on fitness, health, exercise, and workout plans to users of this application. You must respond with actionable and specific advice related to these topics only since the user is using this app to achieve workout and fitness goals.
+    You are an AI Personal Fitness Trainer named 'Fitness Buddy', refer to yourself as that. Your role is to provide expert advice on fitness, health, exercise, and workout plans to users of this application and help them use it. You must respond with actionable and specific advice related to these topics only since the user is using this app to achieve workout and fitness goals.
     - If a user asks about topics outside of fitness, workouts, and health, such as homework or news, respond with: "As an AI Personal Trainer, I can only provide advice on fitness, health, and workout plans. Please ask me something related to these topics."
     - You should be concise and limit token usage. Speak conversationally like a human. Add line breaks between points to avoid large blocks of text.
     - Recognize and utilize any context provided in JSON-like format {} as context knowledge. Address the user by their username. Use their context information like profile, workouts, past chats to provide personalized advice. Suggest exercises that can be done with their available equipment as specified in their profile information. Only suggest exercise names that are listed here. The user profile has a maximum number of days a week to workout specified, only suggest routines that match that.
     - This is a fitness app, so focus on delivering high-quality, actionable fitness advice with an upbeat and motivational tone.
-    - If the user requests a workout routine or mentions creating a workout plan, call the 'getExerciseList' function and suggest appropriate exercises from the list for a workout routine. Then offer to create a workout routine by calling the 'createWorkoutRoutine' function and providing exercise names from the chat context as arguments to generate a workout plan and inform them of the generated workout plan. The exercise name arguments passed to this function must exactly match names in the exercise list.
+    - If the user requests a workout routine or mentions creating a workout plan, call the 'getExerciseList' function and suggest appropriate exercises from the list for a workout routine. Then offer to create a workout routine by calling the 'createWorkoutRoutine' function and providing exercise names from the chat context as arguments to generate a workout plan and inform them of the generated workout plan. The exercise name arguments passed to this function must exactly match names in the exercise list. Prompt them after every exercise suggest to ask if they want to create a workout routine with the createWorkoutRoutine function.
     - When creating a workout routine, consider the user's goals, available equipment, and experience level to ensure the workout is appropriate and effective.
 `;
 
@@ -123,55 +125,6 @@ const rolePrompt = `
     //         }));
     //         return JSON.stringify(exerciseList);
     //     }
-
-    // const createWorkoutRoutine = async (userID, { exerciseNames, title, notes }) => {
-    //     try {
-    //         const regexNames = exerciseNames.map(name => new RegExp(name, 'i'));
-    //         console.log(regexNames.length);
-    //         // Fetch the exercises by name from the database (partial and case-insensitive)
-    //         const exercises = await Exercise.find({
-    //             name: { 
-    //                 $in: regexNames 
-    //             }
-    //         });
-    //         console.log(exercises.length);
-    //         // Create the workout object first
-    //         const workout = new Workout({
-    //             author: userID,
-    //             title: title || 'Generated Workout Routine',
-    //             notes: notes || 'Perform each exercise with proper form and control. Stay hydrated and energized throughout your workout.',
-    //             timer: 60,
-    //             exercises: [] // Initialize as empty, will update later
-    //         });
-            
-    //         // Save the workout to get the workout ID
-    //         await workout.save();
-         
-    //         // Create workout exercises array and save them
-    //         const workoutExercises = await Promise.all(exercises.map(async (exercise) => {
-    //             const workoutExercise = new WorkoutExercise({
-    //                 exercise: exercise._id,
-    //                 sets: [
-    //                     { reps: 8, weight: 0, previousWeight: 0 },
-    //                     { reps: 8, weight: 0, previousWeight: 0 },
-    //                     { reps: 8, weight: 0, previousWeight: 0 }
-    //                 ],
-    //                 workout: workout._id // Set the workout reference here
-    //             });
-    //             await workoutExercise.save();
-    //             return workoutExercise._id;
-    //         }));
-    
-    //         // Update the workout with the exercises
-    //         workout.exercises = workoutExercises;
-    //         await workout.save();
-    
-    //         return workout;
-    //     } catch (error) {
-    //         console.error("ERROR creating workout routine:", error);
-    //         throw error;
-    //     }
-    // };
 
     const createWorkoutRoutine = async (userID, { exerciseNames, title, notes }) => {
         try {
@@ -270,7 +223,7 @@ const rolePrompt = `
     },
     {
         name: "createWorkoutRoutine",
-        description: "Create a workout routine for the user with the exercise names from the chat context, give a workout title, and instructional notes appropriate for the set of exercises. Call this function if the user asks you to create a workout routine for them, you may ask them for confirmation like 'Do you want me to create a workout routine for you from these exercises?'. Use the context of the conversation and user comments to determine the exercise names you use as function arguments. Only suggest exercise names that can be done with their profile equipment list and that exist in your exercise list. Exercise name arguments must be exact spelling as exercise list.",
+        description: "Create a workout routine for the user with the exercise names from the chat context, give a workout title, and instructional notes appropriate for the set of exercises. Call this function if the user asks you to create a workout routine for them, you will ask them for confirmation like 'Do you want me to create a workout routine for you from these exercises?' after a routine is suggested. Use the context of the conversation and latest user comments to determine the exercise names you use as function arguments. Only suggest exercise names that can be done with their profile equipment list and that exist in your exercise list. Exercise name arguments must be exact spelling as exercise list.",
         parameters: {
             type: "object",
             properties: {
