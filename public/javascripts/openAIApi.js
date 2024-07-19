@@ -3,7 +3,7 @@ require('dotenv').config();
 const {rolePrompt} = require('./AIContext');
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const catchAsync = require('../../utils/catchAsync');
-const {aiFunctions, getExerciseList, getProfileContext, getWorkoutContext, getChatContext} = require('./AIContext');
+const {aiFunctions, getExerciseList, getProfileContext, getWorkoutContext, getChatContext, createWorkoutRoutine} = require('./AIContext');
 const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
 });
@@ -12,7 +12,7 @@ const openai = new OpenAI({
 async function sendPrompt(userMessage, superPrompt, userID) {
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
         { role: "system", content: superPrompt },
         { role: "user", content: userMessage }
@@ -21,7 +21,7 @@ async function sendPrompt(userMessage, superPrompt, userID) {
       function_call: "auto",
       max_tokens: 250
     });
-    console.log(response);
+    console.log(response.usage);
     console.log(response.choices[0].message.function_call);
     const tokens = response.usage;
     const message = response.choices[0].message;
@@ -43,6 +43,9 @@ async function sendPrompt(userMessage, superPrompt, userID) {
       if(functionName === 'getChatContext'){
         functionResult = await getChatContext(userID, functionArgs.limit);
       }
+      if(functionName === 'createWorkoutRoutine'){
+        functionResult = await createWorkoutRoutine(userID, functionArgs);
+      }
       const functionResponse = { // make an object for the next API call with updated function results
         role: "function",
         name: functionName,
@@ -51,7 +54,7 @@ async function sendPrompt(userMessage, superPrompt, userID) {
     
       // Make another api call, this time with function response and message attached to it, openAI expects this
       const finalResponse = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
+        model: "gpt-4o-mini",
         messages: [
           {role: "system", content: superPrompt},
           {role: "user", content: userMessage},
@@ -60,7 +63,6 @@ async function sendPrompt(userMessage, superPrompt, userID) {
         ],
         max_tokens: 250
       });
-      
       return finalResponse.choices[0].message.content;
     }
     else {

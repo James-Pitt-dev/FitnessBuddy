@@ -7,7 +7,6 @@ const chest = [
     {"name":"cable cross-over variation","bodyPart":"chest","equipment":"cable"},
     {"name":"cable decline fly","bodyPart":"chest","equipment":"cable"},
     {"name":"cable incline fly","bodyPart":"chest","equipment":"cable"},
-    {"name":"cable fly","bodyPart":"chest","equipment":"cable"},
     {"name":"chest dip","bodyPart":"chest","equipment":"body weight"},
     {"name":"clap push up","bodyPart":"chest","equipment":"body weight"},
     {"name":"decline push-up","bodyPart":"chest","equipment":"body weight"},
@@ -145,7 +144,6 @@ const cardio = [
 
 const lowerLegs = [
     {"name":"ankle circles","bodyPart":"lower legs","equipment":"body weight"},
-    {"name":"assisted lying calves stretch","bodyPart":"lower legs","equipment":"assisted"},
     {"name":"band single leg calf raise","bodyPart":"lower legs","equipment":"band"},
     {"name":"barbell seated calf raise","bodyPart":"lower legs","equipment":"barbell"},
     {"name":"barbell standing calf raise","bodyPart":"lower legs","equipment":"barbell"},
