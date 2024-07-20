@@ -55,7 +55,6 @@ async function getChatContext(userID, limit = 3){
     })).reverse();
 
     const promptContext = 'Users Recent Chats: ' + JSON.stringify(messages);
-    console.log(JSON.stringify(messages));
     return promptContext;
 }
 
