@@ -9,7 +9,6 @@
         <div class="navbar-nav">
           <a class="nav-link" href="/">Home</a>
           <a class="nav-link" href="/showProfile">Profile</a>
-
           <a class="nav-link" href="/workouts/new">New Workout</a>
           <a class="nav-link" href="/exercises">Exercises Catalogs</a>
           <a class="nav-link" href="/workouts/index">Workouts(require log in later)</a>
@@ -17,15 +16,15 @@
           <a href="/" class="nav-link">More links as we need them</a>
         </div>
 
-        <div class="navbar-nav ms-auto">
-          <% if(!currentUser){ %>
-          <a href="/login" class="nav-link">Log In</a>
-          <a href="/register" class="nav-link">| Register |</a>
-          <% } %>
-          <% if(currentUser){ %>
-          <a href="/logout" class="nav-link">Log Out</a>
-          <% } %>
-        </div>
+      <div class="navbar-nav ms-auto">
+        <% if(!currentUser){ %>
+        <a href="/login" class="nav-link">Log In</a>
+        <a href="/register" class="nav-link">| Register |</a>
+        <% } %>
+        <% if(currentUser){ %>
+        <a href="/logout" class="nav-link">Log Out</a>
+        <% } %>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>

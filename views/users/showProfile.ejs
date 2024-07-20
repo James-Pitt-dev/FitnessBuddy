@@ -1,97 +1,156 @@
 <% layout('layouts/boilerplate') %>
 
-<!-- show user profile information -->
-  
-  <div class="show-workout-profile">
-    <div class="form-head">
-    <h1 class="text-center">View / Update User Profile</h1>
-    </div>
-    <div class="col-9 offset-3">
-        <form action="/editProfile" method="POST" novalidate class="validated-form">
-          
-            <div class="form-row">
-                <div class="form-group col-md-6"> 
-                <label class="form-label" for="name">Name</label>
-                <input class="form-control" type="text" id="name" name="username" value="<%= currUser.username %>"  required>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-                </div>
-            </div>
-            <input class="form-control" type="text" id="_id" name="_id" value="<%= currentUser._id %>"  hidden>
-            <div class="form-row">  
-                <div class="form-group col-md-6">  
-                <label class="form-label" for="email">Email</label>
-                <input class="form-control" type="text" id="email" name="email" value="<%= currUser.email %>" readonly required>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-                </div>
-            </div>
-       
-            <div class="form-row">  
-            <div class="form-group col-md-6"> 
-                <label class="form-label" for="experience">Experience</label>
-                <select class="form-select" id="experience" name="experience" required>
-                    <option  value="Novice"
-                    <% if(currUser.experience=="Novice") { 
-                     %>
-                        selected       
-                    <% } %> 
-                  >Novice</option>
-                    <option value="Intermediate"
-                     <% if(currUser.experience=="Intermediate") { 
-                        %>
-                           selected       
-                       <% } %> 
-                    >Intermediate</option>
-                    <option  value="Expert" 
-                    <% if(currentUser.experience=="Expert") { 
-                        %>
-                           selected       
-                       <% } %> 
-                    >Expert</option>
-                </select>
-                
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-            </div> 
-            </div>
+    <!-- show user profile information -->
 
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label for="weight">Weight (kg)</label>
-                    <input class="form-control" type="number" name="currentWeight" id="currentWeight" value="<%= currUser.currentWeight %>">
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="height">Height (cm)</label>
-                    <input class="form-control" type="number" name="height" id="height" value="<%= currUser.height %>">
-                </div>
-                <div class="form-group col-md-3">
-                    <label for="workoutNum">WorkoutNum</label>
-                    <input class="form-control" type="number" name="workoutNum" id="workoutNum" value="<%= currUser.workoutNum %>">
-                </div>
-            </div>
-           
-            <div class="form-row"> 
-                <div class="col-md-9">    
-                <label class="form-label" for="description">Description</label>
-                <textarea class="form-control" type="text" id="location" name="" required></textarea>
-                <div class="valid-feedback">
-                    Looks Good!
-                </div>
-                </div>
-            </div>
-            
-            <Br> 
-           <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
-                
-        </form>
-        <a href="/">All campgrounds</a>
+    <div class="show-workout-profile">
+        <div class="form-head">
+            <h1 class="text-center">View / Update User Profile</h1>
         </div>
-       
+        <div class="col-9 offset-3">
+            <form action="/editProfile" method="POST" novalidate class="validated-form">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="name">Name</label>
+                        <input class="form-control" type="text" id="name" name="username"
+                            value="<%= currUser.username %>" required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                </div>
+                <input class="form-control" type="text" id="_id" name="_id" value="<%= currUser._id %>" hidden>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-control" type="text" id="email" name="email" value="<%= currUser.email %>"
+                            readonly required>
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label class="form-label" for="experience">Experience</label>
+                        <select class="form-select" id="experience" name="experience" required>
+                            <option value="beginner" <% if(currUser.experience=="beginner" ) { %>
+                                selected
+                                <% } %>
+                                    >Beginner
+                            </option>
+                            <option value="intermediate" <% if(currUser.experience=="intermediate" ) { %>
+                                selected
+                                <% } %>
+                                    >Intermediate
+                            </option>
+                            <option value="advanced" <% if(currentUser.experience=="advanced" ) { %>
+                                selected
+                                <% } %>
+                                    >Advanced
+                            </option>
+                        </select>
+
+                        <div class="valid-feedback">
+                            Looks Good!
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-3">
+                        <label for="weight">Weight (bls)</label>
+                        <input class="form-control" type="number" name="currentWeight" id="currentWeight"
+                            value="<%= currUser.currentWeight %>">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="height">Height (cm)</label>
+                        <input class="form-control" type="number" name="height" id="height"
+                            value="<%= currUser.height %>">
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="workoutfrequency">Workout Frequency</label>
+                        <select class="form-select" id="workoutfrequency" name="workoutfrequency" required>
+                            <option value="2days" <% if(currUser.workoutfrequency=="2days" ) { %>
+                                selected
+                                <% } %>
+                                    >2days
+                            </option>
+                            <option value="3days" <% if(currUser.workoutfrequency=="3days" ) { %>
+                                selected
+                                <% } %>
+                                    >3days
+                            </option>
+                            <option value="4days" <% if(currentUser.workoutfrequency=="4days" ) { %>
+                                selected
+                                <% } %>
+                                    >4days
+                            </option>
+                            <option value="5days" <% if(currUser.workoutfrequency=="5days" ) { %>
+                                selected
+                                <% } %>
+                                    >5days
+                            </option>
+                            <option value="6days" <% if(currUser.workoutfrequency=="6days" ) { %>
+                                selected
+                                <% } %>
+                                    >6days
+                            </option>
+                            <option value="7days" <% if(currentUser.workoutfrequency=="7days" ) { %>
+                                selected
+                                <% } %>
+                                    >7days
+                            </option>
+                        </select>
+
+                    </div>
+                </div>
+                <br>
+                <div class="form-row">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Workout plan Title</th>
+                                <th scope="col">Notes</th>
+                                <th scope="col">Duration(in Minutes)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (workouts.length==0){ %>
+                                <td>
+                                    There is no workout plan created!
+                                </td>
+
+                                <% }else{ %>
+                                    <% for (let i=0; i < workouts.length; i++) { %>
+                                        <tr>
+                                            <td>
+                                                <%= workouts[i].title %>
+                                            </td>
+                                            <td>
+                                                <%= workouts[i].notes %>
+                                            </td>
+                                            <td>
+                                                <%= workouts[i].timer %>
+                                            </td>
+                                        </tr>
+                                        <% } }%>
+                        </tbody>
+                    </table>
+                </div>
+
+                <Br>
+                <div>
+
+                    <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
+                    <button class="btn  btn-warning my-2 my-sm-0"><a
+                            href="/deleteProfile/<%= currUser._id %>">Delete</a></button>
+                </div>
+            </form>
+
+            <Br>
+            <a href="/">All campgrounds</a>
+        </div>
+
     </div>
-
-  
-

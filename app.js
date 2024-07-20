@@ -110,3 +110,6 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`App Connected: ${PORT}`);
 });
+
+// exports for integration testing
+module.exports = app;
