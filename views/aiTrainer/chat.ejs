@@ -71,10 +71,13 @@
             const userMessageDiv = document.createElement('div');
             userMessageDiv.classList.add('bg-gray');
             userMessageDiv.innerHTML = `<div class="row m-2">
-                <div class="col-md-8 offset-md-4">
+                <div class="col-md-8 offset-md-2">
                     <div class="d-flex justify-content-end">
-                        <div class="card border-primary mb-3" style="width: 100%;">
-                            <div class="card-header bg-success text-white">User</div>
+                        <div class="card border-dark shadow-lg mb-3" style="width: 100%;">
+                            <div class="card-header shadow bg-success text-white d-flex justify-content-between">
+                                <span>User</span>
+                                <span>${new Date().toDateString()}</span>
+                            </div>
                             <div class="card-body">
                               <p class="card-text">${chatHistory.userMessage}</p>
                             </div>
@@ -88,8 +91,8 @@
             trainerMessageDiv.innerHTML = `<div class="row m-2">
                 <div class="col-md-8 offset-md-2">
                     <div class="d-flex justify-content-start">
-                        <div class="card border-primary mb-3" style="width: 100%;">
-                            <div class="card-header bg-primary text-white">AI Trainer</div>
+                        <div class="card border-dark mb-3" style="width: 100%;">
+                            <div class="card-header text-primary-emphasis bg-primary-subtle border border-primary-subtle">AI Trainer</div>
                             <div class="card-body">
                               <p class="card-text">${chatHistory.trainerMessage}</p>
                             </div>

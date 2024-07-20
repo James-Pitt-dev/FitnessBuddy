@@ -143,7 +143,7 @@ const rolePrompt = `
                 author: userID,
                 title: title || 'Generated Workout Routine',
                 notes: notes || 'Perform each exercise with proper form and control. Stay hydrated and energized throughout your workout.',
-                timer: 60,
+                timer: 0,
                 exercises: [] // Initialize as empty, will update later
             });
     
@@ -176,7 +176,7 @@ const rolePrompt = `
         }
     };
     
-
+    // Thhese functions are used by the AI to fetch context information and perform actions based on the user's requests, we process the function in openAIApi.js
     const aiFunctions = [
         {
             name: "getExerciseList",
@@ -230,7 +230,7 @@ const rolePrompt = `
                 exerciseNames: {
                     type: "array",
                     items: { type: "string" },
-                    description: "Array of exercise names to include in the workout. Names are inferred from the user's recent chat history."
+                    description: "Array of exercise names to include in the workout. Names are inferred from the user's recent chat history. Double check the exercise names so they match the exercise list exactly, best match if necessary."
                 },
                 title: { type: "string", description: "Title of the workout" },
                 notes: { type: "string", description: "Notes for the workout" }
