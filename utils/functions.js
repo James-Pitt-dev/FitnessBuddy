@@ -1,8 +1,3 @@
-const timer = () => {
-    let counter = 0;
-    document.querySelector(duration);
-    
-}
 
 const workoutAPI = async function(){
     // /exercises/exercise/{id}

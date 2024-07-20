@@ -1,3 +1,4 @@
 node_modules/
 .env
-test.js
+seeds/exerciseDB.js
+seeds/deleteChatDB.js

@@ -1,15 +1,15 @@
 const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
-const dbPassword = process.env.DATABASE_PASSWORD;
+const DATABASE_PASSWORD = process.env.DATABASE_PASSWORD;
 const Exercise = require('../models/exercise');
 const Workout = require('../models/workout');
 const WorkoutExercise = require('../models/workoutExercise');
-
+const EXERCISEDB_API_KEY = process.env.EXERCISEDB_API_KEY;
 // WILL WIPE AND REWRITE EXERCISE COLLECTION IN DATABASE IF RAN, CAUTION!!
 
 
-mongoose.connect('mongodb+srv://jamespitt1:cTiHNKFp4QSL9x6B@cluster0.eimml8f.mongodb.net/FitnessBuddy?retryWrites=true&w=majority', {})
+mongoose.connect(DATABASE_PASSWORD, {})
     .then(() => {
         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
     })
@@ -26,11 +26,11 @@ db.once("open", () => {
 
 const workoutAPI = async function(){ //function to fetch API exercises
     // /exercises/exercise/{id}
-        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=300`;
+        const url = `https://exercisedb.p.rapidapi.com/exercises?limit=1324`;
         const options = {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': 'a34bd91f76mshd066cdaa2775237p1f279djsn703a2c619030',
+                'X-RapidAPI-Key': EXERCISEDB_API_KEY,
                 'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
             }
         };
@@ -45,17 +45,20 @@ const workoutAPI = async function(){ //function to fetch API exercises
      }
 
 const seedDB = async () => {
+    console.log('Fetching API...');
     const exerciseAPI = await workoutAPI();
+    console.log('Deleting Exercises DB...');
     await Exercise.deleteMany({}); //empty exercise collection
+    console.log('Deleting Workout DB...');
     await Workout.deleteMany({});
+    console.log('Deleting WorkoutExercise DB...');
     await WorkoutExercise.deleteMany({});
 
-
+    console.log('Writing new exercises to DB...cd .');
     for(let e of exerciseAPI){
         const exercise = new Exercise({...e}); 
         await exercise.save();
     }
-
 }
 
 seedDB().then(() => mongoose.connection.close()).catch(e => {console.log(e)});

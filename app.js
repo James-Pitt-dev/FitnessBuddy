@@ -12,11 +12,13 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const checkForUpdate = require('./seeds/updateGifUrl.js');
 
 // routes
 const userRoutes = require('./routes/users');
 const workoutRoutes = require('./routes/workouts');
 const exerciseRoutes = require('./routes/exercises');
+const aiTrainerRoutes = require('./routes/aiTrainer.js');
 
 const User = require('./models/user.js');
 
@@ -27,6 +29,8 @@ const dbPassword = process.env.DATABASE_PASSWORD;
 mongoose.connect(dbPassword, {})
     .then(() => {
         console.log(`Connected to DB: ${mongoose.connection.db.databaseName}`);
+        checkForUpdate();
+        
     })
     .catch((err) => {
         console.log(`Mongoose Error: ${err}`);
@@ -44,6 +48,7 @@ app.set('view engine', 'ejs');
 app.set('path', path.join(__dirname, 'views'));
 
 // MIDDLEWARE
+app.use(express.json());
 app.use(express.urlencoded({extended: true})); // To parse req.body
 app.use(methodOverride('_method')); // To enable PUT/PATCH requests. Pass in string pattern we want app to watch for.
 // app.use(morgan('tiny'));
@@ -83,6 +88,7 @@ app.use((req, res, next) => {
 app.use('/', userRoutes);
 app.use('/workouts', workoutRoutes);
 app.use('/exercises', exerciseRoutes); //reroutes incoming urls that match '/exercises/*' to route handler
+app.use('/ai-trainer', aiTrainerRoutes);
 
 app.get('/', (req, res) => {
     res.render('home');
