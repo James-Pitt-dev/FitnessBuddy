@@ -1,102 +1,108 @@
 <% layout('layouts/boilerplate') %>
 
-
-<% for(let msg of pastMessages){ %>
-<div class="row m-2">
-    <div class="col-md-4 offset-6">
-        <div class="d-flex justify-content-end">
-            <div class="card border-dark mb-3" style="width: 38rem;">
-                <div class="card-header bg-success text-white" style="max-height: 3rem;">User</div>
-                <div class="card-body">
-                  <p class="card-text"><%= msg.userMessage %></p>
-                </div>
-              </div>
-        </div>
-    </div>
-</div>
-
-<div class="row m-2">
-    <div class="col-md-4 offset-2">
-        <div class="d-flex justify-content-end">
-            <div class="card border-dark mb-3" style="width: 38rem;">
-                <div class="card-header bg-primary text-white" style="max-height: 3rem;">AI Trainer</div>
-                <div class="card-body">
-                  <p class="card-text"><%= msg.trainerMessage %></p>
-                </div>
-              </div>
-        </div>
-    </div>
-</div>
-    <% } %>
-
-    <div class="container" id="chatContainer"></div>
-
-
-<form id="chatForm" novalidate class="validated-form">
-    <div class="row mb-5 fixed-bottom">
-        <div class="col-md-8 offset-2 mb-5 fixed-bottom">
-            <div class="row">
-                <div class="col-md-10">
-                    <textarea class="form-control border-success" style="background-color:darkgray;" type="text" id="userChat" name="AI[userChat]" cols="25" rows="3" required></textarea>
-                </div>
-                <div class="col-md-1 d-flex align-items-end">
-                    <button class="btn btn-success border-dark">^</button>
+<div class="container d-flex flex-column" style="height: 100vh;">
+    <div class="chat-box flex-grow-1 overflow-auto" id="chatBox" style="padding-bottom: 60px;">
+        <% for(let msg of pastMessages){ %>
+        <div class="row m-2">
+            <div class="col-md-8 offset-md-2">
+                <div class="d-flex justify-content-end">
+                    <div class="card border-dark shadow-lg mb-3" style="width: 100%;">
+                        <div class="card-header shadow bg-success text-white d-flex justify-content-between">
+                            <span>User</span>
+                            <span><%= String(msg.date).slice(0, 15) %></span>
+                        </div>
+                        <div class="card-body">
+                          <p class="card-text"><%= msg.userMessage %></p>
+                        </div>
+                      </div>
                 </div>
             </div>
         </div>
+        
+        <div class="row m-2">
+            <div class="col-md-8 offset-md-2">
+                <div class="d-flex justify-content-start">
+                    <div class="card border-dark mb-3" style="width: 100%;">
+                        <div class="card-header text-primary-emphasis bg-primary-subtle border border-primary-subtle">AI Trainer</div>
+                        <div class="card-body">
+                          <p class="card-text"><%= msg.trainerMessage %></p>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
     </div>
-</form>
+
+    <form id="chatForm" novalidate class="validated-form">
+        <div class="container mb-1 fixed-bottom">
+            <div class="row justify-content-center">
+                <div class="col-10 col-md-8">
+                    <div class="input-group">
+                        <textarea class="form-control border-dark shadow-lg bg-body rounded-3 w-auto" 
+                                  type="text" id="userChat" name="AI[userChat]" cols="25" rows="3" 
+                                  placeholder="Type your message..." required></textarea>
+                        <button class="btn btn-success shadow-lg border-thick border-dark rounded-3">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    
+</div>
+
 <script>
  const chatForm = document.querySelector('#chatForm');
  chatForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const userChat = document.getElementById('userChat').value;
-    try{
+    try {
         const response = await fetch('/ai-trainer/chat', {
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({AI: {userChat}}), 
-    });
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'POST',
+            body: JSON.stringify({AI: {userChat}}), 
+        });
 
-    const chatHistory = await response.json();
-    if(response.ok){
-    const chatContainer = document.getElementById('chatContainer');
-    const userMessageDiv = document.createElement('div');
-    userMessageDiv.classList.add('bg-gray');
-    userMessageDiv.innerHTML = `<div class="row">
-    <div class="col-md-4 offset-6">
-        <div class="d-flex justify-content-end">
-            <div class="card border-primary mb-3" style="width: 38rem;">
-                <div class="card-header bg-success text-white" style="max-height: 3rem;">User</div>
-                <div class="card-body">
-                  <p class="card-text">${chatHistory.userMessage}</p>
+        const chatHistory = await response.json();
+        if(response.ok) {
+            const chatBox = document.getElementById('chatBox');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.classList.add('bg-gray');
+            userMessageDiv.innerHTML = `<div class="row m-2">
+                <div class="col-md-8 offset-md-4">
+                    <div class="d-flex justify-content-end">
+                        <div class="card border-primary mb-3" style="width: 100%;">
+                            <div class="card-header bg-success text-white">User</div>
+                            <div class="card-body">
+                              <p class="card-text">${chatHistory.userMessage}</p>
+                            </div>
+                          </div>
+                    </div>
                 </div>
-              </div>
-        </div>
-    </div>
-</div>`;
-    chatContainer.appendChild(userMessageDiv);    
+            </div>`;
+            chatBox.appendChild(userMessageDiv);    
 
-    const trainerMessageDiv = document.createElement('div');
-    trainerMessageDiv.innerHTML = `<div class="row">
-    <div class="col-md-4 offset-2">
-        <div class="d-flex justify-content-end">
-            <div class="card border-primary mb-3" style="width: 38rem;">
-                <div class="card-header bg-primary text-white" style="max-height: 3rem;">AI Trainer</div>
-                <div class="card-body">
-                  <p class="card-text">${chatHistory.trainerMessage}</p>
+            const trainerMessageDiv = document.createElement('div');
+            trainerMessageDiv.innerHTML = `<div class="row m-2">
+                <div class="col-md-8 offset-md-2">
+                    <div class="d-flex justify-content-start">
+                        <div class="card border-primary mb-3" style="width: 100%;">
+                            <div class="card-header bg-primary text-white">AI Trainer</div>
+                            <div class="card-body">
+                              <p class="card-text">${chatHistory.trainerMessage}</p>
+                            </div>
+                          </div>
+                    </div>
                 </div>
-              </div>
-        </div>
-    </div>
-</div>`;
-    chatContainer.appendChild(trainerMessageDiv);    
-    document.getElementById('userChat').value = '';
- }    
-} catch(e){ console.log(e);}
-
+            </div>`;
+            chatBox.appendChild(trainerMessageDiv);    
+            document.getElementById('userChat').value = '';
+            chatBox.scrollTop = chatBox.scrollHeight; // Scroll to the bottom
+        }    
+    } catch(e) { 
+        console.log(e);
+    }
  });
-
 </script>
