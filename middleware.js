@@ -4,7 +4,7 @@ const ExpressError = require('./utils/ExpressError.js');
 module.exports.isLoggedIn = (req, res, next) => {
     if(!req.isAuthenticated()){//we check if req has authentication object appended to it by passport
         req.session.returnTo = req.originalUrl;
-        console.log('session:', req.session);
+       // console.log('session:', req.session);
         req.flash('error', 'You must be signed in');
         return res.redirect('/login');
     }

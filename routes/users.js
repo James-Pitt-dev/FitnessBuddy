@@ -21,7 +21,7 @@ router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlas
 router.get('/logout', users.logout); 
 
 router.get('/createProfile', (req, res) => {
-    console.log(req.user);
+    //console.log(req.user);
     res.render('users/createProfile');
 });
 
@@ -49,9 +49,9 @@ router.post('/createProfile', async (req, res) => {
     res.redirect('/');
 });
 
-router.get('/showProfile',isLoggedIn, async (req, res) => {
-    let currUser= res.locals.currentUser;
-    let currUserId= req.user._id;
+router.get('/showProfile', async (req, res) => {
+    let currUser= res.locals.currentUser;   
+    let serId= req.user._id; 
     //fetch the workoutPlan data as an array to show the workout title, notes, and duration
     const workouts = await Workout.find({author:currUserId}).populate({
         path: "exercises",
@@ -65,7 +65,7 @@ router.get('/showProfile',isLoggedIn, async (req, res) => {
 
 
 //POST methond to update the profile
-router.post('/editProfile',isLoggedIn, async(req,res)=>{
+router.post('/editProfile', isLoggedIn,async(req,res)=>{
     try{
         const id= req.body._id    
         const editUser= await User.findByIdAndUpdate(id,req.body); 
@@ -85,6 +85,7 @@ router.post('/editProfile',isLoggedIn, async(req,res)=>{
 //get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
 router.get('/deleteProfile/:id',isLoggedIn, async(req,res)=>{
     try{
+        console.log('we are herer');
         let {id} = req.params;
         console.log(id)
         const delUser= await User.findByIdAndDelete(id); 
