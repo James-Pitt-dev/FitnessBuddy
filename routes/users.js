@@ -51,9 +51,9 @@ router.post('/createProfile', async (req, res) => {
 
 router.get('/showProfile', async (req, res) => {
     let currUser= res.locals.currentUser;   
-    let serId= req.user._id; 
+    let userId= req.user._id; 
     //fetch the workoutPlan data as an array to show the workout title, notes, and duration
-    const workouts = await Workout.find({author:currUserId}).populate({
+    const workouts = await Workout.find({author:userId}).populate({
         path: "exercises",
         populate: {
           path: "exercise", // populate the `exercise` field inside `workoutExercise`
