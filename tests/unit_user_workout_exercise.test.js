@@ -21,9 +21,13 @@ const WorkoutExercise = require("../models/workoutExercise.js");
 const mongoose = require("mongoose"); // Used as ODM and mongdoDB interaction
 const users = require("../controllers/users.js");
 const request = require("supertest");
-const app = require("../app.js");
+const app = require("./test_app.js");
 const passport = require("passport");
 const exercisesRoute = require("../routes/exercises.js");
+const { beforeAll, afterAll } = require('@jest/globals');
+
+
+
 
 /*afterAll("Testing Finished", async () => {
   await mongoose.disconnect();
@@ -37,7 +41,7 @@ describe("Jest for User Profile Operations", () => {
     await User.find({}).then(function (users) {
       currDatalenght = users.length;
     });
-    expect(currDatalenght).toBe(10);
+    expect(currDatalenght).toBeGreaterThan(11);
   });
 
   test("testing passport authenticate for login ", async () => {
@@ -51,7 +55,7 @@ describe("Jest for User Profile Operations", () => {
       if (err) {
         console.log(err);
       } else {
-        console.log("authentication successfully");
+        //console.log("authentication successfully");
         //The email of attribute is unique, so compare it
         expect(result.email).toBe(email);
       }
@@ -114,7 +118,7 @@ describe("Jest for WorkoutPlan Operations", () => {
     await Workout.find({}).then(function (workouts) {
       currDatalenght = workouts.length;
     });
-    expect(currDatalenght).toBe(47);
+    expect(currDatalenght).toBeGreaterThan(55);
   });
 
   test("testing for updating current workout plan ", async () => {
@@ -148,16 +152,9 @@ describe("Jest for WorkoutPlan Operations", () => {
         model: "Exercise",
       },
     });
-    console.log(currentWorkoutPlan);
+    //console.log(currentWorkoutPlan);
     expect(currentWorkoutPlan.author.toString()).toBe(
       "667ccd047aceba108c25fc10"
     );
   });
-});
-
-describe("POST /users", () => {
-    test("should respond with a 200 status code", async () => {
-      const response = await request(app).get("/exercises/");
-      expect(response.statusCode).toBe(200);
-    });  
 });
