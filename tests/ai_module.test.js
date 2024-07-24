@@ -8,11 +8,11 @@ let agent; // create a variable to store the logged in user session
 beforeAll(async () => {
   agent = request.agent(app);
 
-  // Mock console.log to suppress logs during tests
-  global.console = {
-    ...global.console,
-    log: jest.fn()
-  };
+    // Mock console.log to suppress logs during tests
+    global.console = {
+      ...global.console,
+      log: jest.fn()
+    };
 
   const loginResponse = await agent
     .post('/login')
@@ -22,7 +22,13 @@ beforeAll(async () => {
     expect(loginResponse.headers['set-cookie']).toBeDefined();
 });
 
-//Unit Tests, testing individual functions
+//Unit Tests, testing key individual functions
+
+// sendPrompt function
+
+// describe("Testing OPENAI chatCompletions API with superprompt context", () => {
+
+// });
 
 
 // Integration Tests, multiple systems working together.
@@ -37,7 +43,7 @@ describe("GET /chat", () => {
   });
 });
 
-describe("POST /chat", () => {
+describe("POST /chat", () => { // test endpoint and simulate a chat conversation
   it("should respond with a 200 status code, make API calls, and return chat response", async () => {
     const postData = {
       AI: {
@@ -60,6 +66,6 @@ describe("POST /chat", () => {
 
 // Clean up after tests
 afterAll(async () => {
-  global.console.log.mockRestore();
-  await mongoose.connection.close();
+  global.console.log.mockRestore(); // Restore console.log
+  await mongoose.connection.close(); 
 });

@@ -3,6 +3,8 @@ const router = express.Router();
 const Workout = require("../models/workout");
 const WorkoutExercise = require("../models/workoutExercise");
 const Exercise = require("../models/exercise");
+const markdown = require('markdown-it');
+const md = new markdown();
 const catchAsync = require("../utils/catchAsync");
 const { isLoggedIn } = require("../middleware");
 const sendPrompt = require('../public/javascripts/openAIApi');
@@ -16,6 +18,13 @@ router.get('/chat', isLoggedIn, catchAsync(async (req, res) => {
         const getMessages = await ChatHistory.find({author: id}).populate('author').exec();
         // Limit the number of messages displayed to the user to last 5 messages in ascending order
         const pastMessages = getMessages.slice(Math.max(getMessages.length - 7, 0));
+
+        // map the messages throughh md to render markdown
+        pastMessages.map(message => {
+            message.userMessage = md.render(message.userMessage);
+            message.trainerMessage = md.render(message.trainerMessage);
+        });
+
         res.render('aiTrainer/chat', {pastMessages});
 }));
 
@@ -37,6 +46,9 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
         trainerMessage: data
     });
     await chatHistory.save();
+
+    chatHistory.userMessage = md.render(chatHistory.userMessage);
+    chatHistory.trainerMessage = md.render(chatHistory.trainerMessage);
     res.json(chatHistory);
 }));
 
