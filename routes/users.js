@@ -122,10 +122,13 @@ router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
 
     const workouts = await Workout.find({ author: userId });
     let totalTimeSpent = 0;
-    workouts.forEach(workout => {
-        const [hours, minutes, seconds] = workout.elapsedTime.split(':').map(Number);
-        totalTimeSpent += (hours * 3600) + (minutes * 60) + seconds;
-    });
+    try {
+        workouts.forEach(workout => {
+            const [hours, minutes, seconds] = workout.elapsedTime.split(':').map(Number);
+            totalTimeSpent += (hours * 3600) + (minutes * 60) + seconds;
+        });
+    
+    } catch (error) {console.log("Old user data leads to error. Missing elapsedTime in database. Make new user: " + error)};
 
      // Group workouts by week
      let workoutStats = {};
