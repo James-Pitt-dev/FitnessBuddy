@@ -32,7 +32,7 @@ router.post(
   "/search",
   catchAsync(async (req, res) => {
     const search = req.body.search;
-    res.send(req.body.search);
+    //res.send(req.body.search);
     try {
       let workouts = await Exercise.find({ name: { $regex: search, $options: "i" } });
       return res.render("exercises/index", { workouts });
