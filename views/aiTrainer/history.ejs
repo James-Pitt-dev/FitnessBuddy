@@ -1,0 +1,87 @@
+<% layout('layouts/boilerplate'); %>
+
+
+    <h1 class="text-center ">Chat History</h1>
+    <div class="row align-items-start">
+        <!-- Sidebar for weeks -->
+        <div class="col-3 p-3 mb-2 ">
+            <ul class="list-group">
+                <% weeks.forEach((week, index) => { %>
+                    <li class="list-group-item">
+                        <a href="#" class="week-link" data-index="<%= index %>">
+                          <% if(index ===  0) { %>
+                            Current Week: <%= week.startDate.toDateString() %> - <%= week.endDate.toDateString() %>
+                          <% } else { %>
+                            Week: <%= week.startDate.toDateString() %> - <%= week.endDate.toDateString() %>
+                          <% } %>
+                          </a>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
+        <!-- Chat history display -->
+      
+      <div class="col-md-8 d-flex flex-column align-self-end" autofocus>
+                <div class="chat-box flex-grow-1 overflow-auto" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px" id="chatBox" style="padding-bottom: 10px;">
+                    <h2 class="text-center">Select a week to view chats</h2>
+                </div>
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const weekLinks = document.querySelectorAll('.week-link');
+        weekLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const weekIndex = this.getAttribute('data-index');
+                fetch(`/ai-trainer/week/${weekIndex}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displayChats(data);
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        });
+
+        function displayChats(data) {
+            const chatBox = document.getElementById('chatBox');
+            let chatHtml = `
+                <h2 class="text-center">Chats from ${new Date(data.startDate).toDateString()} to ${new Date(data.endDate).toDateString()}</h2>
+            `;
+            data.chats.forEach(chat => {
+                chatHtml += `
+                    <div class="row m-2">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="d-flex justify-content-end">
+                                <div class="card border-dark shadow-lg mb-3" style="width: 100%;">
+                                    <div class="card-header shadow bg-success text-white d-flex justify-content-between">
+                                        <span>User</span>
+                                        <span>${new Date(chat.date).toDateString()}</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="card-text">${chat.userMessage}</p>
+                                    </div>
+                                </div>
+                            </div>
+                      </div>
+                   </div>
+                    <div class="row m-2">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="d-flex justify-content-start">
+                                <div class="card border-dark mb-3" style="width: 100%;">
+                                    <div class="card-header text-primary-emphasis bg-primary-subtle border border-primary-subtle">AI Trainer</div>
+                                    <div class="card-body">
+                                        <p class="card-text">${chat.trainerMessage}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            chatBox.innerHTML = chatHtml;
+        }
+    });
+</script>

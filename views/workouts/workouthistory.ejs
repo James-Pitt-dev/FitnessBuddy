@@ -1,0 +1,87 @@
+<% layout('layouts/boilerplate') %>
+
+<h1 class="text-center">All Workouts</h1>
+<form action="/viewWorkouts" method="POST" novalidate class="validated-form">
+    <div class="row row-cols-lg-2 g-2 g-lg-3 mb-2">
+    <% for (let workout of workouts) { %>
+        <div class="col-md-8">
+        <div class="card mb-2 shadow-lg" style="min-height: 20rem;">
+                    <div class="card-body p-2">
+                        <h5 class="card-title text-bold">Title: <%= workout.title %></h5>
+                        <p class="card-text text-muted">Date: <%= workout.date.toDateString() %></p>
+                        <p class="card-text text-muted">Timer: <%= workout.elapsedTime %></p>
+                        <p class="card-text text-muted">Notes: <%= workout.notes %></p>
+                        <h6>Exercises:</h6>
+                        <ul>
+                            <% workout.exercises.forEach(exercise => { %>
+                                <li><%= exercise.exercise.name %> - Best Set: <%= exercise.sets.reduce((prev, current) => (prev.weight > current.weight) ? prev : current).weight %> lbs</li>
+                            <% }) %>
+                        </ul>
+                        <button type="button" class="btn btn-primary mt-3 view-workout" data-id="<%= workout._id %>">View</button>
+                        <a class="btn btn-secondary mt-3" href="/workouts/view/<%= workout._id %>">Update</a>
+                        <a class="btn btn-danger mt-3" href="/workouts/delete/<%= workout._id %>">Delete</a>
+                    </div>
+                </div>
+            
+        </div>
+    <% } %>
+    </div>
+</form>
+
+<!-- Modal Structure -->
+<div class="modal fade" id="workoutModal" tabindex="-1" aria-labelledby="workoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="workoutModalLabel">Workout Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- Workout details will be loaded here via JavaScript -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.view-workout').forEach(button => {
+      button.addEventListener('click', function() {
+        const workoutId = this.getAttribute('data-id');
+        fetch(`/workouts/view/${workoutId}?json=true`)
+          .then(response => response.json())
+          .then(data => {
+            const workout = data.workout;
+            let modalContent = `
+              <h5>Title: ${workout.title}</h5>
+              <p><strong>Date:</strong> ${new Date(workout.date).toDateString()}</p>
+              <p><strong>Notes:</strong> ${workout.notes}</p>
+              <p><strong>Elapsed Time:</strong> ${workout.elapsedTime}</p>
+              <h6>Exercises</h6>
+              <ul>
+            `;
+            workout.exercises.forEach(exercise => {
+              modalContent += `
+                <li>
+                  <strong>${exercise.exercise.name}</strong>
+                  <ul>
+              `;
+              exercise.sets.forEach((set, index) => {
+                modalContent += `
+                  <li>Set ${index + 1}: Reps: ${set.reps}, Weight: ${set.weight}</li>
+                `;
+              });
+              modalContent += `
+                  </ul>
+                </li>
+              `;
+            });
+            modalContent += `</ul>`;
+            document.getElementById('modalBody').innerHTML = modalContent;
+            const workoutModal = new bootstrap.Modal(document.getElementById('workoutModal'));
+            workoutModal.show();
+          });
+      });
+    });
+  });
+</script>

@@ -40,4 +40,67 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     res.json(chatHistory);
 }));
 
+// Ensure user is logged in
+router.get('/chathistory', isLoggedIn, catchAsync(async (req, res) => {
+    const userId = req.user._id;
+  
+    // Get the current date
+    const now = new Date();
+    const currentWeekEnd = new Date(now);
+    currentWeekEnd.setHours(23, 59, 59, 999);
+  console.log(currentWeekEnd);
+    // Get the earliest chat date for the user
+    const earliestChat = await ChatHistory.findOne({ author: userId }).sort({ date: 1 });
+  console.log(earliestChat);
+    if (!earliestChat) {
+      return res.render('aiTrainer/history', { weeks: [] });
+    }
+  
+    
+    const earliestDate = earliestChat.date;
+  
+    // Calculate the total number of weeks between the earliest chat date and now
+    const totalWeeks = Math.ceil((currentWeekEnd - earliestDate) / (7 * 24 * 60 * 60 * 1000));
+  
+    // Create week ranges
+    const weeks = [];
+    for (let i = 0; i < totalWeeks; i++) {
+      const weekEnd = new Date(currentWeekEnd);
+      weekEnd.setDate(currentWeekEnd.getDate() - (i * 7));
+  
+      const weekStart = new Date(weekEnd);
+      weekStart.setDate(weekEnd.getDate() - 6);
+      weekStart.setHours(0, 0, 0, 0);
+  
+      weeks.push({ startDate: weekStart, endDate: weekEnd });
+    }
+  
+    res.render('aiTrainer/history', { weeks });
+  }));
+  
+  router.get('/week/:weekId', isLoggedIn, catchAsync(async (req, res) => {
+    const userId = req.user._id;
+    const weekIndex = parseInt(req.params.weekId);
+  
+    // Get the current date
+    const now = new Date();
+    const currentWeekEnd = new Date(now);
+    currentWeekEnd.setHours(23, 59, 59, 999);
+  
+    // Calculate the start and end date for the specified week
+    const weekEnd = new Date(currentWeekEnd);
+    weekEnd.setDate(currentWeekEnd.getDate() - (weekIndex * 7));
+  
+    const weekStart = new Date(weekEnd);
+    weekStart.setDate(weekEnd.getDate() - 6);
+    weekStart.setHours(0, 0, 0, 0);
+  
+    // Get all chat messages for the user within the specified week
+    const chats = await ChatHistory.find({
+      author: userId,
+      date: { $gte: weekStart, $lte: weekEnd }
+    }).sort({ date: -1 });
+res.json({ chats, startDate: weekStart, endDate: weekEnd });
+  }));
+
 module.exports = router;

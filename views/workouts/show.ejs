@@ -11,7 +11,20 @@
                     <input class="form-control" type="text" id="title" name="workout[title]"
                         value="<%= workout.title %>" placeholder="Name your workout" required>
                     <div class="valid-feedback">Looks Good!</div>
+
                 </div>
+                <div class="mb-3 text-center">
+                    <!--- <input class="form-control" type="number" id="timer" name="workout[timer]" placeholder="60"> 
+                       <div class="valid-feedback">Looks Good!</div>--->
+                    
+                       <div class=""  >
+                        <span class=" stopwatch display-7" type="string" id="time">Timer: <%= workout.elapsedTime %> </span>
+                       <i class="fas fa-redo-alt fa-2x mt-2" id="resetButton" style="cursor: pointer;"></i>
+                       <i class="fas fa-play fa-2x " id="startButton" style="cursor: pointer;"></i>
+                      </div>
+                       <!-- <button class="btn btn-warning btn-lg" id="resetButton">Reset</button> -->
+                   </div>
+            
 
                 <div class="mb-3">
                     <label class="form-label" for="notes">Notes</label>
@@ -19,14 +32,7 @@
                         placeholder="Add notes to help your workout"><%= workout.notes %></textarea>
                     <div class="valid-feedback">Looks Good!</div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label" for="timer">Duration (in minutes)</label>
-                    <input class="form-control" type="number" id="timer" name="workout[timer]"
-                        value="<%= workout.timer %>" placeholder="60">
-                    <div class="valid-feedback">Looks Good!</div>
-                </div>
-
+                
                 <% for (let i=0; i < workout.exercises.length; i++) { %>
 
                     <div class="input-group mb-3">
@@ -59,15 +65,7 @@
                                 value="<%= workout.exercises[i].sets[j].weight %>" required></input>
 
                         </div>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend" style="margin-left: 4em">
-                                <span class="input-group-text">Previous Weight:</span>
-                            </div>
-
-                            <input class="form-control" type="number" id="title" name="workout[exercises][<%= i %>][sets][<%= j %>][previousWeight]"
-                                value="<%= workout.exercises[i].sets[j].previousWeight %>" required></input>
-
-                        </div>
+               
 
                         <% } %>
                             <% } %>
@@ -79,4 +77,56 @@
         </div>
     </div>
 
-    
+    <script>
+          
+  let timer;
+  let elapsedTime = 0;
+  let isRunning = false;
+  let formattedTime = '00:00:00';
+
+  function formatTime(ms) {
+      let totalSeconds = Math.floor(ms / 1000);
+      let hours = Math.floor(totalSeconds / 3600);
+      let minutes = Math.floor((totalSeconds % 3600) / 60);
+      let seconds = totalSeconds % 60;
+
+      return `Timer: ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+
+  function startStopwatch() {
+      if (!isRunning) {
+          isRunning = true;
+          const startTime = Date.now() - elapsedTime;
+          timer = setInterval(() => {
+              elapsedTime = Date.now() - startTime;
+              formattedTime = formatTime(elapsedTime);
+              document.getElementById('time').textContent = formattedTime;
+          }, 1000);
+      }
+  }
+
+  function stopStopwatch() {
+      if (isRunning) {
+          isRunning = false;
+          clearInterval(timer);
+      }
+  }
+
+  function resetStopwatch() {
+      stopStopwatch();
+      elapsedTime = 0;
+      formattedTime = 'Timer: 00:00:00';
+      document.getElementById('time').textContent = formattedTime;
+  }
+
+  document.getElementById('startButton').addEventListener('click', function () {
+      startStopwatch();
+  });
+  document.getElementById('resetButton').addEventListener('click', resetStopwatch);
+
+  document.getElementById('finishButton').addEventListener('click', function () {
+      stopStopwatch();
+      document.getElementById('elapsedTime').value = formattedTime; // Set the hidden input value to the formatted time
+      document.querySelector('form').submit(); // Submits the form when the timer is stopped
+  });
+    </script>

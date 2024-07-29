@@ -1,5 +1,6 @@
 
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const UserSchema = new mongoose.Schema({
@@ -37,6 +38,8 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['2days', '3days', '4days', '5days', '6days', '7days']
     },
+    dashboardExercises:
+    [{ type:Schema.Types.ObjectId, ref: 'Exercise' }] ,
     date: {
         type: Date,
         default: Date.now
