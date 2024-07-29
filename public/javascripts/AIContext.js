@@ -142,7 +142,7 @@ const rolePrompt = `
                 author: userID,
                 title: title || 'Generated Workout Routine',
                 notes: notes || 'Perform each exercise with proper form and control. Stay hydrated and energized throughout your workout.',
-                timer: 0,
+                elaspsedTime: '00:00:00',
                 exercises: [] // Initialize as empty, will update later
             });
     

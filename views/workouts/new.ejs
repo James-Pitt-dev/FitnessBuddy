@@ -1,41 +1,62 @@
 <% layout('layouts/boilerplate') %>
 <!-- https://getbootstrap.com/docs/5.3/components/modal/#how-it-works -->
+
 <div class="row">
-  <h1 class="text-center">New Workout</h1>
-  <div class="col-6 offset-3">
+
+  <h1 class="text-center">Create a New Workout</h1>
+  
+  <div class="col-6 offset-3" >
+    <div class="d-flex justify-content-center mb-3">
+      <!-- <button class="btn btn-success btn-lg" id="startButton" >Start Workout</button> -->
+    </div>
+  
     <form action="/workouts/new" method="POST" novalidate class="validated-form">
+
+      <div class="mb-3 text-center">
+        <!--- <input class="form-control" type="number" id="timer" name="workout[timer]" placeholder="60"> 
+           <div class="valid-feedback">Looks Good!</div>--->
+        
+           <div class=""  >Timer: 
+            <span class=" stopwatch display-7" type="string" id="time">00:00:00</span>
+           <i class="fas fa-redo-alt fa-2x mt-2" id="resetButton" style="cursor: pointer;"></i>
+           <i class="fas fa-play fa-2x " id="startButton" style="cursor: pointer;"></i>
+          </div>
+           <!-- <button class="btn btn-warning btn-lg" id="resetButton">Reset</button> -->
+       </div>
+
+      
       <div class="mb-3">
-        <label class="form-label" for="title">Workout Title</label>
         <input class="form-control" type="text" id="title" name="workout[title]" placeholder="Name your workout" required>
         <div class="valid-feedback">Looks Good!</div>
       </div>
-
       <div class="mb-3">
-        <label class="form-label" for="notes">Notes</label>
         <textarea class="form-control" id="notes" name="workout[notes]" placeholder="Add notes to help your workout"></textarea>
         <div class="valid-feedback">Looks Good!</div>
       </div>
+      
 
-      <div class="mb-3">
-        <label class="form-label" for="timer">Duration (in minutes)</label>
-        <input class="form-control" type="number" id="timer" name="workout[timer]" placeholder="60">
-        <div class="valid-feedback">Looks Good!</div>
-      </div>
 
-      <div class="mb-3">
-        <button type="button" class="btn btn-primary" id="add-exercise">Add Exercise</button>
-        <button type="button" class="btn btn-secondary" onclick="window.location='/workouts'">Cancel</button>
-      </div>
+      <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+ 
+       </div>
 
       <div id="exercises-container"></div>
 
-      <div class="mb-3 mt-3">
-        <button class="btn btn-success">Finish Workout</button>
+      <div class="mb-3 d-grid gap-2 col-6 mx-auto">
+        <button type="button" class="btn btn-primary btn-lg" id="add-exercise">Add Exercise</button>
+        <button class="btn btn-success " id="finishButton" >Finish Workout</button>
+        <button type="button" class="btn btn-danger" onclick="window.location='/workouts/index'">Cancel</button>
+     
+        <input type="hidden" name="workout[elapsedTime]" id="elapsedTime" value="00:00:00">
       </div>
+   
     </form>
-    <a href="/workouts">All Workouts</a>
+
+    <a href="/workouts/workouthistory">All Workouts</a>
   </div>
 </div>
+
+
 
 <!-- Modal for exercise selection -->
 <div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
@@ -56,7 +77,118 @@
   </div>
 </div>
 
+<!-- Modal for Congratulations Message -->
+<div class="modal fade" id="congratulationsModal" tabindex="-1" aria-labelledby="congratulationsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="congratulationsModalLabel">Congratulations!</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>You've completed your workout!</p>
+        <div id="workoutDetails"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="confirmButton">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const urlParams = new URLSearchParams(window.location.search);
+      const templateId = urlParams.get('template');
+
+      if (templateId) {
+          fetch(`/workouts/template/${templateId}`)
+              .then(response => response.json())
+              .then(data => {
+                  // Pre-fill the form with the details of the old workout
+                  document.getElementById('title').value = data.title;
+                  document.getElementById('notes').value = data.notes;
+
+                  const exercisesContainer = document.getElementById('exercises-container');
+                  exercisesContainer.innerHTML = '';
+
+                  data.exercises.forEach((workoutExercise, exerciseIndex) => {
+                      const exerciseDiv = document.createElement('div');
+                      exerciseDiv.className = 'exercise mb-3';
+
+                      let setsHtml = '';
+                      workoutExercise.sets.forEach((set, setIndex) => {
+                          setsHtml += `
+                            <div class="row mt-2 set">
+                              ${setIndex + 1}
+                              <div class="col-3">
+                                <label for="sets">Reps</label>
+                                <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][reps]" value="${set.reps}" placeholder="0">
+                              </div>
+                              <div class="col-3">
+                                <label for="weight">Weight</label>
+                                <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][weight]" value="${set.weight}" placeholder="0">
+                              </div>
+                        ${setIndex === 0 ? `
+                <div class="col-3">
+                  <label for="previousWeight">Previous</label>
+                  <input class="form-control" type="string" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][previousWeight]" ">
+                </div>` : ''}
+                              <div class="col-1">
+                                <button type="button" class="btn btn-danger mt-3 delete-set-button" aria-label="Close">&times;</button>
+                              </div>
+                            </div>
+                          `;
+                      });
+
+                      exerciseDiv.innerHTML = `
+                        <div class="container">
+                          <div class="container">
+                            <div class="row bg-light.bg-gradient">
+                              <div class="col-md-6 p-1"><h4>${workoutExercise.exercise.name}</h4></div>
+                              <div class="col-md-2 offset-md-4"><button type="button" class="btn btn-danger mt-3 delete-exercise-button" aria-label="Close">&times;</button></div>
+                            </div>
+                          </div>
+                          <input type="hidden" name="workout[exercises][${exerciseIndex}][exercise]" value="${workoutExercise.exercise._id}">
+                          <div class="sets-container">
+                            ${setsHtml}
+                          </div>
+                          <button type="button" class="btn btn-secondary mt-2 add-set" data-index="${exerciseIndex}">+ Add Set</button>
+                          <hr>
+                        </div>
+                      `;
+
+                      exercisesContainer.appendChild(exerciseDiv);
+                                    // Fetch previous weight for the first set
+                  fetch(`/workouts/previousWeight/${workoutExercise.exercise._id}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        exerciseDiv.querySelector(`input[name="workout[exercises][${exerciseIndex}][sets][0][previousWeight]"]`).value = ` ${data.previousReps} X ${data.previousWeight}`;
+                    });
+
+                      exerciseDiv.querySelector('.delete-exercise-button').addEventListener('click', function () {
+                          exerciseDiv.remove();
+                          reindexExercises();
+                      });
+
+                      exerciseDiv.querySelectorAll('.delete-set-button').forEach(button => {
+                          button.addEventListener('click', function () {
+                              button.closest('.set').remove();
+                              reindexSets(exerciseIndex);
+                          });
+                      });
+
+                      document.querySelector(`.add-set[data-index="${exerciseIndex}"]`).addEventListener('click', function () {
+                          addSetToExercise(exerciseIndex);
+                      });
+                  });
+              })
+              .catch(error => {
+                  console.error('Error fetching template workout:', error);
+              });
+      }
+  });
+
   document.getElementById('add-exercise').addEventListener('click', function () {
     const exerciseModal = new bootstrap.Modal(document.getElementById('exerciseModal'));
     exerciseModal.show();
@@ -72,14 +204,16 @@
     }
   });
 
+
   function addExerciseToForm(exerciseId, exerciseName) {
     const container = document.getElementById('exercises-container');
     const exerciseDiv = document.createElement('div');
     exerciseDiv.className = 'exercise mb-3';
-
     const exerciseIndex = document.querySelectorAll('.exercise').length;
 
+
     exerciseDiv.innerHTML = `
+    <div class="container">
       <div class="container">
         <div class="row bg-light.bg-gradient">
           <div class="col-md-6 p-1"><h4>${exerciseName}</h4></div>
@@ -88,10 +222,8 @@
       </div>
       <input type="hidden" name="workout[exercises][${exerciseIndex}][exercise]" value="${exerciseId}">
       <div class="sets-container">
-        <div class="row mt-2 set">
-          <div class="col-1">
-            1
-          </div>
+        <div class="row mt-5 set">
+          1
           <div class="col-3">
             <label for="sets">Reps</label>
             <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][0][reps]" placeholder="0">
@@ -101,16 +233,27 @@
             <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][0][weight]" placeholder="0">
           </div>
           <div class="col-3">
-            <label for="previousWeight">Previous Weight</label>
-            <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][0][previousWeight]" placeholder="0">
+            <label for="previousWeight">Previous</label>
+            <input class="form-control" type="string" name="workout[exercises][${exerciseIndex}][sets][0][previousWeight]" >
           </div>
         </div>
       </div>
+      
       <button type="button" class="btn btn-secondary mt-2 add-set" data-index="${exerciseIndex}">+ Add Set</button>
       <hr>
+      </div>
     `;
 
     container.appendChild(exerciseDiv);
+   
+
+    // Fetch previous weight for the first set
+    fetch(`/workouts/previousWeight/${exerciseId}`)
+        .then(response => response.json())
+        .then(data => {
+            exerciseDiv.querySelector(`input[name="workout[exercises][${exerciseIndex}][sets][0][previousWeight]"]`).value = `${data.previousWeight} X ${data.previousReps}` ;
+        });
+
 
     exerciseDiv.querySelector('.delete-exercise-button').addEventListener('click', function () {
       exerciseDiv.remove();
@@ -124,7 +267,14 @@
 
   function addSetToExercise(exerciseIndex) {
     const setsContainer = document.querySelector(`.exercise:nth-child(${exerciseIndex + 1}) .sets-container`);
+   
     const setCount = setsContainer.querySelectorAll('.set').length;
+    console.log(setCount);
+    const lastSet = setsContainer.querySelectorAll('.set')[setCount - 1];
+    const lastWeight = lastSet ? lastSet.querySelector('input[name*="[weight]"]').value : 0;
+    const lastRep = lastSet ? lastSet.querySelector('input[name*="[reps]"]').value : 0;
+
+
     const setDiv = document.createElement('div');
     setDiv.className = 'row mt-2 set';
 
@@ -132,16 +282,13 @@
       ${setCount + 1}
       <div class="col-3">
         <label for="sets">Reps</label>
-        <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setCount}][reps]" placeholder="0">
+        <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setCount}][reps]" placeholder="${lastRep}">
       </div>
       <div class="col-3">
         <label for="weight">Weight</label>
-        <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setCount}][weight]" placeholder="0">
+        <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setCount}][weight]" placeholder="${lastWeight}">
       </div>
-      <div class="col-3">
-        <label for="previousWeight">Previous Weight</label>
-        <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setCount}][previousWeight]" placeholder="0">
-      </div>
+
       <div class="col-1">
         <button type="button" class="btn btn-danger mt-3 delete-set-button" aria-label="Close">&times;</button>
       </div>
@@ -200,4 +347,99 @@
       });
     });
   }
+
+  
+  let timer;
+  let elapsedTime = 0;
+  let isRunning = false;
+  let formattedTime = '00:00:00';
+
+  function formatTime(ms) {
+      let totalSeconds = Math.floor(ms / 1000);
+      let hours = Math.floor(totalSeconds / 3600);
+      let minutes = Math.floor((totalSeconds % 3600) / 60);
+      let seconds = totalSeconds % 60;
+
+      return ` ${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }
+
+  function startStopwatch() {
+      if (!isRunning) {
+          isRunning = true;
+          const startTime = Date.now() - elapsedTime;
+          timer = setInterval(() => {
+              elapsedTime = Date.now() - startTime;
+              formattedTime = formatTime(elapsedTime);
+              document.getElementById('time').textContent = formattedTime;
+          }, 1000);
+      }
+  }
+
+  function stopStopwatch() {
+      if (isRunning) {
+          isRunning = false;
+          clearInterval(timer);
+      }
+  }
+
+  function resetStopwatch() {
+      stopStopwatch();
+      elapsedTime = 0;
+      formattedTime =  '00:00:00';
+      document.getElementById('time').textContent = formattedTime;
+  }
+
+  document.getElementById('startButton').addEventListener('click', function () {
+      startStopwatch();
+  });
+  document.getElementById('resetButton').addEventListener('click', resetStopwatch);
+
+  document.getElementById('finishButton').addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    stopStopwatch();
+    document.getElementById('elapsedTime').value = formattedTime; // Set the hidden input value to the formatted time
+
+    // Collect workout details
+    const title = document.getElementById('title').value;
+    const notes = document.getElementById('notes').value;
+    const exercisesContainer = document.getElementById('exercises-container');
+    const exercises = exercisesContainer.querySelectorAll('.exercise');
+
+    let workoutDetailsHtml = `
+        <p><strong>Title:</strong> ${title}</p>
+        <p><strong>Notes:</strong> ${notes}</p>
+        <p><strong>Elapsed Time:</strong> ${formattedTime}</p>
+        <div><strong>Exercises:</strong>
+            <ul>`;
+    
+    exercises.forEach((exerciseDiv, exerciseIndex) => {
+        const exerciseName = exerciseDiv.querySelector('h4').textContent;
+        workoutDetailsHtml += `<li>${exerciseName}
+            <ul>`;
+        
+        const sets = exerciseDiv.querySelectorAll('.set');
+        sets.forEach((setDiv, setIndex) => {
+            const reps = setDiv.querySelector('input[name*="[reps]"]').value;
+            const weight = setDiv.querySelector('input[name*="[weight]"]').value;
+            workoutDetailsHtml += `<li>Set ${setIndex + 1}: ${reps} reps, ${weight} lbs</li>`;
+        });
+        
+        workoutDetailsHtml += `</ul>
+        </li>`;
+    });
+
+    workoutDetailsHtml += `</ul></div>`;
+    
+    document.getElementById('workoutDetails').innerHTML = workoutDetailsHtml;
+
+    // Show the congratulations modal
+    const congratulationsModal = new bootstrap.Modal(document.getElementById('congratulationsModal'));
+    congratulationsModal.show();
+
+    // Handle confirmation button click
+    document.getElementById('confirmButton').addEventListener('click', function () {
+        document.querySelector('form').submit(); // Submits the form when the modal is confirmed
+    });
+});
 </script>

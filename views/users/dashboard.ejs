@@ -1,0 +1,406 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container mt-2">
+  <h2 class="text-center mb-1 display-4">Hello, <%= name %>!</h2>
+  <div class="row text-right mb-5">
+      <div class="col-md-4">
+          <div class="card bg-info text-white">
+              <div class="card-body">
+                  
+                  <p class="card-text"><strong>Current Weight:</strong> <%= currentWeight %> lbs</p>
+                  <p class="card-text"><strong>Goal Weight:</strong> <%= goalWeight %> lbs</p>
+                  <p class="card-text"><strong>Only</strong> <%= weightDifference %> lbs away from your Goal</p>
+                  
+              </div>
+          </div>
+      </div>
+    <div class="col-md-4">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <h3>Total Workouts</h3>
+          <p class="display-4"><%= totalWorkouts %></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <h4>Total Time Spent</h4>
+          <p class="display-7"><%= Math.floor(totalTimeSpent / 3600) %>h <%= Math.floor((totalTimeSpent % 3600) / 60) %>m</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="text-center mt-5">Recent Workouts</h2>
+  <div class="row">
+    <% recentWorkouts.forEach(workout => { %>
+          <div class="col-md-4 mb-4">
+              <div class="card">
+                  <div class="card-body">
+                      <h5 class="card-title"><%= workout.title %> - <%= workout.date.toLocaleDateString() %></h5>
+                      <p class="card-text"><%= workout.notes %></p>
+                      <ul>
+                        <% workout.exercises.forEach(exercise => { %>
+                          <li><%= exercise.exercise.name %>: <%= exercise.sets.length %> sets</li>
+                        <% }) %>
+                      </ul>
+                  </div>
+              </div>
+          </div>
+      <% }) %>
+  </div>
+
+  <h3 class="text-center">Progress Charts</h3> 
+  <div class="d-flex justify-content-center align-items-center" style="height: 500px;">
+    <div class="col-14 col-md-6" >
+       <canvas id="workoutChart" width="600" height="500"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-2">
+  <div class="row align-items-center">
+    <div class="col col-md-6 col-sm-12 offset-md-3 ">
+      <h3 class="text-center">Track You Progress </h3>
+      <div id="dashboard-exercises" class="list-group">
+        <!-- Dashboard exercises will be appended here -->
+      </ul>
+    </div>
+  </div>
+</div>
+</div>
+
+<div class="container mt-2">
+  <h2 class="text-center mt-5">Search Exercise Progress</h2>
+  <div class="search-container">
+    <input type="text" id="exerciseSearchInput" placeholder="Search for an exercise..." class="form-control mb-3">
+    <button id="searchButton" class="btn btn-primary mb-3">Search</button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exerciseModal" tabindex="-1" aria-labelledby="exerciseModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exerciseModalLabel">Exercise Progress</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="suggestions" class="list-group mb-3"></div>
+        <div id="message1" class="mt-3" style="display: none;"></div>
+        <div id="message2" class="mt-3" style="display: none;"></div>
+        <div id="message3" class="mt-3" style="display: none;"></div>
+        <canvas id="exerciseProgressChart" width="600" height="400" style="display: none;"></canvas>
+        <button id="addToDashboardButton" class="btn btn-success mb-3" style="display: none;">Add to Dashboard</button>
+        <button id="removeFromDashboardButton" class="btn btn-danger mb-3" style="display: none;">Remove from Dashboard</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script>
+        let exerciseProgressChart;
+        let progressChartCreated = false;
+        let selectedExerciseId = null;
+        let dashboardExercises = JSON.parse('<%- JSON.stringify(dashboardExercises) %>').map(exercise => exercise._id);
+
+
+        const exerciseCharts = {};
+    document.addEventListener('DOMContentLoaded', function() {
+
+
+
+ const workoutStats = JSON.parse('<%- JSON.stringify(workoutStats) %>');
+        const labels = Object.keys(workoutStats);
+        const data = Object.values(workoutStats);
+
+        const ctx = document.getElementById('workoutChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Number of workouts',
+                data: data,
+            },
+        ],
+    },
+    options: {
+        maintainAspectRatio: false,
+        responsive: false,
+        backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',  // Bar 1
+            'rgba(54, 162, 235, 0.2)',  // Bar 2
+            'rgba(255, 206, 86, 0.2)',  // Bar 3
+            'rgba(75, 192, 192, 0.2)',  // Bar 4
+            'rgba(153, 102, 255, 0.2)', // Bar 5
+            'rgba(255, 159, 64, 0.2)'   // Bar 6
+        ],
+        borderWidth: 2,
+        borderColor: 'black',
+
+    plugins: {
+    title: {
+      display: true,
+      text: 'Number of Workouts per Week',
+      font: {
+        size: 25
+      }
+    },
+  },  legend: {
+    display: true,
+    position: 'top'
+  }
+    }
+    
+ });
+ displayDashboardExercises();
+    document.getElementById('searchButton').addEventListener('click', performSearch);
+  
+});
+
+function performSearch() {
+  if (progressChartCreated) {
+            exerciseProgressChart.destroy();
+            progressChartCreated = false;
+        } 
+        const query = document.getElementById('exerciseSearchInput').value;
+        if (query.length < 2) {
+            document.getElementById('suggestions').innerHTML = '';
+            document.getElementById('message').style.display = 'none';
+            return;
+        }
+        
+        fetch(`/searchexercises/${query}`)
+            .then(response => response.json())
+            .then(exercises => {
+                const suggestionsContainer = document.getElementById('suggestions');
+                suggestionsContainer.innerHTML = '';
+          
+                exercises.forEach(exercise => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('list-group-item', 'list-group-item-action');
+                    suggestionItem.textContent = exercise.name;
+                    suggestionItem.addEventListener('click', function() {
+                        document.getElementById('exerciseSearchInput').value = exercise.name;
+                        suggestionsContainer.innerHTML = '';
+                        document.getElementById('message1').textContent = `You selected: ${exercise.name} `;
+                        document.getElementById('message1').style.display = 'block';
+ 
+                        if (!dashboardExercises.includes(exercise._id)) {
+              document.getElementById('addToDashboardButton').style.display = 'block';
+              document.getElementById('removeFromDashboardButton').style.display = 'none';
+              document.getElementById('addToDashboardButton').dataset.exerciseId = exercise._id;
+            } else {
+              document.getElementById('addToDashboardButton').style.display = 'none';
+              document.getElementById('removeFromDashboardButton').style.display = 'block';
+              document.getElementById('removeFromDashboardButton').dataset.exerciseId = exercise._id;
+            }
+
+            fetchExerciseProgress(exercise._id);
+                        
+                    });
+                   
+                    suggestionsContainer.appendChild(suggestionItem);
+                });
+
+                document.getElementById('message1').textContent = `Showing results for "${query}"`;
+                document.getElementById('message1').style.display = 'block';
+                
+        // Show the modal
+        const exerciseModal = new bootstrap.Modal(document.getElementById('exerciseModal'));
+        exerciseModal.show();
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('message1').textContent = `An error occurred while searching. Please try again. `;
+                document.getElementById('message1').style.display = 'block';
+            });
+    }
+
+    function fetchExerciseProgress(exerciseId) {
+   
+        fetch(`/exerciseprogress/${exerciseId}`)
+            .then(response => response.json())
+            .then(data => {
+                const dates = data.map(entry => new Date(entry.date).toLocaleDateString());
+                const weights = data.map(entry => entry.weight);
+                if (dates.length === 0) {
+                    document.getElementById('message3').textContent = 'No progress data available for this exercise.';
+                    document.getElementById('message3').style.display = 'block';
+                    return;
+                }
+                createOrUpdateChart(dates, weights);
+                document.getElementById('exerciseProgressChart').style.display = 'block';
+            })
+            .catch(error => {
+                console.error(error);
+                document.getElementById('message3').textContent = `An error occurred while fetching exercise progress. Please try again.${error} ${progresschartnumber}`;
+                document.getElementById('message3').style.display = 'block';
+            });
+    }
+
+    function removeData(chart) {
+    chart.data.labels.pop();
+    chart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+
+    chart.update();
+}
+
+function displayDashboardExercises() {
+    fetch('/dashboardExerciseProgress')
+        .then(response => response.json())
+        .then(exercisesProgress => {
+            const container = document.getElementById('dashboard-exercises');
+            container.innerHTML = '';
+
+            exercisesProgress.forEach(({ exercise, progressData }) => {
+                const dates = progressData.map(entry => new Date(entry.date).toLocaleDateString());
+                const weights = progressData.map(entry => entry.weight);
+
+                const canvasContainer = document.createElement('div');
+                canvasContainer.className = 'mb-4';
+
+                const canvas = document.createElement('canvas');
+                canvas.id = `chart-${exercise._id}`;
+                canvas.width = 600; // Adjust width
+                canvas.height = 400; // Adjust height
+                canvasContainer.appendChild(canvas);
+
+                container.appendChild(canvasContainer);
+
+                createDashboardChart(canvas.id, exercise.name, dates, weights);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching dashboard exercises:', error);
+        });
+}
+function createDashboardChart(canvasId, exerciseName, dates, weights) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: dates,
+            datasets: [{
+                label: exerciseName,
+                data: weights,
+                fill: false,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.5
+            }]
+        },
+        options: {       
+          responsive: true,
+          maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: `${exerciseName} Progress`
+                }
+            }
+        }
+    });
+}
+
+function createOrUpdateChart(dates, weights) {
+        if (progressChartCreated) {
+            exerciseProgressChart.destroy();
+            progressChartCreated = false;
+        } 
+        if (!progressChartCreated) {
+            const progressCtx = document.getElementById('exerciseProgressChart').getContext('2d');
+            exerciseProgressChart = new Chart(progressCtx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Weight',
+                        data: weights,
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        tension: 0.5
+                    }]
+                },
+                options: {
+                  maintainAspectRatio: false,
+                  responsive: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'Exercise Progress'
+                        }
+                    }
+                }
+            });
+            progressChartCreated = true;
+        }
+    }
+  
+  
+
+    document.getElementById('addToDashboardButton').addEventListener('click', function() {
+    const exerciseId = this.dataset.exerciseId;
+    fetch('/addToDashboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ exerciseId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        dashboardExercises.push(exerciseId);
+        document.getElementById('addToDashboardButton').style.display = 'none';
+        document.getElementById('removeFromDashboardButton').style.display = 'block';
+        alert('Exercise added to dashboard successfully!');
+        displayDashboardExercises(); // Update the dashboard exercises
+      } else {
+        alert('Failed to add exercise to dashboard.');
+      }
+    })
+    .catch(error => {
+      console.error('Error adding exercise to dashboard:', error);
+      alert('An error occurred while adding the exercise to the dashboard.');
+    });
+  });
+
+  document.getElementById('removeFromDashboardButton').addEventListener('click', function() {
+    const exerciseId = this.dataset.exerciseId;
+    fetch('/removeFromDashboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ exerciseId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        dashboardExercises = dashboardExercises.filter(id => id !== exerciseId);
+        document.getElementById('addToDashboardButton').style.display = 'block';
+        document.getElementById('removeFromDashboardButton').style.display = 'none';
+        alert('Exercise removed from dashboard successfully!');
+        displayDashboardExercises(); // Update the dashboard exercises
+      } else {
+        alert('Failed to remove exercise from dashboard.');
+      }
+    })
+    .catch(error => {
+      console.error('Error removing exercise from dashboard:', error);
+      alert('An error occurred while removing the exercise from the dashboard.');
+    });
+  });
+</script>

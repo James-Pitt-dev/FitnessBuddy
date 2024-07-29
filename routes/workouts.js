@@ -26,6 +26,7 @@ router.post(
       title: workout.title,
       notes: workout.notes,
       timer: workout.timer,
+      elapsedTime: workout.elapsedTime,
       author: req.user._id,
     });
 
@@ -56,16 +57,70 @@ router.get(
   "/index",
   isLoggedIn,
   catchAsync(async (req, res) => {
-    const userId= req.user._id;
-    console.log("show user id as author to display workout",userId);
-    const workouts = await Workout.find({author:userId}).populate({
+    const userId = req.user._id;
+    console.log("show user id as author to display workout", userId);
+
+    // Find the last 7 workouts for the user, sorted by date in descending order
+    const workouts = await Workout.find({ author: userId })
+      .sort({ date: -1 }) // Sort by date in descending order
+      .populate({
+        path: "exercises",
+        populate: {
+          path: "exercise", // populate the `exercise` field inside `workoutExercise`
+          model: "Exercise",
+        },
+      });
+        // Filter workouts to keep only distinct titles and limit to the last 7
+    const distinctWorkouts = [];
+    const titles = new Set();
+    for (const workout of workouts) {
+      if (!titles.has(workout.title)) {
+        titles.add(workout.title);
+        distinctWorkouts.push(workout);
+      }
+      if (distinctWorkouts.length >= 8) break;
+    }
+
+    res.render("workouts/index", { workouts: distinctWorkouts });
+  })
+);
+router.get(
+  "/template/:id",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const { id } = req.params;
+    const workout = await Workout.findById(id).populate({
       path: "exercises",
       populate: {
         path: "exercise", // populate the `exercise` field inside `workoutExercise`
         model: "Exercise",
       },
     });
-    res.render("workouts/index", { workouts });
+
+    if (!workout) {
+      return res.status(404).json({ error: "Workout not found" });
+    }
+
+    res.json(workout);
+  })
+);
+
+
+router.get(
+  "/workouthistory",
+  isLoggedIn,
+  catchAsync(async (req, res) => {
+    const userId= req.user._id.toString();
+    console.log("show user id as author to display workout",userId);
+    const workouts = await Workout.find({author:userId}).sort({ date: -1 }).populate({
+      
+      path: "exercises",
+      populate: {
+        path: "exercise", // populate the `exercise` field inside `workoutExercise`
+        model: "Exercise",
+      },
+    });
+    res.render("workouts/workouthistory", { workouts });
     // res.render('workouts/index');
   })
 );
@@ -75,6 +130,8 @@ router.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     let { id } = req.params;
+    const { json = false } = req.query; // Get the 'json' query parameter and default to false if not provided
+
     console.log("here is viewing ", id);
     const workout = await Workout.findById(id).populate({
       path: "exercises",
@@ -83,11 +140,16 @@ router.get(
         model: "Exercise",
       },
     });
-    req.flash("success", "Welcom to view the workout!");
-    res.render("workouts/show", { workout });
-    // res.render('workouts/index');*/
+
+    if (json === 'true') {
+      res.json({ workout });
+    } else {
+      req.flash("success", "Welcome to view the workout!");
+      res.render("workouts/show", { workout });
+    }
   })
 );
+
 
 router.get(
   "/delete/:id",
@@ -105,7 +167,7 @@ router.get(
     }
     //ane then delete the workout plan
     const delete_workout = await Workout.findByIdAndDelete(id);
-    res.redirect("/workouts/index");
+    res.redirect("/workouts/workouthistory");
   })
 );
 
@@ -121,6 +183,7 @@ router.post(
       title: workout.title,
       notes: workout.notes,
       timer: workout.timer,
+      elapsedTime: workout.elapsedTime,
     });
 
     if (!editWorkout) {
@@ -149,6 +212,34 @@ router.post(
     res.redirect("/workouts/index");
   })
 );
+
+
+router.get('/previousWeight/:exerciseId', isLoggedIn, catchAsync(async (req, res) => {
+  const { exerciseId } = req.params;
+  const userId = req.user._id.toString(); 
+  
+  
+  // Find the latest WorkoutExercise for the given exerciseId and userId
+  const lastWorkoutExercise = await WorkoutExercise.findOne({ 
+    exercise: exerciseId 
+  })
+  .populate({
+    path: 'workout',
+    match: { author: userId },
+  })
+  .sort({ 'sets._id': -1 })  // Sorting by the sets' ObjectId to get the latest one
+  .exec();
+
+  if (lastWorkoutExercise && lastWorkoutExercise.workout) {
+    // If a WorkoutExercise is found and it belongs to the current user
+    const lastSet = lastWorkoutExercise.sets[lastWorkoutExercise.sets.length - 1];
+   
+    res.json({ previousWeight: lastSet.weight || 0, previousReps: lastSet.reps || 0 });
+  } else {
+    res.json({ previousWeight: 0 , previousReps: 0}); // default to 0 if no previous weight is found
+  }
+}));
+
 
 module.exports = router;
 

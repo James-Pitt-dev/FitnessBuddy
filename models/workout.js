@@ -48,9 +48,13 @@ const workoutSchema = new Schema({
     title: String,
     notes: String,
     timer: Number,
+    elapsedTime: String,
+    date: {
+      type: Date,
+      default: Date.now
+    },
     exercises: [{ type: Schema.Types.ObjectId, ref: 'WorkoutExercise'}]
 });
 
 const Workout = mongoose.model('Workout', workoutSchema);
 module.exports = Workout;
-

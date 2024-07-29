@@ -6,7 +6,7 @@ const workoutExerciseSchema = new Schema({
     sets: [{
         reps: { type: Number},
         weight: { type: Number},
-        previousWeight: { type: Number}
+        previousWeight: { type: String}
     }],
     workout: { type: Schema.Types.ObjectId, ref: 'Workout', required: true }
 });
