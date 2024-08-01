@@ -52,9 +52,9 @@ router.post('/createProfile', catchAsync(async (req, res) => {
     res.redirect('/');
 }));
 
-router.get('/showProfile', async (req, res) => {
+router.get('/showProfile',isLoggedIn, async (req, res) => {
     let currUser= res.locals.currentUser;   
-    let userId= req.user._id; 
+    let userId = req.user._id; 
     //fetch the workoutPlan data as an array to show the workout title, notes, and duration
     const workouts = await Workout.find({author:userId}).populate({
         path: "exercises",
@@ -70,7 +70,7 @@ router.get('/showProfile', async (req, res) => {
 //POST methond to update the profile
 router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
     try{
-        const id= req.body._id    
+        const id = req.body._id    
         const editUser= await User.findByIdAndUpdate(id,req.body); 
         if(!editUser){
             return res.status(500).json({msg:"Unable to update user data"});
@@ -86,22 +86,12 @@ router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
 }));
 
 //get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
-router.get('/deleteProfile/:id',isLoggedIn, async(req,res)=>{
-    try{
-        console.log('we are herer');
-        let {id} = req.params;
-        console.log(id)
-        const delUser= await User.findByIdAndDelete(id); 
-        if(!delUser){
-            return res.status(500).json({msg:"Unable to delete user data"});
-        } else{
-            //return to home pape and user needs to recreate new account to login
-           
-           res.redirect('/');               
-        }                  
-    }catch(error){     
-        return res.status(500).json({msg:"Unable to delete user data"});
-    }
+router.get('/deleteProfile/:id', isLoggedIn, async (req, res) => {
+  
+        let { id } = req.params;
+        const user = await User.findByIdAndDelete(id);
+        req.flash('success', `Deleted User: ${user.username}`);
+        res.redirect('/');
 });
 
 // if (!req.isAuthenticated()){
