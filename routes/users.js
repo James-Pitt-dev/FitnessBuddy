@@ -11,10 +11,11 @@ const { isLoggedIn } = require("../middleware");
 const moment = require('moment');
 const Exercise = require("../models/exercise");
 const WorkoutExercise = require("../models/workoutExercise");
+const {validateUser} = require('../middleware');
 
 router.get('/register', users.renderRegister);
 
-router.post('/register', catchAsync(users.registerUser));
+router.post('/register', validateUser, catchAsync(users.registerUser));
 
 router.get('/login', users.renderLogin);
 
@@ -28,7 +29,7 @@ router.get('/createProfile', (req, res) => {
     res.render('users/createProfile');
 });
 
-router.post('/createProfile', async (req, res) => {
+router.post('/createProfile', catchAsync(async (req, res) => {
     const {experience, age, height, currentWeight, goalWeight, workoutNum, gender, goal, activity, equipment,workoutfrequency} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){
@@ -49,7 +50,7 @@ router.post('/createProfile', async (req, res) => {
     await user.save();
     console.log(user);
     res.redirect('/');
-});
+}));
 
 router.get('/showProfile', async (req, res) => {
     let currUser= res.locals.currentUser;   
@@ -67,7 +68,7 @@ router.get('/showProfile', async (req, res) => {
 
 
 //POST methond to update the profile
-router.post('/editProfile', isLoggedIn,async(req,res)=>{
+router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
     try{
         const id= req.body._id    
         const editUser= await User.findByIdAndUpdate(id,req.body); 
@@ -82,7 +83,7 @@ router.post('/editProfile', isLoggedIn,async(req,res)=>{
     }catch(error){     
         return res.status(500).json({msg:"Unable to update user data"});
     }
-});
+}));
 
 //get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
 router.get('/deleteProfile/:id',isLoggedIn, async(req,res)=>{

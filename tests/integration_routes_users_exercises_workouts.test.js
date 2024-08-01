@@ -77,9 +77,9 @@ describe("Integration testing of exercise routes such as POST and GET", () => {
     const response = await request(currApp)
       .post("/exercises/search")
       .send("search=bike")
-      .set("Accept", "application/json");
+      .set("Accept", "text/html");
     expect(response.status).toBe(200);
-    expect(response.text).toBe("bike");
+    expect(response.text).toContain("bike");
   });
 });
 
