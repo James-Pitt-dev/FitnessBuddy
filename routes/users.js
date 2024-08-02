@@ -11,10 +11,11 @@ const { isLoggedIn } = require("../middleware");
 const moment = require('moment');
 const Exercise = require("../models/exercise");
 const WorkoutExercise = require("../models/workoutExercise");
+const {validateUser} = require('../middleware');
 
 router.get('/register', users.renderRegister);
 
-router.post('/register', catchAsync(users.registerUser));
+router.post('/register', validateUser, catchAsync(users.registerUser));
 
 router.get('/login', users.renderLogin);
 
@@ -24,11 +25,11 @@ router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlas
 router.get('/logout', users.logout); 
 
 router.get('/createProfile', (req, res) => {
-    console.log(req.user);
+    //console.log(req.user);
     res.render('users/createProfile');
 });
 
-router.post('/createProfile', async (req, res) => {
+router.post('/createProfile', catchAsync(async (req, res) => {
     const {experience, age, height, currentWeight, goalWeight, workoutNum, gender, goal, activity, equipment,workoutfrequency} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){
@@ -49,13 +50,13 @@ router.post('/createProfile', async (req, res) => {
     await user.save();
     console.log(user);
     res.redirect('/');
-});
+}));
 
 router.get('/showProfile',isLoggedIn, async (req, res) => {
-    let currUser= res.locals.currentUser;
-    let currUserId= req.user._id;
+    let currUser= res.locals.currentUser;   
+    let userId = req.user._id; 
     //fetch the workoutPlan data as an array to show the workout title, notes, and duration
-    const workouts = await Workout.find({author:currUserId}).populate({
+    const workouts = await Workout.find({author:userId}).populate({
         path: "exercises",
         populate: {
           path: "exercise", // populate the `exercise` field inside `workoutExercise`
@@ -67,9 +68,9 @@ router.get('/showProfile',isLoggedIn, async (req, res) => {
 
 
 //POST methond to update the profile
-router.post('/editProfile',isLoggedIn, async(req,res)=>{
+router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
     try{
-        const id= req.body._id    
+        const id = req.body._id    
         const editUser= await User.findByIdAndUpdate(id,req.body); 
         if(!editUser){
             return res.status(500).json({msg:"Unable to update user data"});
@@ -82,24 +83,15 @@ router.post('/editProfile',isLoggedIn, async(req,res)=>{
     }catch(error){     
         return res.status(500).json({msg:"Unable to update user data"});
     }
-});
+}));
 
 //get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
-router.get('/deleteProfile/:id',isLoggedIn, async(req,res)=>{
-    try{
-        let {id} = req.params;
-        console.log(id)
-        const delUser= await User.findByIdAndDelete(id); 
-        if(!delUser){
-            return res.status(500).json({msg:"Unable to delete user data"});
-        } else{
-            //return to home pape and user needs to recreate new account to login
-           
-           res.redirect('/');               
-        }                  
-    }catch(error){     
-        return res.status(500).json({msg:"Unable to delete user data"});
-    }
+router.get('/deleteProfile/:id', isLoggedIn, async (req, res) => {
+  
+        let { id } = req.params;
+        const user = await User.findByIdAndDelete(id);
+        req.flash('success', `Deleted User: ${user.username}`);
+        res.redirect('/');
 });
 
 // if (!req.isAuthenticated()){
@@ -121,10 +113,13 @@ router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
 
     const workouts = await Workout.find({ author: userId });
     let totalTimeSpent = 0;
-    workouts.forEach(workout => {
-        const [hours, minutes, seconds] = workout.elapsedTime.split(':').map(Number);
-        totalTimeSpent += (hours * 3600) + (minutes * 60) + seconds;
-    });
+    try {
+        workouts.forEach(workout => {
+            const [hours, minutes, seconds] = workout.elapsedTime.split(':').map(Number);
+            totalTimeSpent += (hours * 3600) + (minutes * 60) + seconds;
+        });
+    
+    } catch (error) {console.log("Old user data leads to error. Missing elapsedTime in database. Make new user: " + error)};
 
      // Group workouts by week
      let workoutStats = {};

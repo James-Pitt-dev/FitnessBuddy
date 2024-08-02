@@ -2,6 +2,28 @@
 
 <div class="container d-flex flex-column" style="height: 100vh;">
     <div class="chat-box flex-grow-1 overflow-auto" id="chatBox" style="padding-bottom: 60px;">
+        <% if(pastMessages.length == 0) { %>
+            <div class="row m-2">
+                <div class="col-md-8 offset-md-2">
+                    <div class="d-flex justify-content-start">
+                        <div class="card border-dark mb-3" style="width: 100%;">
+                            <div class="card-header text-primary-emphasis bg-primary-subtle border border-primary-subtle">AI Trainer</div>
+                            <div class="card-body">
+                                <p class="card-text">Hello! I am Fitness Buddy, your personal AI Trainer. Here's what you can do:</p>
+                                <ul>
+                                    <li>Ask for personalized workout plans.</li>
+                                    <li>Get advice on fitness, health, and nutrition.</li>
+                                    <li>Inquire about exercises targeting specific muscle groups.</li>
+                                    <li>Receive recommendations based on your profile and past workouts.</li>
+                                    <li>Ask for a summary of your recent workouts or chats with me.</li>
+                                </ul>
+                                <p class="card-text">How can I assist you in achieving your fitness goals today?</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% } %>
         <% for(let msg of pastMessages){ %>
         <div class="row m-2">
             <div class="col-md-8 offset-md-2">
@@ -12,7 +34,7 @@
                             <span><%= String(msg.date).slice(0, 15) %></span>
                         </div>
                         <div class="card-body">
-                          <p class="card-text"><%= msg.userMessage %></p>
+                          <p class="card-text"><%- msg.userMessage %></p>
                         </div>
                       </div>
                 </div>
@@ -25,7 +47,7 @@
                     <div class="card border-dark mb-3" style="width: 100%;">
                         <div class="card-header text-primary-emphasis bg-primary-subtle border border-primary-subtle">AI Trainer</div>
                         <div class="card-body">
-                          <p class="card-text"><%= msg.trainerMessage %></p>
+                          <p class="card-text"><%- msg.trainerMessage %></p>
                         </div>
                       </div>
                 </div>
@@ -53,6 +75,7 @@
 
 <script>
  const chatForm = document.querySelector('#chatForm');
+ 
  chatForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     const userChat = document.getElementById('userChat').value;
