@@ -1,11 +1,30 @@
 <% layout('layouts/boilerplate') %>
-
+<style>
+  .bg-blue-1 {
+      background-color: #3468af !important; /* First shade of blue */
+  }
+  .bg-blue-2 {
+      background-color: #418cdb !important; /* Second shade of blue */
+  }
+  .bg-blue-3 {
+      background-color: #43a3df !important; /* Third shade of blue */
+  }
+  .fixed-box {
+            height: 150px;  /* Adjust the height */
+       
+            width: 320px;   /* Adjust the width */
+  }
+  .fixed-box2 {
+            height: 250px;  /* Adjust the height */
+            width: 320px;   /* Adjust the width */
+  }
+</style>
 <div class="container mt-2">
   <h2 class="text-center mb-1 display-4">Hello, <%= name %>!</h2>
-  <div class="row text-right mb-5">
-      <div class="col-md-4">
-          <div class="card bg-info text-white">
-              <div class="card-body">
+  <div class="row text-right align-items-center">
+      <div class="col-md-3 offset-md-1">
+          <div class="card bg-blue-1 fixed-box text-white shadow-lg">
+              <div class="card-body " >
                   
                   <p class="card-text"><strong>Current Weight:</strong> <%= currentWeight %> lbs</p>
                   <p class="card-text"><strong>Goal Weight:</strong> <%= goalWeight %> lbs</p>
@@ -14,16 +33,16 @@
               </div>
           </div>
       </div>
-    <div class="col-md-4">
-      <div class="card bg-primary text-white">
+    <div class="col-md-3">
+      <div class="card bg-blue-2 fixed-box text-white shadow-lg">
         <div class="card-body">
           <h3>Total Workouts</h3>
           <p class="display-4"><%= totalWorkouts %></p>
         </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card bg-success text-white">
+    <div class="col-md-3">
+      <div class="card bg-blue-3 fixed-box text-white shadow-lg" >
         <div class="card-body">
           <h4>Total Time Spent</h4>
           <p class="display-7"><%= Math.floor(totalTimeSpent / 3600) %>h <%= Math.floor((totalTimeSpent % 3600) / 60) %>m</p>
@@ -35,9 +54,9 @@
   <h2 class="text-center mt-5">Recent Workouts</h2>
   <div class="row">
     <% recentWorkouts.forEach(workout => { %>
-          <div class="col-md-4 mb-4">
-              <div class="card">
-                  <div class="card-body">
+          <div class="col-md-2  offset-md-1 shadow-lg">
+              <div class="card fixed-box2">
+                  <div class="card-body ">
                       <h5 class="card-title"><%= workout.title %> - <%= workout.date.toLocaleDateString() %></h5>
                       <p class="card-text"><%= workout.notes %></p>
                       <ul>
@@ -49,12 +68,13 @@
               </div>
           </div>
       <% }) %>
+    
   </div>
 
-  <h3 class="text-center">Progress Charts</h3> 
-  <div class="d-flex justify-content-center align-items-center" style="height: 500px;">
-    <div class="col-14 col-md-6" >
-       <canvas id="workoutChart" width="600" height="500"></canvas>
+  <h3 class="text-center mb-4 mt-4">Progress Charts</h3> 
+  <div class="d-flex justify-content-center align-items-center shadow-lg col-md-9 offset-md-1" style="height: 500px;">
+    <div class="col col-md-6 col-sm-12  " >
+       <canvas id="workoutChart" width="600" height="500" class="shadow-lg"></canvas>
     </div>
   </div>
 </div>
