@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env NODE_ENV=test jest --testTimeout=6000 --runInBand --detectOpenHandles --no-cache --forceExit"
+    "test": "cross-env NODE_ENV=test jest --testTimeout=6000 --runInBand --detectOpenHandles --no-cache --forceExit",
+    "start": "node app.js"
   },
   "keywords": [],
   "author": "",

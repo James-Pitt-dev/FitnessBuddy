@@ -15,9 +15,7 @@ module.exports.isLoggedIn = (req, res, next) => {
 // when isAuthenticated() is called.
 module.exports.storeReturnTo = (req, res, next) => {
     if (req.session.returnTo) {
-        console.log('session:', req.session.returnTo);
         res.locals.returnTo = req.session.returnTo;
-        console.log('local:', res.locals.returnTo);
     }
     next();
 }

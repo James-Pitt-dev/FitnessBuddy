@@ -60,10 +60,10 @@ router.get('/chathistory', isLoggedIn, catchAsync(async (req, res) => {
     const now = new Date();
     const currentWeekEnd = new Date(now);
     currentWeekEnd.setHours(23, 59, 59, 999);
-  console.log(currentWeekEnd);
+
     // Get the earliest chat date for the user
     const earliestChat = await ChatHistory.findOne({ author: userId }).sort({ date: 1 });
-  console.log(earliestChat);
+
     if (!earliestChat) {
       return res.render('aiTrainer/history', { weeks: [] });
     }
