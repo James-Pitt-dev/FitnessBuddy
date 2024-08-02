@@ -71,13 +71,16 @@
     
   </div>
 
+  <div class="container mt-2">
+  <div class="row align-items-center">
   <h3 class="text-center mb-4 mt-4">Progress Charts</h3> 
-  <div class="d-flex justify-content-center align-items-center shadow-lg col-md-9 offset-md-1" style="height: 500px;">
-    <div class="col col-md-6 col-sm-12  " >
-       <canvas id="workoutChart" width="600" height="500" class="shadow-lg"></canvas>
+    <div class="col col-md-6 col-sm-12   offset-md-3" >
+       <canvas id="workoutChart" width="600" height="400" class="shadow-lg"></canvas>
     </div>
   </div>
 </div>
+
+
 
 <div class="container mt-2">
   <div class="row align-items-center">
@@ -149,8 +152,8 @@
         ],
     },
     options: {
-        maintainAspectRatio: false,
-        responsive: false,
+      maintainAspectRatio: false,
+      responsive: true,
         backgroundColor: [
             'rgba(255, 99, 132, 0.2)',  // Bar 1
             'rgba(54, 162, 235, 0.2)',  // Bar 2
@@ -159,7 +162,7 @@
             'rgba(153, 102, 255, 0.2)', // Bar 5
             'rgba(255, 159, 64, 0.2)'   // Bar 6
         ],
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: 'black',
 
     plugins: {
