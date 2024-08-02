@@ -13,6 +13,7 @@ const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const checkForUpdate = require('./seeds/updateGifUrl.js');
+const MongoStore = require('connect-mongo');
 
 // routes
 const userRoutes = require('./routes/users');
@@ -61,9 +62,9 @@ const sessionConfig = { //initialize session with some options
         httpOnly: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
-    }
+    },
+    store: MongoStore.create({mongoUrl: 'mongodb+srv://jamespitt1:cTiHNKFp4QSL9x6B@cluster0.eimml8f.mongodb.net/FitnessBuddy?retryWrites=true&w=majority'})
     //store: mongodb
-
 }
 app.use(session(sessionConfig));
 
@@ -106,7 +107,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('errors', {err});
 })
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`App Connected: ${PORT}`);
 });
