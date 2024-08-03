@@ -65,6 +65,11 @@
                             value="<%= currUser.currentWeight %>">
                     </div>
                     <div class="form-group col-md-3">
+                        <label for="weight">Goal Weight (bls)</label>
+                        <input class="form-control" type="number" name="goalWeight" id="goalWeight"
+                            value="<%= currUser.goalWeight %>">
+                    </div>
+                    <div class="form-group col-md-3">
                         <label for="height">Height (cm)</label>
                         <input class="form-control" type="number" name="height" id="height"
                             value="<%= currUser.height %>">
@@ -144,13 +149,10 @@
                 <div>
 
                     <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
-                    <button class="btn  btn-warning my-2 my-sm-0"><a
+                    <button class="btn  btn-danger my-2 my-sm-0"><a
                             href="/deleteProfile/<%= currUser._id %>">Delete</a></button>
                 </div>
             </form>
-
-            <Br>
-            <a href="/">All campgrounds</a>
         </div>
 
     </div>
