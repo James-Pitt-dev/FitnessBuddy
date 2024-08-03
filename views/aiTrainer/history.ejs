@@ -4,8 +4,8 @@
     <h1 class="text-center ">Chat History</h1>
     <div class="row align-items-start">
         <!-- Sidebar for weeks -->
-        <div class="col-3 p-3 mb-2 ">
-            <ul class="list-group">
+        <div class="col-md-3 col-sm-12 mb-2 mt-5 pt-1">
+            <ul class="list-group d-none d-lg-block shadow">
                 <% weeks.forEach((week, index) => { %>
                     <li class="list-group-item">
                         <a href="#" class="week-link" data-index="<%= index %>">
@@ -20,10 +20,33 @@
             </ul>
         </div>
         <!-- Chat history display -->
+
+        <!-- Example single danger button -->
+<div class="btn-group d-lg-none">
+    <button type="button" class="btn btn-info dropdown-toggle mb-2 shadow" data-bs-toggle="dropdown" aria-expanded="false">
+      History
+    </button>
+    <ul class="dropdown-menu">
+        <% weeks.forEach((week, index) => { %>
+            <li class="list-group-item px-3">
+                <a href="#" class="week-link" data-index="<%= index %>">
+                  <% if(index ===  0) { %>
+                    Current Week: <%= week.startDate.toDateString() %> - <%= week.endDate.toDateString() %>
+                  <% } else { %>
+                    Week: <%= week.startDate.toDateString() %> - <%= week.endDate.toDateString() %>
+                  <% } %>
+                  </a>
+            </li>
+        <% }) %>
+      <li><hr class="dropdown-divider"></li>
+      <li><a class="dropdown-item" href="chat">Current Chat</a></li>
+    </ul>
+  </div>
       
       <div class="col-md-8 d-flex flex-column align-self-end" autofocus>
                 <div class="chat-box flex-grow-1 overflow-auto" data-mdb-perfect-scrollbar-init style="position: relative; height: 400px" id="chatBox" style="padding-bottom: 10px;">
-                    <h2 class="text-center">Select a week to view chats</h2>
+    
+                    <h2 class="offset-md-3 offset-3 card-text mt-5">Select a week</h2>
                 </div>
     </div>
 </div>

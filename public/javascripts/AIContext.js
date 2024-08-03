@@ -222,7 +222,7 @@ const rolePrompt = `
     },
     {
         name: "createWorkoutRoutine",
-        description: "Create a workout routine for the user with the exercise names from the chat context, give a workout title, and instructional notes appropriate for the set of exercises. Call this function if the user asks you to create a workout routine for them, you will ask them for confirmation like 'Do you want me to create a workout routine for you from these exercises?' after a routine is suggested. Use the context of the conversation and latest user comments to determine the exercise names you use as function arguments. Only suggest exercise names that can be done with their profile equipment list and that exist in your exercise list. Exercise name arguments must be exact spelling as exercise list.",
+        description: "Create a workout routine for the user with the exercise names from the chat context, give a workout title, and instructional notes appropriate for the set of exercises. Call this function if the user asks you to create a workout routine for them, you will ask them for confirmation like 'Do you want me to create a workout routine for you from these exercises?' after a routine is suggested. Use the context of the conversation and latest user comments to determine the exercise names you use as function arguments. Only suggest exercise names that can be done with their profile equipment list and that exist in your exercise list. Exercise name arguments must be exact spelling as exercise list. Maximum of 5 exercises per routine.",
         parameters: {
             type: "object",
             properties: {
