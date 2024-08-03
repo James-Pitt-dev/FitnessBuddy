@@ -28,7 +28,7 @@
     </button>
     <ul class="dropdown-menu">
         <% weeks.forEach((week, index) => { %>
-            <li class="list-group-item">
+            <li class="list-group-item px-3">
                 <a href="#" class="week-link" data-index="<%= index %>">
                   <% if(index ===  0) { %>
                     Current Week: <%= week.startDate.toDateString() %> - <%= week.endDate.toDateString() %>
