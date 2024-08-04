@@ -24,7 +24,7 @@ router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlas
 
 router.get('/logout', users.logout); 
 
-router.get('/createProfile', (req, res) => {
+router.get('/createProfile', isLoggedIn, (req, res) => {
     //console.log(req.user);
     res.render('users/createProfile');
 });
