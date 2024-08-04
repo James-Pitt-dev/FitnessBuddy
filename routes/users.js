@@ -29,7 +29,7 @@ router.get('/createProfile', (req, res) => {
     res.render('users/createProfile');
 });
 
-router.post('/createProfile', catchAsync(async (req, res) => {
+router.post('/createProfile', isLoggedIn, catchAsync(async (req, res) => {
     const {experience, age, height, currentWeight, goalWeight, workoutNum, gender, goal, activity, equipment,workoutfrequency} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){
