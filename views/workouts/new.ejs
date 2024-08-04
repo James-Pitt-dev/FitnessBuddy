@@ -119,7 +119,7 @@
                       let setsHtml = '';
                       workoutExercise.sets.forEach((set, setIndex) => {
                           setsHtml += `
-                            <div class="row row-cols-md-4 mt-2 set">
+                            <div class="row row-cols-md-3 mt-5 set">
                               ${setIndex + 1}
                               <div class="col">
                                 <label for="sets">Reps</label>
@@ -129,26 +129,27 @@
                                 <label for="weight">Weight</label>
                                 <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][weight]" value="${set.weight}" placeholder="0">
                               </div>
+                                
                         ${setIndex === 0 ? `
-                <div class="col">
+                <div class="col-md-3">
                   <label for="previousWeight">Previous</label>
                   <input class="form-control" type="string" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][previousWeight]" ">
                 </div>` : ''}
-                
-                              <div class="col">
+                    ${setIndex !== 0 ? `
+                              <div class="col-md-2">
                                 <button type="button" class="btn btn-outline-danger mt-3 delete-set-button btn-sm" aria-label="Close">&times;</button>
-                              </div>
-                            </div>
+                              </div>` : ''}
+                          </div>
                           `;
                       });
 
                       exerciseDiv.innerHTML = `
                         <div class="container">
-                          <div class="container">
-                            <div class="row bg-light.bg-gradient">
-                              <div class="col-md-6 p-1"><h4>${workoutExercise.exercise.name}</h4></div>
-                              <div class="col-md-2 offset-md-4"><button type="button" class="btn btn-outline-danger mt-3 delete-exercise-button" aria-label="Close">&times;</button></div>
-                            </div>
+                            <div class="row row-cols-mb-3  bg-light bg-gradient">
+                             <div class="col"><h4>${workoutExercise.exercise.name}</h4></div>
+                             <div class="col"></div>
+                              <div class="col"><button type="button" class="btn btn-outline-danger btn-sm mt-3 delete-exercise-button" aria-label="Close">&times;</button></div>
+                            
                           </div>
                           <input type="hidden" name="workout[exercises][${exerciseIndex}][exercise]" value="${workoutExercise.exercise._id}">
                           <div class="sets-container">
