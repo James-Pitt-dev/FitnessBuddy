@@ -24,12 +24,12 @@ router.post('/login', storeReturnTo, passport.authenticate('local', {failureFlas
 
 router.get('/logout', users.logout); 
 
-router.get('/createProfile', (req, res) => {
+router.get('/createProfile', isLoggedIn, (req, res) => {
     //console.log(req.user);
     res.render('users/createProfile');
 });
 
-router.post('/createProfile', catchAsync(async (req, res) => {
+router.post('/createProfile', isLoggedIn, catchAsync(async (req, res) => {
     const {experience, age, height, currentWeight, goalWeight, workoutNum, gender, goal, activity, equipment,workoutfrequency} = req.body;
     const user = await User.findById(req.user._id);
     if(!user){

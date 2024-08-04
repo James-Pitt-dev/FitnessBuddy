@@ -60,10 +60,14 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                
                     <div class="mb-3">
                         <label class="form-label">Please select your sex.</label>
-                        <div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="gender" id="male" value="male">
-                                <label class="form-check-label" for="male">Male</label>
+                        <!-- make male female line up -->
+                        <div> 
+                            <div class="form-check form-check-inline row">
+                                <div class="col-md-6">
+                                    <input class="form-check-input" type="radio" name="gender" id="male" value="male">
+                                    <label class="form-check-label" for="male">Male</label>
+                                </div>
+                               
                             </div>
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="gender" id="female" value="female">
@@ -213,11 +217,12 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                 </div>
 
                                 <div class="container mt-5" id="Form5" style="display: none;">
+                                    <!-- line up checkboxes -->
                                     <h4 class="text-center mb-4">What equipment do you have available?</h4>
                                     <div class="list-group">
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🏋️‍♂️</span>
+                                                <span class="me-2">🏋️‍♂️</span>
                                                 <span>Full Gym</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="full-gym" value="full-gym" autocomplete="off">
@@ -225,7 +230,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🏋️</span>
+                                                <span class="me-2">🏋️</span>
                                                 <span>Barbells</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="barbells" value="barbells"  autocomplete="off">
@@ -233,7 +238,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🏋️</span>
+                                                <span class="me-2">🏋️</span>
                                                 <span>Dumbbells</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="dumbbells" value="dumbbells" autocomplete="off">
@@ -241,7 +246,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🏋️</span>
+                                                <span class="me-2">🏋️</span>
                                                 <span>Kettlebells</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="kettlebells" value="kettlebells"  autocomplete="off">
@@ -249,7 +254,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🏋️</span>
+                                                <span class="me-2">🏋️</span>
                                                 <span>Machines</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="machines" value="machines" autocomplete="off">
@@ -257,7 +262,7 @@ ex. a current weight input is submitted here, you go to the route: route.post('/
                                         </div>
                                         <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
                                             <div class="d-flex align-items-center">
-                                                <span class="me-3">🤸</span>
+                                                <span class="me-2">🤸</span>
                                                 <span>Bodyweight</span>
                                             </div>
                                             <input type="checkbox" class="btn-check" name="equipment" id="bodyweight" value="bodyweight" autocomplete="off">
