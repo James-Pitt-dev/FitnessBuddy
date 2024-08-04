@@ -65,6 +65,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
+        <input type="text" id="exercise-search" class="form-control mb-3" placeholder="Search exercises...">
         <div class="list-group" id="exercise-list">
           <% for(let exercise of exercises) { %>
             <button type="button" class="list-group-item list-group-item-action" data-id="<%= exercise._id %>" data-name="<%= exercise.name %>"><%= exercise.name %></button>
@@ -74,6 +75,7 @@
     </div>
   </div>
 </div>
+
 
 <!-- Modal for Congratulations Message -->
 <div class="modal fade" id="congratulationsModal" tabindex="-1" aria-labelledby="congratulationsModalLabel" aria-hidden="true">
@@ -117,23 +119,24 @@
                       let setsHtml = '';
                       workoutExercise.sets.forEach((set, setIndex) => {
                           setsHtml += `
-                            <div class="row mt-2 set">
+                            <div class="row row-cols-md-4 mt-2 set">
                               ${setIndex + 1}
-                              <div class="col-md-3 col-sm-1">
+                              <div class="col">
                                 <label for="sets">Reps</label>
                                 <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][reps]" value="${set.reps}" placeholder="0">
                               </div>
-                              <div class="col-md-3 col-sm-1">
+                              <div class="col">
                                 <label for="weight">Weight</label>
                                 <input class="form-control" type="number" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][weight]" value="${set.weight}" placeholder="0">
                               </div>
                         ${setIndex === 0 ? `
-                <div class="col-md-3 col-sm-1">
+                <div class="col">
                   <label for="previousWeight">Previous</label>
                   <input class="form-control" type="string" name="workout[exercises][${exerciseIndex}][sets][${setIndex}][previousWeight]" ">
                 </div>` : ''}
-                              <div class="col-md-3 col-sm-1">
-                                <button type="button" class="btn btn-danger mt-3 delete-set-button" aria-label="Close">&times;</button>
+                
+                              <div class="col">
+                                <button type="button" class="btn btn-outline-danger mt-3 delete-set-button btn-sm" aria-label="Close">&times;</button>
                               </div>
                             </div>
                           `;
@@ -202,6 +205,19 @@
     }
   });
 
+  document.getElementById('exercise-search').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    const exercises = document.querySelectorAll('#exercise-list button');
+
+    exercises.forEach(exercise => {
+      const name = exercise.getAttribute('data-name').toLowerCase();
+      if (name.includes(query)) {
+        exercise.style.display = 'block';
+      } else {
+        exercise.style.display = 'none';
+      }
+    });
+  });
 
   function addExerciseToForm(exerciseId, exerciseName) {
     const container = document.getElementById('exercises-container');
