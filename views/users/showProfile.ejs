@@ -6,7 +6,7 @@
         <div class="form-head">
             <h1 class="text-center">View / Update User Profile</h1>
         </div>
-        <div class="col-9 offset-3">
+        <div class="col-md-9 offset-md-3">
             <form action="/editProfile" method="POST" novalidate class="validated-form">
 
                 <div class="form-row">
@@ -57,15 +57,16 @@
                         </div>
                     </div>
                 </div>
+                
 
                 <div class="row">
                     <div class="form-group col-md-3">
-                        <label for="weight">Weight (bls)</label>
+                        <label for="weight">Weight (lbs)</label>
                         <input class="form-control" type="number" name="currentWeight" id="currentWeight"
                             value="<%= currUser.currentWeight %>">
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="weight">Goal Weight (bls)</label>
+                        <label for="weight">Goal Weight (lbs)</label>
                         <input class="form-control" type="number" name="goalWeight" id="goalWeight"
                             value="<%= currUser.goalWeight %>">
                     </div>
@@ -74,7 +75,7 @@
                         <input class="form-control" type="number" name="height" id="height"
                             value="<%= currUser.height %>">
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-4 mb-3 mt-3">
                         <label for="workoutfrequency">Workout Frequency</label>
                         <select class="form-select" id="workoutfrequency" name="workoutfrequency" required>
                             <option value="2days" <% if(currUser.workoutfrequency=="2days" ) { %>
@@ -110,6 +111,119 @@
                         </select>
 
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Please select your sex.</label>
+                        <div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="male" value="male" <% if(currentUser.gender == "male") { %> checked <% } %>>
+                                <label class="form-check-label" for="male">Male</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="female" value="female" <% if(currentUser.gender == "female") { %> checked <% } %>>
+                                <label class="form-check-label" for="female">Female</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row mb-3">
+                        <div class="form-group col-md-3">
+  <label for="age" class="form-label">What is your age?</label>
+  <input type="number" class="form-control" id="age" name="age" placeholder="Enter your age" value="<%= currentUser.age %>">
+</div>
+</div>
+<div class="form-row">
+    <div class="form-group col-md-6">
+                    <label class="form-label">What are you looking to get out of Fitness Buddy?</label>
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="get_stronger" value="Get Stronger" autocomplete="off" <% if (currentUser.goal.includes("Get Stronger")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="get_stronger">Get Stronger</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="look_better_goal" value="Look Better" autocomplete="off" <% if (currentUser.goal.includes("Look Better")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="look_better_goal">Look Better</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="lose_weight" value="Lose Weight" autocomplete="off" <% if (currentUser.goal.includes("Lose Weight")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="lose_weight">Lose Weight</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="gain_muscle" value="Gain Muscle" autocomplete="off" <% if (currentUser.goal.includes("Gain Muscle")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="gain_muscle">Gain Muscle</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="stay_fit" value="Stay Fit" autocomplete="off" <% if (currentUser.goal.includes("Stay Fit")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="stay_fit">Stay Fit</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="boost_endurance" value="Boost Endurance" autocomplete="off" <% if (currentUser.goal.includes("Boost Endurance")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="boost_endurance">Boost Endurance</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="improve_flexibility" value="Improve Flexibility" autocomplete="off" <% if (currentUser.goal.includes("Improve Flexibility")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="improve_flexibility">Improve Flexibility</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="track_progress" value="Track Progress" autocomplete="off" <% if (currentUser.goal.includes("Track Progress")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="track_progress">Track Progress</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="stay_motivated" value="Stay Motivated" autocomplete="off" <% if (currentUser.goal.includes("Stay Motivated")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="stay_motivated">Stay Motivated</label>
+                    
+                        <input type="checkbox" class="btn-check btn-dark" name="goal[]" id="reduce_stress" value="Reduce Stress" autocomplete="off" <% if (currentUser.goal.includes("Reduce Stress")) { %> checked <% } %>>
+                        <label class="btn btn-outline-secondary btn-sm mb-2" for="reduce_stress">Reduce Stress</label>
+                    </div>
+                    </div>
+                    </div>
+
+                  <div class="form-row mt-3">
+                    <div class="form-group col-md-6">  
+                    <h4 class="text-center mb-4">What equipment do you have available?</h4>
+                    <div class="list-group">
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🏋️‍♂️</span>
+                                <span>Full Gym</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="full-gym" value="full-gym" autocomplete="off" <% if (currentUser.equipment.includes("full-gym")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="full-gym"><i class="bi bi-check2"></i></label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🏋️</span>
+                                <span>Barbells</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="barbells" value="barbells" autocomplete="off" <% if (currentUser.equipment.includes("barbells")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="barbells"><i class="bi bi-check2"></i></label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🏋️</span>
+                                <span>Dumbbells</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="dumbbells" value="dumbbells" autocomplete="off" <% if (currentUser.equipment.includes("dumbbells")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="dumbbells"><i class="bi bi-check2"></i></label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🏋️</span>
+                                <span>Kettlebells</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="kettlebells" value="kettlebells" autocomplete="off" <% if (currentUser.equipment.includes("kettlebells")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="kettlebells"><i class="bi bi-check2"></i></label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🏋️</span>
+                                <span>Machines</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="machines" value="machines" autocomplete="off" <% if (currentUser.equipment.includes("machines")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="machines"><i class="bi bi-check2"></i></label>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center list-group-item list-group-item-dark">
+                            <div class="d-flex align-items-center">
+                                <span class="me-3">🤸</span>
+                                <span>Bodyweight</span>
+                            </div>
+                            <input type="checkbox" class="btn-check" name="equipment" id="bodyweight" value="bodyweight" autocomplete="off" <% if (currentUser.equipment.includes("bodyweight")) { %> checked <% } %>>
+                            <label class="btn btn-outline-secondary btn-sm" for="bodyweight"><i class="bi bi-check2"></i></label>
+                        </div>
+                    </div>
+                    </div>
+                  </div>
+                    
                 </div>
                 <br>
                 <!-- <div class="form-row">
@@ -146,11 +260,10 @@
                 </div> -->
 
                 <Br>
-                <div>
+                <div class = "mb-2">
 
                     <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
-                    <button class="btn  btn-danger my-2 my-sm-0"><a
-                            href="/deleteProfile/<%= currUser._id %>">Delete</a></button>
+                    <button class="btn  btn-danger my-2 my-sm-0  href=/deleteProfile/<%= currUser._id %>">Delete</button>
                 </div>
             </form>
         </div>
