@@ -40,6 +40,7 @@ router.post('/chat', isLoggedIn, catchAsync(async (req, res) => {
     This is context about the User talking to you and your role in the system, use it to inform your responses and provide personalized advice to their queries. Also occasionally inform the user what services and functions you can do like workout creation and fetching exercises: ${rolePrompt} - EXERCISES FOR SUGGESTION AND WORKOUT CREATION CALLING, YOU MUST USE THESE NAMES ONLY WHEN SUGGESTING EXERCISES AND WORKOUTS, THEY MUST BE EXACT NAMES: ${JSON.stringify(allExercises)}- USER CONTEXT = ${userProfile} - ${workoutHistory} - ${messageHistory}
 `;
     const data = await sendPrompt(userChat, superPrompt, req.user._id);
+    
     const chatHistory = new ChatHistory({
         author: req.user._id,
         userMessage: userChat,

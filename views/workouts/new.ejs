@@ -284,7 +284,7 @@
     const setsContainer = document.querySelector(`.exercise:nth-child(${exerciseIndex + 1}) .sets-container`);
    
     const setCount = setsContainer.querySelectorAll('.set').length;
-    console.log(setCount);
+    
     const lastSet = setsContainer.querySelectorAll('.set')[setCount - 1];
     const lastWeight = lastSet ? lastSet.querySelector('input[name*="[weight]"]').value : 0;
     const lastRep = lastSet ? lastSet.querySelector('input[name*="[reps]"]').value : 0;

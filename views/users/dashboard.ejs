@@ -83,7 +83,7 @@
 <div class="row ">
   <div class="col-md-6 col-sm-8 offset-md-3">
     <div class="container mt-2">
-      <h2 class="text-center mt-5">Track Exercise Progress</h2>
+      <h2 class="text-center mt-5">Search Exercise Progress Charts</h2>
       <div class="search-container ">
         <input type="text" id="exerciseSearchInput" placeholder="Search for an exercise..." class="form-control mb-3 shadow-lg">
         <button id="searchButton" class="btn btn-primary mb-3 text-center">Search</button>
@@ -96,10 +96,11 @@
 <div class="container mt-2">
   <div class="row align-items-center">
     <div class="col col-md-6 col-sm-12 offset-md-3 ">
-      <h3 class="text-center">Track You Progress </h3>
+      <h3 class="text-center">Track Your Progress </h3>
       <div id="dashboard-exercises" class="list-group">
+
         <!-- Dashboard exercises will be appended here -->
-      </ul>
+     
     </div>
   </div>
 </div>
@@ -300,10 +301,23 @@ function displayDashboardExercises() {
                 canvas.height = 400; // Adjust height
                 canvasContainer.appendChild(canvas);
 
+                const buttonContainer = document.createElement('div');
+                const removeButton = document.createElement('button');
+                removeButton.className = 'btn btn-danger mb-3';
+                removeButton.textContent = 'Remove from Dashboard';
+                removeButton.dataset.exerciseId = exercise._id;
+                removeButton.addEventListener('click', function() {
+                    removeExerciseFromDashboard(exercise._id);
+                });
+
+                
+                buttonContainer.appendChild(removeButton);
                 container.appendChild(canvasContainer);
+                container.appendChild(buttonContainer);
 
                 createDashboardChart(canvas.id, exercise.name, dates, weights);
-            });
+            
+           });
         })
         .catch(error => {
             console.error('Error fetching dashboard exercises:', error);
@@ -431,4 +445,28 @@ function createOrUpdateChart(dates, weights) {
       alert('An error occurred while removing the exercise from the dashboard.');
     });
   });
+
+  function removeExerciseFromDashboard(exerciseId) {
+    fetch('/removeFromDashboard', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ exerciseId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            dashboardExercises = dashboardExercises.filter(id => id !== exerciseId);
+            alert('Exercise removed from dashboard successfully!');
+            displayDashboardExercises(); // Update the dashboard exercises
+        } else {
+            alert('Failed to remove exercise from dashboard.');
+        }
+    })
+    .catch(error => {
+        console.error('Error removing exercise from dashboard:', error);
+        alert('An error occurred while removing the exercise from the dashboard.');
+    });
+}
 </script>
