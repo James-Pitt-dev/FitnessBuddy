@@ -6,15 +6,33 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+        <div class="navbar-nav offset-md-3">
           <a class="nav-link" href="/dashboard">Dashboard</a>
           <a class="nav-link" href="/showProfile">Profile</a>
           <a class="nav-link" href="/exercises">Exercises Catalogs</a>
-          <a class="nav-link" href="/workouts/new">New Workout</a>
+          <!-- <a class="nav-link" href="/workouts/new">New Workout</a>
           <a class="nav-link" href="/workouts/index">Workouts</a>
-          <a class="nav-link" href="/workouts/workouthistory">Workout History</a>
-          <a class="nav-link" href="/ai-trainer/chathistory">Chat History</a>
-          <a class="nav-link" href="/ai-trainer/chat">Chat</a>
+          <a class="nav-link" href="/workouts/workouthistory">Workout History</a> -->
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+             Workouts
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/workouts/new">New Workout</a></li>
+              <li><a class="dropdown-item" href="/workouts/index">Start Workouts</a></li>
+              <li><a class="dropdown-item" href="/workouts/workouthistory">Workout History</a></li>
+            </ul>
+          </div>
+          <div class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Chat
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/ai-trainer/chat">AI Chat</a></li>
+              <li><a class="dropdown-item" href="/ai-trainer/chathistory">Chat History</a></li>
+            </ul>
+          </div>
+  
         </div>
 
       <div class="navbar-nav ms-auto">
