@@ -260,12 +260,13 @@
                 </div> -->
 
                 <Br>
-                <div class = "mb-2">
-
-                    <button type="submit" class="btn  btn-success my-2 my-sm-0">Update Profile</button>
-                    <button class="btn  btn-danger my-2 my-sm-0  href=/deleteProfile/<%= currUser._id %>">Delete</button>
-                </div>
-            </form>
-        </div>
+                    <div class="mb-2 d-flex justify-content">
+                        <form action="/editProfile" method="POST" class="me-2" novalidate class="validated-form">
+                            <button type="submit" class="btn btn-success my-2 my-sm-0">Update Profile</button>
+                        </form>
+                        <form action="/deleteProfile/<%= currUser._id %>" method="POST" style="display:inline;" class="ms-2">
+                            <button type="submit" class="btn btn-danger my-2 my-sm-0">Delete</button>
+                        </form>
+                    </div>
 
     </div>

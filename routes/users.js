@@ -85,7 +85,7 @@ router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
 }));
 
 //get methond to delete the profile, and direct to home page, if user wants to access, has to recreate account
-router.get('/deleteProfile/:id', isLoggedIn, async (req, res) => {
+router.post('/deleteProfile/:id', isLoggedIn, async (req, res) => {
   
         let { id } = req.params;
         const user = await User.findByIdAndDelete(id);
