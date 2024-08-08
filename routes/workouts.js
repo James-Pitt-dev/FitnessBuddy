@@ -102,6 +102,7 @@ router.get(
     }
 
     res.json(workout);
+   
   })
 );
 
@@ -120,6 +121,7 @@ router.get(
         model: "Exercise",
       },
     });
+    console.log('Workout History:',workouts);
     res.render("workouts/workouthistory", { workouts });
     // res.render('workouts/index');
   })

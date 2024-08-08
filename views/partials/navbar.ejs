@@ -7,6 +7,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
+          <% if(currentUser){ %>
           <a class="nav-link" href="/dashboard">Dashboard</a>
           <a class="nav-link" href="/showProfile">Profile</a>
           <a class="nav-link" href="/exercises">Exercises Catalogs</a>
@@ -15,12 +16,13 @@
           <a class="nav-link" href="/workouts/workouthistory">Workout History</a>
           <a class="nav-link" href="/ai-trainer/chathistory">Chat History</a>
           <a class="nav-link" href="/ai-trainer/chat">Chat</a>
+          <% } %>
         </div>
 
       <div class="navbar-nav ms-auto">
         <% if(!currentUser){ %>
         <a href="/login" class="nav-link">Log In</a>
-        <a href="/register" class="nav-link">| Register |</a>
+        <a href="/register" class="nav-link"> Register </a>
         <% } %>
         <% if(currentUser){ %>
         <a href="/logout" class="nav-link">Log Out</a>

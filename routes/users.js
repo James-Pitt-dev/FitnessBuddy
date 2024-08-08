@@ -49,12 +49,13 @@ router.post('/createProfile', isLoggedIn, catchAsync(async (req, res) => {
     user.workoutfrequency = workoutfrequency;
     await user.save();
     console.log(user);
-    res.redirect('/');
+    res.redirect('/dashboard');
 }));
 
 router.get('/showProfile',isLoggedIn, async (req, res) => {
     let currUser= res.locals.currentUser;   
     let userId = req.user._id; 
+
     //fetch the workoutPlan data as an array to show the workout title, notes, and duration
     const workouts = await Workout.find({author:userId}).populate({
         path: "exercises",
@@ -152,6 +153,7 @@ router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
         });
     const averageWorkoutDuration = totalTimeSpent / totalWorkouts;
     const userexercises = await User.findById(userId).populate('dashboardExercises');
+    console.log('week: number of workouts',sequentialWorkoutStats);
 
     res.render('users/dashboard', {
         name: user.username,
@@ -238,11 +240,11 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
     const user = await User.findById(userId).populate('dashboardExercises');
 
     // Log the dashboard exercises to ensure they are populated correctly
-    console.log('Dashboard Exercises:', user.dashboardExercises);
+    
 
     const exercisesProgress = await Promise.all(user.dashboardExercises.map(async (exercise) => {
         // Log the exercise being processed
-        console.log('Processing Exercise:', exercise.name);
+    //    console.log('Processing Exercise:', exercise.name);
 
         const progressData = await Workout.find({ author: userId })
             .sort({ date: -1 })
@@ -255,7 +257,7 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
             .exec();
 
         // Log the progress data fetched for the exercise
-        console.log('Progress Data for Exercise:', exercise.name, progressData);
+     //   console.log('Progress Data for Exercise:', exercise.name, progressData);
 
         return {
             exercise,
@@ -270,7 +272,7 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
     }));
 
     // Log the final exercises progress data to verify the structure
-    console.log('Exercises Progress:', exercisesProgress);
+    //console.log('Exercises Progress:', exercisesProgress);
 
     res.json(exercisesProgress);
 }));
