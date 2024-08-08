@@ -48,7 +48,6 @@ router.post('/createProfile', isLoggedIn, catchAsync(async (req, res) => {
     user.equipment = equipment;
     user.workoutfrequency = workoutfrequency;
     await user.save();
-    console.log(user);
     res.redirect('/dashboard');
 }));
 
@@ -66,7 +65,6 @@ router.get('/showProfile',isLoggedIn, async (req, res) => {
       });
     res.render('users/showProfile',{currUser,workouts});
 });
-
 
 //POST methond to update the profile
 router.post('/editProfile', isLoggedIn,catchAsync(async(req,res)=>{
@@ -101,17 +99,13 @@ router.get('/deleteProfile/:id', isLoggedIn, async (req, res) => {
 // }
 router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
     const userId = req.user._id.toString();
-    
     const user = await User.findById(userId);
-
     if (!user) {
         req.flash('error', 'User not found');
         return res.redirect('/');
     }
-
     const weightDifference = user.goalWeight - user.currentWeight;
     const totalWorkouts = await Workout.countDocuments({ author: userId });
-
     const workouts = await Workout.find({ author: userId });
     let totalTimeSpent = 0;
     try {
@@ -119,14 +113,11 @@ router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
             const [hours, minutes, seconds] = workout.elapsedTime.split(':').map(Number);
             totalTimeSpent += (hours * 3600) + (minutes * 60) + seconds;
         });
-    
     } catch (error) {console.log("Old user data leads to error. Missing elapsedTime in database. Make new user: " + error)};
-
-     // Group workouts by week
+    // Group workouts by week
      let workoutStats = {};
      workouts.forEach(workout => {
-         const weekNumber= moment(workout.date).week();
-         
+         const weekNumber= moment(workout.date).week();      
          if (!workoutStats[weekNumber]) {
              workoutStats[weekNumber] = 0;
          }
@@ -153,7 +144,7 @@ router.get('/dashboard', isLoggedIn, catchAsync(async (req, res) => {
         });
     const averageWorkoutDuration = totalTimeSpent / totalWorkouts;
     const userexercises = await User.findById(userId).populate('dashboardExercises');
-    console.log('week: number of workouts',sequentialWorkoutStats);
+    
 
     res.render('users/dashboard', {
         name: user.username,
@@ -239,12 +230,8 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
     const userId = req.user._id.toString();
     const user = await User.findById(userId).populate('dashboardExercises');
 
-    // Log the dashboard exercises to ensure they are populated correctly
-    
-
     const exercisesProgress = await Promise.all(user.dashboardExercises.map(async (exercise) => {
-        // Log the exercise being processed
-    //    console.log('Processing Exercise:', exercise.name);
+ 
 
         const progressData = await Workout.find({ author: userId })
             .sort({ date: -1 })
@@ -255,10 +242,6 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
                 populate: { path: 'exercise', model: 'Exercise' }
             })
             .exec();
-
-        // Log the progress data fetched for the exercise
-     //   console.log('Progress Data for Exercise:', exercise.name, progressData);
-
         return {
             exercise,
             progressData: progressData.map(workout => {
@@ -270,10 +253,6 @@ router.post('/removeFromDashboard', isLoggedIn, catchAsync(async (req, res) => {
             }).filter(entry => entry.weight > 0).reverse()
         };
     }));
-
-    // Log the final exercises progress data to verify the structure
-    //console.log('Exercises Progress:', exercisesProgress);
-
     res.json(exercisesProgress);
 }));
 module.exports = router;

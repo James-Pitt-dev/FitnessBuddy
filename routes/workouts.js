@@ -47,7 +47,6 @@ router.post(
     }
 
     await newWorkout.save();
-    console.log(newWorkout);
     req.flash("success", "Successfully created a new workout!");
     res.redirect("/workouts/index");
   })
@@ -58,8 +57,6 @@ router.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const userId = req.user._id;
-    console.log("show user id as author to display workout", userId);
-
     // Find the last 7 workouts for the user, sorted by date in descending order
     const workouts = await Workout.find({ author: userId })
       .sort({ date: -1 }) // Sort by date in descending order
@@ -80,7 +77,6 @@ router.get(
       }
       if (distinctWorkouts.length >= 8) break;
     }
-
     res.render("workouts/index", { workouts: distinctWorkouts });
   })
 );
@@ -96,13 +92,10 @@ router.get(
         model: "Exercise",
       },
     });
-
     if (!workout) {
       return res.status(404).json({ error: "Workout not found" });
     }
-
-    res.json(workout);
-   
+    res.json(workout);  
   })
 );
 
@@ -112,7 +105,6 @@ router.get(
   isLoggedIn,
   catchAsync(async (req, res) => {
     const userId= req.user._id.toString();
-    console.log("show user id as author to display workout",userId);
     const workouts = await Workout.find({author:userId}).sort({ date: -1 }).populate({
       
       path: "exercises",
@@ -121,7 +113,7 @@ router.get(
         model: "Exercise",
       },
     });
-    console.log('Workout History:',workouts);
+    
     res.render("workouts/workouthistory", { workouts });
     // res.render('workouts/index');
   })
@@ -134,7 +126,7 @@ router.get(
     let { id } = req.params;
     const { json = false } = req.query; // Get the 'json' query parameter and default to false if not provided
 
-    console.log("here is viewing ", id);
+    
     const workout = await Workout.findById(id).populate({
       path: "exercises",
       populate: {
