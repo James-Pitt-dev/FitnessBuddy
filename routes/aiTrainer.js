@@ -113,6 +113,11 @@ router.get('/chathistory', isLoggedIn, catchAsync(async (req, res) => {
       author: userId,
       date: { $gte: weekStart, $lte: weekEnd }
     }).sort({ date: -1 });
+       // map the messages throughh md to render markdown
+       chats.map(message => {
+        message.userMessage = md.render(message.userMessage);
+        message.trainerMessage = md.render(message.trainerMessage);
+    });
 res.json({ chats, startDate: weekStart, endDate: weekEnd });
   }));
 
