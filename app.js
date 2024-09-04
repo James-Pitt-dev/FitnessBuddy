@@ -15,6 +15,7 @@ const LocalStrategy = require('passport-local');
 const checkForUpdate = require('./seeds/updateGifUrl.js');
 const MongoStore = require('connect-mongo');
 const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
 // routes
 const userRoutes = require('./routes/users');
 const workoutRoutes = require('./routes/workouts');
@@ -77,6 +78,7 @@ app.use(session(sessionConfig));
 app.use(limiter);
 app.use(passport.initialize()); //initialize it and use session for persistent log in
 app.use(passport.session());
+app.use(mongoSanitize());
 passport.use(new LocalStrategy(User.authenticate())); // tell it to use local strat and use user model auth
 passport.serializeUser(User.serializeUser()); //how d we store a user in session?
 passport.deserializeUser(User.deserializeUser());
