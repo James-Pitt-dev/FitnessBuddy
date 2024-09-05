@@ -56,21 +56,23 @@ app.use(methodOverride('_method')); // To enable PUT/PATCH requests. Pass in str
 // app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, 'public')));  //
 const sessionConfig = { //initialize session with some options
+    name: 'session',
     secret: 'test',
     resave: false,
     saveUninitialized: true,
     cookie: {
         httpOnly: true,
+        // secure: true,
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
         maxAge: 1000 * 60 * 60 * 24 * 7
     },
-    store: MongoStore.create({mongoUrl: 'mongodb+srv://jamespitt1:cTiHNKFp4QSL9x6B@cluster0.eimml8f.mongodb.net/FitnessBuddy?retryWrites=true&w=majority'})
+    store: MongoStore.create({mongoUrl: dbPassword})
     //store: mongodb
 }
 // rate limiter to help prevent abuse since its on open internet
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // limit to 100 requests per windowMs
+    max: 20, // limit to 100 requests per windowMs
     message: "Too many requests. Please try again later."
   });
 
