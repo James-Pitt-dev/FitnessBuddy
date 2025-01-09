@@ -35,6 +35,10 @@ The database is hosted on MongoDB, a source-available cross-platform document-or
 ### Summary
 The app has fitness tracking and workout planner paired with a personalized AI trainer. The AI trainer will provide personalized advice and recommendations to the users to support and assist them with their wellness goals based on their health data and interactions. The app gives users easy to follow workouts with the ability to adjust the difficulty level. The overall goal is to create a user friendly and accessible application for achieving health and fitness goals. Target user group is anyone who is a fitness enthusiast or wants to be one.   
 
+- ● First Aim: Providing a user friendly and accessible application for achieving health and fitness goals.
+- ● Second Aim: Integrating AI to bring affordable personal training and health advice.
+- ● Third Aim: Creating a framework for effective prompting and persisting context in general purpose LLM’s 
+
 Application user would be able to: 
 - • Create an account.
 - • Enter their health data.
@@ -48,12 +52,16 @@ Our users will interface with our application through a front end UI, the Fitnes
 ![diagram](https://github.com/user-attachments/assets/0077821c-96f9-4572-8f5a-ae60f04c8f2f)
 
 ### AI Trainer Model Diagram 
+This system will take a users relevant history and past conversations to craft a system prompt to be attached to their message. The LLM provider receives it and the header prompt, enabling persistence and context. The LLM response is then processed, parsed for relevant workout data, saved to Memory DB, then ultimately sent to the user for the appearance of a personalized trainer.
+
 ![image](https://github.com/user-attachments/assets/0d30664e-f71e-43e7-9551-89c600046d9a)
 
 ### Use Case
 ![image](https://github.com/user-attachments/assets/e48880ca-89e4-4aaa-aaa9-8a748e3d5e4b)
 
 ### AI Trainer Sequence Diagram 
+A user will chat with our Trainer Agent, the chat request is handled through our middleware system that will add context and system prompts before sending the chat to the LLM provider. These data objects will be saved in database.
+
 ![Seqdiagram](https://github.com/user-attachments/assets/97302907-6a02-49e8-8360-d5ffa21327f1)
 
 ### Data Flow Diagram
