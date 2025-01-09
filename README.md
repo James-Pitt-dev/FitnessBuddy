@@ -30,52 +30,17 @@ MVC (Model-View-Controller) architectural pattern. It's a functional programming
 ## Database
 The database is hosted on MongoDB, a source-available cross-platform document-oriented database program. It uses JSON-like documents with optional schemas.
 
-## Workflows
+## SDLC Highlights
 
-### Getting started
-- //navigate to a project dir, git clone will make a fitnessbuddy dir there //
+### Use Case
+![image](https://github.com/user-attachments/assets/e48880ca-89e4-4aaa-aaa9-8a748e3d5e4b)
 
-    - git clone https://github.com/James-Pitt-dev/FitnessBuddy.git
-    - cd .\fitnessbuddy\
-    - npm install
+### System Model (High Level)
+Our users will interface with our application through a front end UI, the Fitness Buddy app will track and manage fitness data, workouts, user info, and facilitate our AI Trainer chat application. These components are helped with databases and API interactions as detailed in the model.
+![diagram](https://github.com/user-attachments/assets/0077821c-96f9-4572-8f5a-ae60f04c8f2f)
 
-// change .env.example to .env, replace password placeholder with real password
+### AI Trainer Model Diagram 
+![image](https://github.com/user-attachments/assets/0d30664e-f71e-43e7-9551-89c600046d9a)
 
-// to start the server on http://127.0.0.1:3000
-
-    - node app.js   
-
-//this starts the server and lets it listen for incoming url requests, which we make routes in code for it to run and serve view pages and do logic
-
-//Jest and Supertest to process the unit tests and integration tests
-   - installation before testing:  
-     - npm install --save-dev @shelf/jest-mongodb
-     - npm update --latest @testing-library/jest-dom
-     - npm i jest supertest cross-env
-     - "scripts": {
-        - "test": "cross-env NODE_ENV=test jest --testTimeout=6000",
-        -  "start": "node server.js",
-        - "dev": "nodemon server.js"
-        - },
-   - run testing
-     - npm run test
-
-### git
-- Update to latest code: be in master/main branch, then git pull origin to get the latest code from repo
-- develop new features in a separate branch and change as little other code as possible to reduce merge conflicts. git checkout -b featureBranch --> do code, when done something functional --> git push origin featureBranch
-- We want to make things as modular and isolated as possible or the code becomes a mess
-- We want master branch to be clean and functional
-
-
-### References
-- https://github.com/James-Pitt-dev/Yelp-Camp
-  - A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
-- Routing naming convention example
-  - ![image](https://github.com/James-Pitt-dev/FitnessBuddy/assets/39842510/37ce50cf-7e84-4018-bbb2-0f62e1e51a53)
-
-
-- https://rapidapi.com/justin-WFnsXH_t6/api/exercisedb
-  - API for exercise list
-
-A finished project of an express/nodeJS/mongoDB web application with create/read/update/delete functions.
-
+### AI Trainer Sequence Diagram 
+![Seqdiagram](https://github.com/user-attachments/assets/97302907-6a02-49e8-8360-d5ffa21327f1)
